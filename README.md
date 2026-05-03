@@ -21,7 +21,7 @@
 
 ## 在线阅读
 
-👉 https://haiyoung.github.io/agent-memory-engineering/（配置后生效）
+👉 https://haiyoung.github.io/agent-memory-engineering/
 
 ## 本地构建
 
