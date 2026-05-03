@@ -21,7 +21,7 @@
 
 ## 在线阅读
 
-👉 https://xpaperreader.github.io/agent-memory-engineering/（配置后生效）
+👉 https://haiyoung.github.io/agent-memory-engineering/（配置后生效）
 
 ## 本地构建
 
@@ -30,7 +30,7 @@
 cargo install mdbook
 
 # 克隆仓库
-git clone https://github.com/xPaperReader/agent-memory-engineering.git
+git clone https://github.com/Haiyoung/agent-memory-engineering.git
 cd agent-memory-engineering
 
 # 构建
