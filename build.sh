@@ -3,21 +3,23 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+DEST="docs"
+
 case "${1:-build}" in
   build)
     echo ":: Building book..."
-    mdbook build
-    echo ":: Done → ./book/"
+    mdbook build --dest-dir "$DEST"
+    echo ":: Done → ./$DEST/"
     ;;
   serve)
     echo ":: Killing existing mdbook process (if any) ..."
     pkill -f "mdbook serve" 2>/dev/null && echo "   killed" || echo "   none running"
     echo ":: Starting dev server at http://localhost:3000 ..."
-    mdbook serve --open
+    mdbook serve --open --dest-dir "$DEST"
     ;;
   clean)
     echo ":: Cleaning build output..."
-    mdbook clean
+    mdbook clean --dest-dir "$DEST"
     ;;
   *)
     echo "Usage: $0 [build|serve|clean]"

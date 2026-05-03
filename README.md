@@ -33,10 +33,7 @@ cargo install mdbook
 git clone https://github.com/Haiyoung/agent-memory-engineering.git
 cd agent-memory-engineering
 
-# 构建
-mdbook build
-
-# 或使用构建脚本
+# 构建（输出到 docs/）
 ./build.sh build
 
 # 本地预览
