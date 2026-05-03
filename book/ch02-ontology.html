@@ -1,0 +1,923 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第2章 本体论框架 - 智能体记忆工程</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="katex.min.css">
+        <link rel="stylesheet" href="cover.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "ayu";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">智能体记忆工程</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第2章-本体论框架"><a class="header" href="#第2章-本体论框架">第2章 本体论框架</a></h1>
+<blockquote>
+<p><strong>本章摘要</strong>：本章建立 Agent Memory 领域的统一概念框架。我们提出“三维正交分类 + 类层级“双轨本体论，涵盖 4 种载体维度、7 种功能维度、6 种动态维度、8 个顶层类和 18 条公理。该框架从 170 篇论文、1092 个概念的系统分析中提炼而来，为后续章节的技术展开提供统一的分析语言和分类工具。</p>
+</blockquote>
+<hr />
+<h2 id="21-本体论的设计动机"><a class="header" href="#21-本体论的设计动机">2.1 本体论的设计动机</a></h2>
+<p>如第1章所述，2023 年 Agent Memory 领域经历了爆发式增长——Generative Agents、MemGPT、MemoryBank、Reflexion 等标志性工作在一年内密集涌现。这一增长带来了两个未曾预料的问题：<strong>领域碎片化</strong>与<strong>术语混乱</strong>。</p>
+<h3 id="211-领域碎片化170-篇论文的共同困境"><a class="header" href="#211-领域碎片化170-篇论文的共同困境">2.1.1 领域碎片化：170 篇论文的共同困境</a></h3>
+<p>我们对 2021 至 2026 年间 170 篇 Agent Memory 核心论文的系统分析揭示了一个令人担忧的现象：<strong>同一领域内缺乏统一的概念语言</strong>。</p>
+<p>具体表现在三个层面：</p>
+<ul>
+<li><strong>术语碎片化</strong>：同一概念在不同论文中使用数十种不同的名称。例如，“长期记忆“这一概念在文献中以 Long-Term Memory、Persistent Memory、Archival Memory、Episodic Store、Memory Bank、Knowledge Repository 等至少十余种术语出现。</li>
+<li><strong>概念重叠</strong>：不同论文中使用相同术语指代不同的概念。“Working Memory“在某些工作中指上下文窗口内的活跃推理区，在另一些工作中则指短期对话历史，还有的指任务执行过程中的临时中间状态。</li>
+<li><strong>分类缺失</strong>：缺乏系统性的分类框架。现有综述论文多采用罗列式（按发表时间或方法类型排列）而非分析式组织，读者难以理解各种方法之间的结构关系。</li>
+</ul>
+<p>在功能维度（Function），我们统计到 325 个记忆功能概念，其中 “Other Memory Type”（领域专用记忆类型）高达 72%，说明绝大多数论文都在发明新的场景化子类，而非归入已有分类。在动态维度（Dynamics），445 个操作概念中 “Other Operation” 占比 51%，反映领域在操作语义上远未收敛。</p>
+<h3 id="212-现有综述的不足"><a class="header" href="#212-现有综述的不足">2.1.2 现有综述的不足</a></h3>
+<p>现有的 Agent Memory 综述论文（如记忆架构综述、RAG 综述、持续学习综述等）虽各有贡献，但存在共同的结构性缺陷：</p>
+<ol>
+<li><strong>缺乏系统性分析框架</strong>：多数综述按技术路线（如“基于检索的方法“vs.“基于微调的方法”）组织，但同一技术路线下的不同方法可能服务于完全不同的功能目标，而不同技术路线的方法可能实现相同的功能。</li>
+<li><strong>概念边界模糊</strong>：什么是“记忆“？上下文窗口是记忆吗？模型参数中的隐含知识是记忆吗？向量数据库中的嵌入向量是记忆吗？现有文献对这些问题的回答各不相同，缺乏统一的判定标准。</li>
+<li><strong>维度混叠</strong>：多数分类方案将载体、功能、操作混为一谈。例如将“向量数据库“（载体）与“语义检索“（操作）和“长期记忆“（功能）并列在同一层级，违反了分类的互斥性原则。</li>
+</ol>
+<h3 id="213-本体论作为地图而非领土"><a class="header" href="#213-本体论作为地图而非领土">2.1.3 本体论作为“地图“而非“领土“</a></h3>
+<p>在展开本章之前，需要明确一个关键的元认知：<strong>本体论是分析工具，不是现实本身</strong>。</p>
+<p>正如地图不是领土（The map is not the territory），本体论框架不是 Agent Memory 领域的全貌，而是我们用来理解、组织和导航这一领域的工具。它不声称自己是唯一正确的分类方式，也不试图取代原始论文的贡献。它的价值在于：</p>
+<ul>
+<li><strong>提供统一的术语表</strong>，使不同工作的比较成为可能；</li>
+<li><strong>揭示概念间的结构关系</strong>，帮助研究者发现未被探索的设计空间；</li>
+<li><strong>为工程实践提供架构蓝图</strong>，指导系统设计中的概念选择与组合。</li>
+</ul>
+<p>我们在构建本体论时遵循了五个核心原则：<strong>语义唯一性</strong>（每个概念在模型中具有唯一的语义标识）、<strong>正交独立性</strong>（三个维度相互独立）、<strong>层级清晰性</strong>（类归属与坐标值正交共存）、<strong>工程适配性</strong>（概念兼顾理论完整性与工程可实现性）、<strong>可扩展性</strong>（新增概念可归入现有维度）。</p>
+<h3 id="214-双轨架构概述"><a class="header" href="#214-双轨架构概述">2.1.4 双轨架构概述</a></h3>
+<p>本章提出的本体论采用<strong>双轨架构</strong>：</p>
+<ul>
+<li><strong>轨道一：三维正交分类体系</strong>——回答“在什么坐标“的问题。每个记忆概念由载体（Carrier）、功能（Function）、动态（Dynamic）三个相互正交的维度坐标唯一确定。</li>
+<li><strong>轨道二：类层级体系</strong>——回答“是什么“的问题。8 个顶层类及其子类构成领域概念的语义归属树。</li>
+</ul>
+<p>两条轨道正交共存，确保每个概念既有明确的语义定位（类层级），又可在多维坐标空间中被精确刻画（三维分类）。此外，18 条公理约束概念之间的关系，确保模型的逻辑一致性。</p>
+<p>下图展示了双轨架构的整体结构：</p>
+<pre><code class="language-mermaid">graph TD
+    subgraph 类层级 ["类层级体系：回答'是什么'"]
+        A[Agent] --&gt; A1[记忆主体]
+        B[Memory] --&gt; B1[记忆载体]
+        C[MemorySystem] --&gt; C1[记忆管理架构]
+        D[MemoryEvent] --&gt; D1[记忆触发源]
+        E[MemoryOperation] --&gt; E1[记忆操作行为]
+        F[Context] --&gt; F1[记忆关联场景]
+        G[Entity] --&gt; G1[记忆关联对象]
+        H[Policy] --&gt; H1[记忆操作规则]
+    end
+
+    subgraph 三维分类 ["三维正交分类：回答'在什么坐标'"]
+        subgraph Carrier [载体维度]
+            C1[Token-level] 
+            C2[Parametric] 
+            C3[External] 
+            C4[Latent]
+        end
+        subgraph Function [功能维度]
+            F1[Factual]
+            F2[Semantic]
+            F3[Episodic]
+            F4[Procedural]
+            F5[Experiential]
+            F6[Working]
+            F7[Reflection]
+        end
+        subgraph Dynamic [动态维度]
+            D1[Formation]
+            D2[Retrieval]
+            D3[Evolution]
+            D4[Forgetting]
+            D5[Reflection]
+            D6[Association]
+        end
+    end
+
+    类层级 -.-&gt;|"正交映射"| 三维分类
+</code></pre>
+<p>本节概述了为什么需要本体论框架及其双轨架构。接下来，我们将分别展开三维分类、类层级和公理体系。</p>
+<hr />
+<h2 id="22-三维正交分类体系"><a class="header" href="#22-三维正交分类体系">2.2 三维正交分类体系</a></h2>
+<p>三维正交分类体系是本本体论的核心分析工具。每个 Agent Memory 概念由三个维度的坐标唯一确定：<strong>载体维度</strong>（Carrier）定义记忆的物质承载形式，<strong>功能维度</strong>（Function）定义记忆的认知功能定位，<strong>动态维度</strong>（Dynamic）定义记忆的生命周期操作。三个维度相互正交——同一概念可在不同维度上同时拥有坐标值。</p>
+<h3 id="221-载体维度carrier"><a class="header" href="#221-载体维度carrier">2.2.1 载体维度（Carrier）</a></h3>
+<p>载体维度回答“记忆存在于哪里“这一根本问题。记忆必须依附于某种物质或信息载体而存在，载体的性质直接决定了记忆的持久性、可访问性和更新成本。</p>
+<h4 id="1token-level标记级"><a class="header" href="#1token-level标记级">（1）Token-level（标记级）</a></h4>
+<p><strong>定义</strong>：以文本令牌为载体的记忆，驻留于模型的输入上下文中。</p>
+<p>Token-level 记忆是最直接的记忆形式——将信息以原始文本、摘要或结构化文本的形式写入 LLM 的上下文窗口。这类记忆的特征是：</p>
+<ul>
+<li><strong>易失性</strong>：随推理会话结束而消失，除非被外部系统重新注入。</li>
+<li><strong>即时可访问</strong>：信息在当前上下文中立即可用，无需额外检索。</li>
+<li><strong>零工程开销</strong>：直接拼接为输入文本即可，不需要额外的存储基础设施。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>上下文窗口中的对话历史</li>
+<li>Prompt 序列中的系统指令（如“你是一个有用的助手，用户名叫小明“）</li>
+<li>滑动窗口中的近期消息摘要</li>
+<li>MemGPT 中的主上下文（Main Context）——系统指令、工作上下文和 FIFO 消息队列的组合</li>
+</ul>
+<p><strong>代表论文</strong>：MemGPT（2310.08560）是 Token-level 载体的经典案例。它将 LLM 主上下文视为“虚拟内存“，划分为系统指令（只读）、工作上下文（读写）和 FIFO 消息队列三部分，当队列达到容量上限时触发分页操作，将旧消息移出至外部存储。这种设计精妙地利用了 Token-level 载体的即时可访问性，同时通过外部存储解决了其易失性问题。</p>
+<h4 id="2parametric参数"><a class="header" href="#2parametric参数">（2）Parametric（参数）</a></h4>
+<p><strong>定义</strong>：以模型权重为载体的记忆，通过训练或编辑将知识内化于模型参数中。</p>
+<p>Parametric 记忆是最“内化“的记忆形式——知识被编码到模型的权重矩阵中，成为模型推理能力的一部分。这类记忆的特征是：</p>
+<ul>
+<li><strong>零推理延迟</strong>：知识已融入模型本身，推理时无需额外检索步骤。</li>
+<li><strong>高更新成本</strong>：修改参数级记忆需要微调、持续学习或模型编辑，计算开销远高于外部存储更新。</li>
+<li><strong>低可解释性</strong>：知识分布在数百万至数千亿参数中，难以定位特定知识的存储位置。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>通过 SFT（监督微调）将领域知识注入模型</li>
+<li>LoRA 适配器——将特定领域知识编码为低秩参数矩阵</li>
+<li>KnowledgeEditor（2104.08164）——使用超网络预测权重更新 Delta，直接编辑模型参数中的事实知识</li>
+<li>MLP 记忆模块——在 Transformer 中引入可更新的记忆参数</li>
+</ul>
+<p><strong>代表论文</strong>：Editing Factual Knowledge in Language Models（2104.08164）提出了 KnowledgeEditor 方法，使用一个超网络（Hyper-network）预测模型参数的更新量 Delta，实现对 Transformer 中特定事实的精准编辑。该方法形式化了模型编辑的约束优化问题，定义了局部性（Locality）和泛化性（Generalization）指标，证明了参数级记忆可以在不重训的情况下进行高效更新。</p>
+<h4 id="3external外部"><a class="header" href="#3external外部">（3）External（外部）</a></h4>
+<p><strong>定义</strong>：以外部存储为载体的记忆，独立于模型本身，持久化于外部数据库中。</p>
+<p>External 记忆是当前最主流的载体形式——将信息持久化于向量数据库、知识图谱或文件系统中，需要时通过检索注入上下文。这类记忆的特征是：</p>
+<ul>
+<li><strong>强持久性</strong>：独立于模型生命周期，数据持久保存。</li>
+<li><strong>可扩展性</strong>：存储容量理论上不受限，可随需求扩展。</li>
+<li><strong>检索延迟</strong>：每次使用需要检索步骤，增加响应延迟和计算成本。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>向量数据库（FAISS、ChromaDB、Pinecone）中的嵌入向量</li>
+<li>知识图谱中的实体-关系三元组</li>
+<li>MemoryBank（2305.10250）中的分层记忆数据库（原始对话 + 每日总结 + 全局总结）</li>
+<li>HippoRAG（2405.14831）中的知识图谱 + Personalized PageRank 索引</li>
+<li>文件系统或关系数据库中的对话日志</li>
+</ul>
+<p><strong>代表论文</strong>：MemoryBank（2305.10250）是 External 载体的典型代表。它设计了三层记忆存储结构（原始对话、每日总结、全局总结），并使用 FAISS 向量索引实现高效检索。其创新在于引入艾宾浩斯遗忘曲线模拟记忆的动态更新——记忆强度随时间指数衰减 $R = e^{-t/S}$，被召回时强度重置并增强，模拟人类的“复习“机制。HippoRAG（2405.14831）则进一步将 External 载体与图结构结合，通过知识图谱中的实体-关系网络实现跨段落知识整合，用 Personalized PageRank 实现单次检索完成多跳推理，比迭代检索方法快 6-13 倍。</p>
+<h4 id="4latent隐式"><a class="header" href="#4latent隐式">（4）Latent（隐式）</a></h4>
+<p><strong>定义</strong>：以隐式表示为载体的记忆，存在于模型的隐藏状态或潜在表征中。</p>
+<p>Latent 记忆是最难直接观测和操控的记忆形式——它不是以显式文本或参数形式存在，而是编码在模型的隐状态、注意力模式或潜在向量空间中。这类记忆的特征是：</p>
+<ul>
+<li><strong>隐式性</strong>：不直接可读，需要通过模型前向传播间接体现。</li>
+<li><strong>高密度</strong>：压缩了大量信息于低维向量中。</li>
+<li><strong>难编辑</strong>：缺乏直接修改隐式表征的有效手段。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>Transformer 各层的隐藏状态（Hidden States）</li>
+<li>注意力矩阵中的关注模式（Attention Patterns）</li>
+<li>潜在表征向量（Latent Representation Vectors）</li>
+<li>LM2（2502.06049）中的记忆向量（Memory Vectors）——作为独立的上下文表示仓库，通过跨注意力与输入令牌交互</li>
+</ul>
+<p><strong>代表论文</strong>：LM2（2502.06049）是 Latent 载体的前沿探索。它提出了“大型记忆模型“（Large Memory Models）架构，在 Decoder-only Transformer 中引入一个独立的记忆库（Memory Bank），该记忆库中的记忆向量通过跨注意力机制与输入令牌交互，并通过输入（I）、输出（O）、遗忘（F）三个门控机制进行更新。与标准 Transformer 相比，LM2 在长上下文推理基准 BABILong 上比 Llama-3.2 提升了 86.3%，比记忆增强基线 RMT 提升了 37.1%，且在通用任务 MMLU 上仍保持 5.0% 的提升。</p>
+<h4 id="载体维度的正交关系"><a class="header" href="#载体维度的正交关系">载体维度的正交关系</a></h4>
+<p>载体维度与功能维度、动态维度相互正交，这意味着：</p>
+<ul>
+<li>同一功能（如 Factual 事实记忆）可以由不同载体实现：可以是 Token-level 的 Prompt 注入、Parametric 的模型编辑、External 的向量数据库检索，或 Latent 的记忆向量。</li>
+<li>同一载体（如 External 外部存储）可以服务于不同功能：可以存储 Factual 事实、Semantic 语义网络、Episodic 情景历史或 Procedural 操作流程。</li>
+<li>同一载体-功能组合可以执行不同动态操作：External+Factual 可以用于 Formation（写入新事实）、Retrieval（检索已有事实）、Evolution（更新过时事实）或 Forgetting（淘汰低价值事实）。</li>
+</ul>
+<p>下表展示了载体维度的完整分类：</p>
+<div class="table-wrapper"><table><thead><tr><th>载体类型</th><th>物质基础</th><th>持久性</th><th>更新成本</th><th>访问延迟</th><th>可解释性</th><th>代表论文</th></tr></thead><tbody>
+<tr><td>Token-level</td><td>文本令牌</td><td>低（会话级）</td><td>低</td><td>零</td><td>高</td><td>MemGPT</td></tr>
+<tr><td>Parametric</td><td>模型权重</td><td>高（模型级）</td><td>高</td><td>零</td><td>低</td><td>2104.08164</td></tr>
+<tr><td>External</td><td>外部存储</td><td>高（系统级）</td><td>低</td><td>中</td><td>高</td><td>MemoryBank, HippoRAG</td></tr>
+<tr><td>Latent</td><td>隐式表征</td><td>中（推理级）</td><td>中</td><td>低</td><td>低</td><td>LM2</td></tr>
+</tbody></table>
+</div>
+<h3 id="222-功能维度function"><a class="header" href="#222-功能维度function">2.2.2 功能维度（Function）</a></h3>
+<p>功能维度回答“记忆做什么“这一问题——即记忆在智能体认知架构中扮演的角色。我们从认知心理学和 Agent 架构两个视角出发，定义了 7 种功能类型。</p>
+<h4 id="1factual事实"><a class="header" href="#1factual事实">（1）Factual（事实）</a></h4>
+<p><strong>定义</strong>：存储离散客观信息的记忆功能。</p>
+<p>Factual 记忆是 Agent 对世界的“事实库“，包含具体的、可验证的客观信息。这类记忆的特征是：</p>
+<ul>
+<li><strong>离散性</strong>：每个事实单元是独立的（如“用户小明住在上海“）。</li>
+<li><strong>可验证性</strong>：事实有明确的真值（True/False）。</li>
+<li><strong>时效性</strong>：事实可能随时间变化（如“某国总统“）。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>用户偏好（喜欢猫、不吃辣）</li>
+<li>世界常识（地球围绕太阳转）</li>
+<li>结构化事实（公司成立于 2020 年）</li>
+<li>KnowledgeEditor 编辑的事实三元组（如关系提取中的实体对关系）</li>
+</ul>
+<p>Factual 记忆是 KnowledgeEditor（2104.08164）的核心功能定位——该论文专门解决模型参数中存储的事实知识的编辑问题。</p>
+<h4 id="2semantic语义"><a class="header" href="#2semantic语义">（2）Semantic（语义）</a></h4>
+<p><strong>定义</strong>：组织概念关联与知识网络的记忆功能。</p>
+<p>Semantic 记忆超越孤立事实，关注概念之间的关联关系和知识结构。这类记忆的特征是：</p>
+<ul>
+<li><strong>关联性</strong>：以关系网络而非原子事实的形式组织。</li>
+<li><strong>层级性</strong>：概念之间存在上下位关系（如“猫“ 是 “动物“的子类）。</li>
+<li><strong>推理性</strong>：支持基于关系网络的推理（如“如果 A 是 B 的朋友，B 是 C 的同事，则 A 和 C 可能相识“）。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>知识图谱中的实体-关系网络</li>
+<li>HippoRAG 构建的知识图谱——将文档中的概念提取为节点，关系提取为边，形成跨段落的知识关联网络</li>
+<li>语义锚点（Semantic Anchors）——用于记忆检索的语义参照点</li>
+<li>概念层级（Ontology/Taxonomy）——领域概念的层次分类</li>
+</ul>
+<p>Semantic 记忆是 HippoRAG（2405.14831）的核心创新——通过知识图谱显式建模概念间的语义关联，使检索系统能够沿图边进行多跳推理，而不仅仅是匹配文本相似度。</p>
+<h4 id="3episodic情景"><a class="header" href="#3episodic情景">（3）Episodic（情景）</a></h4>
+<p><strong>定义</strong>：记录交互事件与时间线索的记忆功能。</p>
+<p>Episodic 记忆是 Agent 的“自传式记忆“——记录与用户或环境交互的具体事件，包含时间、地点、参与者等上下文信息。这类记忆的特征是：</p>
+<ul>
+<li><strong>时序性</strong>：事件按时间顺序组织。</li>
+<li><strong>情境依赖性</strong>：同一事件在不同情境下意义不同。</li>
+<li><strong>叙事性</strong>：可以组织为连贯的事件叙事。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>对话历史（用户与 Agent 的完整交互记录）</li>
+<li>交互轨迹（Agent 在任务执行中的行动序列）</li>
+<li>事件图（Event Graph）——事件之间的因果关系网络</li>
+<li>MemoryBank 中的原始对话日志和每日总结</li>
+</ul>
+<h4 id="4procedural程序"><a class="header" href="#4procedural程序">（4）Procedural（程序）</a></h4>
+<p><strong>定义</strong>：存储可执行技能与操作流程的记忆功能。</p>
+<p>Procedural 记忆是 Agent 的“技能库“——编码如何执行特定任务的知识。这类记忆的特征是：</p>
+<ul>
+<li><strong>可执行性</strong>：可以被 Agent 直接调用执行。</li>
+<li><strong>模块化</strong>：可以组合和复用（如“先搜索，再总结，最后回答“）。</li>
+<li><strong>可迁移性</strong>：同一技能可应用于不同场景。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>工具调用序列（搜索 API -&gt; 过滤结果 -&gt; 生成回答）</li>
+<li>SOP（标准操作流程）编码</li>
+<li>API 技能库</li>
+<li>Reflexion 中存储的自我改进策略</li>
+</ul>
+<h4 id="5experiential经验"><a class="header" href="#5experiential经验">（5）Experiential（经验）</a></h4>
+<p><strong>定义</strong>：记录成功/失败轨迹与迁移知识的记忆功能。</p>
+<p>Experiential 记忆是 Agent 的“经验库“——从过往任务中提炼的启发式知识和教训。这类记忆的特征是：</p>
+<ul>
+<li><strong>诊断性</strong>：包含对失败原因的分析。</li>
+<li><strong>迁移性</strong>：跨场景的通用经验可应用于新任务。</li>
+<li><strong>启发式</strong>：通常以规则或模式形式存在，而非精确算法。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>跨域经验（在代码调试中积累的“常见错误模式“）</li>
+<li>反馈诊断（“当用户说’不对’时，通常意味着理解偏差而非事实错误”）</li>
+<li>启发式策略（“遇到数学问题时，先列式再计算”）</li>
+</ul>
+<h4 id="6working工作"><a class="header" href="#6working工作">（6）Working（工作）</a></h4>
+<p><strong>定义</strong>：作为即时认知工作区的记忆功能。</p>
+<p>Working 记忆是 Agent 的“思维桌面“——承载当前任务处理所需的活跃信息。这类记忆的特征是：</p>
+<ul>
+<li><strong>容量受限</strong>：同时处理的信息量有限。</li>
+<li><strong>高更新频率</strong>：随任务进展频繁更新。</li>
+<li><strong>临时性</strong>：任务完成后通常被释放。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>动态上下文工作区（MemGPT 的工作上下文）</li>
+<li>活跃推理链（CoT 推理中的中间步骤）</li>
+<li>任务执行的中间状态</li>
+</ul>
+<h4 id="7reflection反思"><a class="header" href="#7reflection反思">（7）Reflection（反思）</a></h4>
+<p><strong>定义</strong>：实现元认知与自我觉察的记忆功能。</p>
+<p>Reflection 记忆是 Agent 的“自省能力“——对自身认知过程的监控、评估和重构。这类记忆的特征是：</p>
+<ul>
+<li><strong>元层次</strong>：关于认知的认知，而非直接关于外部世界。</li>
+<li><strong>增量性</strong>：反思必然产生新的知识，而非仅仅回顾已有信息。</li>
+<li><strong>自我模型</strong>：包含 Agent 对自身能力、限制和信念的表征。</li>
+</ul>
+<p><strong>典型实例</strong>：</p>
+<ul>
+<li>反思经验（Reflexion 中对推理困境的分析）</li>
+<li>演化信念（对自身能力动态更新的评估）</li>
+<li>自我模型（Creed、能力清单等元描述）</li>
+</ul>
+<h4 id="功能维度的正交关系"><a class="header" href="#功能维度的正交关系">功能维度的正交关系</a></h4>
+<p>功能维度与载体维度的正交性意味着同一功能可由不同载体实现。例如，Factual 事实记忆可以是：</p>
+<ul>
+<li>Token-level：Prompt 中的“用户叫小明“</li>
+<li>Parametric：通过微调内化的领域知识</li>
+<li>External：向量数据库中的用户画像</li>
+<li>Latent：记忆向量中的用户特征编码</li>
+</ul>
+<p>功能维度与动态维度的正交性意味着同一功能可经历不同的生命周期操作。例如，Semantic 语义记忆可以被形成（构建知识图谱）、检索（图遍历查询）、演化（添加新关系）、遗忘（移除过时节点）和关联（建立跨图谱链接）。</p>
+<div class="table-wrapper"><table><thead><tr><th>功能类型</th><th>认知定位</th><th>信息粒度</th><th>典型载体</th><th>典型动态</th><th>代表论文</th></tr></thead><tbody>
+<tr><td>Factual</td><td>离散客观信息</td><td>原子事实</td><td>External, Parametric</td><td>Formation, Evolution</td><td>2104.08164</td></tr>
+<tr><td>Semantic</td><td>概念关联网络</td><td>关系结构</td><td>External, Latent</td><td>Association, Retrieval</td><td>HippoRAG</td></tr>
+<tr><td>Episodic</td><td>交互事件线索</td><td>事件序列</td><td>External, Token-level</td><td>Formation, Forgetting</td><td>MemoryBank</td></tr>
+<tr><td>Procedural</td><td>可执行技能</td><td>操作流程</td><td>Parametric, External</td><td>Formation, Evolution</td><td>Reflexion</td></tr>
+<tr><td>Experiential</td><td>成败迁移知识</td><td>启发规则</td><td>External, Token-level</td><td>Reflection, Formation</td><td>Reflexion</td></tr>
+<tr><td>Working</td><td>即时认知工作区</td><td>活跃状态</td><td>Token-level, Latent</td><td>Formation, Retrieval</td><td>MemGPT</td></tr>
+<tr><td>Reflection</td><td>元认知自我觉察</td><td>元描述</td><td>Token-level, External</td><td>Reflection, Evolution</td><td>Reflexion</td></tr>
+</tbody></table>
+</div>
+<h3 id="223-动态维度dynamic"><a class="header" href="#223-动态维度dynamic">2.2.3 动态维度（Dynamic）</a></h3>
+<p>动态维度回答“记忆如何变化“这一问题——即记忆从创建到淘汰的完整生命周期。我们定义了 6 种核心操作类型，它们构成一个闭环：形成 -&gt; 检索 -&gt; 演化 -&gt; 遗忘 -&gt; 反思 -&gt; 关联。</p>
+<h4 id="1formation形成"><a class="header" href="#1formation形成">（1）Formation（形成）</a></h4>
+<p><strong>定义</strong>：记忆的创建与编码过程。</p>
+<p>Formation 是记忆生命周期的起点。系统将外部信号（用户输入、环境感知、任务输出）转化为可存储的记忆表征，并写入相应的载体。</p>
+<p><strong>典型操作</strong>：</p>
+<ul>
+<li><strong>直接写入（MEM_WRITE / Add / Insertion）</strong>：将信息直接存入存储介质。</li>
+<li><strong>门控写入（Gated Write/Update）</strong>：通过门控机制决定是否写入及写入内容，如 LM2 的输入门（I-Gate）。</li>
+<li><strong>惊喜度驱动编码（Surprise-Driven Encoding）</strong>：当输入与已有记忆存在显著偏差时触发编码。</li>
+<li><strong>编码压缩（Encoding/Summarization）</strong>：将原始信息压缩为更紧凑的表征（如 MemoryBank 的每日总结）。</li>
+</ul>
+<p><strong>技术实例</strong>：KnowledgeEditor（2104.08164）中的超网络生成权重更新 Delta，本质上是一种参数级 Formation——将新事实编码为参数增量。MemoryBank（2305.10250）的分层总结（原始对话 -&gt; 每日总结 -&gt; 全局总结）是一种典型的形成阶段信息压缩策略。</p>
+<h4 id="2retrieval检索"><a class="header" href="#2retrieval检索">（2）Retrieval（检索）</a></h4>
+<p><strong>定义</strong>：从记忆库中召回与当前任务相关的信息。</p>
+<p>Retrieval 是 Agent Memory 领域研究最密集的操作（占动态维度概念的 18%）。高质量的检索需要在召回率（找到所有相关信息）和精确度（避免无关信息干扰）之间找到平衡。</p>
+<p><strong>典型操作</strong>：</p>
+<ul>
+<li><strong>语义检索（Semantic Retrieval）</strong>：基于向量相似度匹配（如 FAISS 的 ANN 搜索）。</li>
+<li><strong>图遍历检索（Graph Traversal）</strong>：沿知识图谱的边进行多跳查询（如 HippoRAG 的 Personalized PageRank）。</li>
+<li><strong>混合检索（Hybrid Retrieval）</strong>：结合关键词匹配与语义相似度。</li>
+<li><strong>上下文感知检索（Context-aware Retrieval）</strong>：根据当前任务上下文动态调整检索策略。</li>
+<li><strong>层次检索（Hierarchical Retrieval）</strong>：先粗后细的多层级检索（如 MemoryBank 先检索全局总结，再检索相关每日总结）。</li>
+</ul>
+<p><strong>技术实例</strong>：HippoRAG（2405.14831）使用 Personalized PageRank 在知识图谱上进行检索，将查询映射为图谱上的起始节点，通过随机游走计算所有节点的相关性得分。这种图遍历检索的优势在于：单次检索即可获得多跳推理所需的全部上下文，无需迭代式检索。</p>
+<h4 id="3evolution演化"><a class="header" href="#3evolution演化">（3）Evolution（演化）</a></h4>
+<p><strong>定义</strong>：知识的更新、整合与结构调整。</p>
+<p>Evolution 确保记忆系统能够适应环境变化和知识更新，避免信息过时和矛盾积累。</p>
+<p><strong>典型操作</strong>：</p>
+<ul>
+<li><strong>记忆更新（Memory Update）</strong>：直接修改已有记忆内容。</li>
+<li><strong>知识融合（Knowledge Fusion）</strong>：整合多个来源的冲突信息。</li>
+<li><strong>冲突消解（Conflict Resolution）</strong>：当新旧记忆矛盾时，通过时间权重、置信度或人工干预选择保留版本。</li>
+<li><strong>增量编辑（Incremental Delta Update）</strong>：KnowledgeEditor 式的参数级微小更新。</li>
+</ul>
+<p><strong>技术实例</strong>：KnowledgeEditor（2104.08164）定义了模型编辑的演化范式——通过最小扰动（Minimal Perturbation）更新参数中的事实，同时通过局部性约束（Locality Constraint）确保不影响无关知识。MemoryBank（2305.10250）的记忆强度更新机制 $S_{new} = S_{old} + \Delta S$ 也是一种演化操作——检索事件触发记忆强化。</p>
+<h4 id="4forgetting遗忘"><a class="header" href="#4forgetting遗忘">（4）Forgetting（遗忘）</a></h4>
+<p><strong>定义</strong>：有计划地淘汰低价值或过时记忆。</p>
+<p>Forgetting 并非系统的缺陷，而是其设计特性——有限的存储资源要求系统优先保留高价值信息。遗忘的主动性是 Agent Memory 区别于传统数据库的关键特征。</p>
+<p><strong>典型操作</strong>：</p>
+<ul>
+<li><strong>时间衰减（Time-based Decay / Forgetting Curve）</strong>：如 MemoryBank 的 $R = e^{-t/S}$ 指数衰减模型。</li>
+<li><strong>LFU 淘汰（Least Frequently Used Eviction）</strong>：淘汰访问频率最低的记忆。</li>
+<li><strong>基于效用的删除（Utility-based Deletion）</strong>：根据记忆对任务成功的贡献度决定保留与否。</li>
+<li><strong>竞争性抑制（Competitive-Inhibitory Forgetting）</strong>：新记忆的形成主动抑制相似但过时的旧记忆。</li>
+</ul>
+<p><strong>技术实例</strong>：MemoryBank（2305.10250）的遗忘机制是本体的经典案例——它模拟人类艾宾浩斯遗忘曲线，记忆保留率随时间指数衰减，当低于阈值时被自动淘汰。这种遗忘不是简单的删除，而是“自然淘汰“——被频繁检索的记忆因强度增强而存活，不被使用的记忆随时间衰减而遗忘。</p>
+<h4 id="5reflection反思"><a class="header" href="#5reflection反思">（5）Reflection（反思）</a></h4>
+<p><strong>定义</strong>：对记忆内容的元层次评估与重构。</p>
+<p>Reflection 是唯一能产生增量知识的动态操作——其他操作都是在已有知识空间内移动信息，而反思操作能够生成全新的知识实例。</p>
+<p><strong>典型操作</strong>：</p>
+<ul>
+<li><strong>反思生成（Reflection Generation）</strong>：从过往交互中提炼新的洞察。</li>
+<li><strong>夜间自评（Nightly Self-Critique）</strong>：定期对自身表现进行系统性回顾。</li>
+<li><strong>洞察提取（Insight Extraction）</strong>：从失败案例中提取可迁移的经验。</li>
+<li><strong>轨迹反思（Trajectory Reflection）</strong>：对完整任务执行路径的回顾分析。</li>
+</ul>
+<p><strong>技术实例</strong>：Reflexion 架构中的自我反思循环——Agent 在任务失败后生成语言反馈，评估自身表现，并将反思结果存储为经验记忆，指导后续尝试。这是 Reflection 动态的典型实现。</p>
+<h4 id="6association关联"><a class="header" href="#6association关联">（6）Association（关联）</a></h4>
+<p><strong>定义</strong>：跨记忆关联的建立与维护。</p>
+<p>Association 操作将孤立的记忆节点连接为网络，使 Agent 能够进行跨记忆的推理和迁移。</p>
+<p><strong>典型操作</strong>：</p>
+<ul>
+<li><strong>上下文集成（Context Integration）</strong>：将当前任务上下文与已有记忆关联。</li>
+<li><strong>关系感知链接（Relation-aware Linking）</strong>：在实体间建立语义关系边。</li>
+<li><strong>跨模态关联（Cross-modal Association）</strong>：将文本记忆与图像、音频等其他模态关联。</li>
+</ul>
+<p><strong>技术实例</strong>：HippoRAG（2405.14831）的知识图谱构建本质上是一种 Association 操作——LLM 从文档中提取实体和关系，将它们组织为图结构，使原本孤立的文本段落通过图边建立语义关联。这种关联使单次检索即可获取多跳推理所需信息。</p>
+<h4 id="动态维度的正交关系与生命周期闭环"><a class="header" href="#动态维度的正交关系与生命周期闭环">动态维度的正交关系与生命周期闭环</a></h4>
+<p>三个维度的正交关系总结如下：</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>回答问题</th><th>变化影响</th><th>独立于</th></tr></thead><tbody>
+<tr><td>载体（Carrier）</td><td>记忆存在哪里？</td><td>改变载体不改变功能和操作类型</td><td>功能、动态</td></tr>
+<tr><td>功能（Function）</td><td>记忆做什么？</td><td>改变功能不改变载体和生命周期阶段</td><td>载体、动态</td></tr>
+<tr><td>动态（Dynamic）</td><td>记忆如何变化？</td><td>改变生命周期阶段不改变载体和功能</td><td>载体、功能</td></tr>
+</tbody></table>
+</div>
+<p>六个动态操作构成记忆生命周期的闭环：</p>
+<pre><code class="language-mermaid">graph LR
+    A["记忆形成\nFormation"] --&gt; B["记忆检索\nRetrieval"]
+    B --&gt; C["记忆演化\nEvolution"]
+    C --&gt; D["记忆遗忘\nForgetting"]
+    B --&gt; E["记忆反思\nReflection"]
+    E -.-&gt;|"产生新知"| A
+    E -.-&gt;|"修正信念"| C
+    D -.-&gt;|"释放资源"| A
+    C --&gt; F["记忆关联\nAssociation"]
+    F -.-&gt;|"增强检索"| B
+</code></pre>
+<p>这一闭环体现了记忆的持续演化特性：记忆不是静态存储的数据，而是通过不断的使用、更新、淘汰和反思而动态生长的认知系统。</p>
+<hr />
+<h2 id="23-类层级体系"><a class="header" href="#23-类层级体系">2.3 类层级体系</a></h2>
+<p>如果说三维分类体系回答“在什么坐标“的问题，类层级体系则回答“是什么“的问题。8 个顶层类及其子类构成 Agent Memory 领域的语义归属树，覆盖从记忆主体到操作规则的完整概念空间。</p>
+<h3 id="231-八个顶层类及其职责"><a class="header" href="#231-八个顶层类及其职责">2.3.1 八个顶层类及其职责</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>顶层类</th><th>核心定位</th><th>职责范围</th><th>子类示例</th></tr></thead><tbody>
+<tr><td><strong>Agent</strong></td><td>记忆主体</td><td>记忆的拥有者与使用者，执行记忆操作，维持身份一致性</td><td>LLM Agent, Human User, Multi-Agent System</td></tr>
+<tr><td><strong>Memory</strong></td><td>记忆载体</td><td>记忆的承载实体，包含内容、质量属性和生命周期元数据</td><td>ParametricMemory, ExternalMemory, TokenMemory, LatentMemory</td></tr>
+<tr><td><strong>MemorySystem</strong></td><td>记忆管理架构</td><td>记忆的组织、协调与调度基础设施</td><td>MemoryOrchestrator, RetrievalEngine, IndexManager, StorageBackend</td></tr>
+<tr><td><strong>MemoryEvent</strong></td><td>记忆触发源</td><td>引发记忆操作的内部或外部事件</td><td>UserInput, AgentOutput, TimerSignal, EnvironmentChange</td></tr>
+<tr><td><strong>MemoryOperation</strong></td><td>记忆操作行为</td><td>对记忆执行的具体操作</td><td>MemoryWrite, MemoryRead, MemoryUpdate, MemoryForget, MemoryReflect</td></tr>
+<tr><td><strong>Context</strong></td><td>记忆关联场景</td><td>操作发生的环境与约束条件</td><td>TaskContext, SessionContext, TemporalContext, SecurityContext</td></tr>
+<tr><td><strong>Entity</strong></td><td>记忆关联对象</td><td>记忆内容涉及的对象与关系</td><td>Person, Concept, Event, Relation, Document</td></tr>
+<tr><td><strong>Policy</strong></td><td>记忆操作规则</td><td>控制记忆行为的安全策略与访问规则</td><td>AccessControl, PrivacyPolicy, RetentionPolicy, EditingPolicy</td></tr>
+</tbody></table>
+</div>
+<h3 id="232-核心类详解"><a class="header" href="#232-核心类详解">2.3.2 核心类详解</a></h3>
+<p><strong>Agent 类</strong>是记忆系统的主体。Agent 拥有记忆、使用记忆并执行记忆操作。在本体论中，Agent 不是被动的记忆容器，而是主动的记忆管理者——它决定什么信息值得记忆、何时检索、如何更新。如第1章所述，Agent 的记忆能力是其在长期交互中维持身份一致性和个性化的前提。</p>
+<p><strong>Memory 类</strong>是记忆的承载实体。它包含记忆的内容（文本、向量、参数等）和元数据（创建时间、访问计数、重要性评分、质量三元组等）。Memory 与载体维度紧密对应——ParametricMemory 对应 Parametric 载体，ExternalMemory 对应 External 载体，等等。</p>
+<p><strong>MemorySystem 类</strong>是记忆的管理基础设施。它不是记忆本身，而是组织、协调和调度记忆的架构。MemGPT（2310.08560）中的队列管理器（Queue Manager）、HippoRAG（2405.14831）中的索引-检索双阶段架构、LM2（2502.06049）中的门控记忆模块，都属于 MemorySystem 的实例。</p>
+<p><strong>MemoryEvent 类</strong>是触发记忆操作的源头。没有无来源的记忆——每条记忆必须关联至少一个 MemoryEvent。用户输入（UserInput）、Agent 输出（AgentOutput）、定时器信号（TimerSignal）和环境变化（EnvironmentChange）是最常见的事件类型。</p>
+<p><strong>MemoryOperation 类</strong>是对记忆执行的具体行为。写入（MemoryWrite）、检索（MemoryRead）、更新（MemoryUpdate）、遗忘（MemoryForget）和反思（MemoryReflect）是五种核心操作。动态维度（Dynamic）的六种类型正是对 MemoryOperation 的高层分类。</p>
+<p><strong>Context 类</strong>定义了操作发生的环境与约束。同一操作在不同上下文中可能产生不同结果——例如，在安全上下文（SecurityContext）受限的情况下，检索操作可能只返回脱敏后的记忆。</p>
+<p><strong>Entity 类</strong>是记忆内容涉及的对象与关系。用户、概念、事件、文档等都是 Entity 的实例。知识图谱中的节点和边本质上都是 Entity 的子类。</p>
+<p><strong>Policy 类</strong>定义了记忆操作的规则和约束。访问控制策略（AccessControl）决定谁可以读写哪些记忆，隐私策略（PrivacyPolicy）规定敏感信息的处理方式，保留策略（RetentionPolicy）决定记忆的生命周期上限，编辑策略（EditingPolicy）约束参数级记忆的更新行为。</p>
+<h3 id="233-类层级与三维分类的互补性"><a class="header" href="#233-类层级与三维分类的互补性">2.3.3 类层级与三维分类的互补性</a></h3>
+<p>类层级和三维分类并非竞争关系，而是正交互补的分析维度：</p>
+<div class="table-wrapper"><table><thead><tr><th>分析维度</th><th>核心问题</th><th>分类方式</th><th>示例</th></tr></thead><tbody>
+<tr><td>类层级</td><td>这个概念<strong>是什么</strong>？</td><td>语义归属（is-a 树）</td><td>Memory -&gt; ExternalMemory -&gt; VectorDBMemory</td></tr>
+<tr><td>三维分类</td><td>这个概念<strong>在什么坐标</strong>？</td><td>坐标映射（Carrier, Function, Dynamic）</td><td>(External, Factual, Retrieval)</td></tr>
+</tbody></table>
+</div>
+<p>一个具体的技术可以同时从两个角度分析。以 MemoryBank 为例：</p>
+<ul>
+<li><strong>类层级分析</strong>：它是 MemorySystem 的一个实例，包含 Memory（分层记忆存储）、MemoryOperation（检索/更新/遗忘）、MemoryEvent（用户输入触发）、Policy（遗忘阈值策略）等多个类的协作。</li>
+<li><strong>三维分类分析</strong>：它的核心记忆载体是 External（向量数据库），功能定位是 Factual + Episodic（用户事实 + 对话历史），动态操作覆盖 Formation（写入/总结）、Retrieval（FAISS 检索）、Evolution（强度增强）和 Forgetting（时间衰减）。</li>
+</ul>
+<p>类层级关注系统的<strong>结构组成</strong>（有哪些组件），三维分类关注组件的<strong>功能坐标</strong>（每个组件在什么位置）。两者结合，才能完整刻画一个记忆系统的全貌。</p>
+<hr />
+<h2 id="24-公理体系"><a class="header" href="#24-公理体系">2.4 公理体系</a></h2>
+<p>公理是本体论中不可再分的断言，构成领域模型的推理基础。以下 18 条公理从 Agent Memory 领域的结构性规律中归纳得出，分为存在、操作、质量、安全和演进五大类。</p>
+<h3 id="241-存在公理"><a class="header" href="#241-存在公理">2.4.1 存在公理</a></h3>
+<p>存在公理定义记忆实例存在的基本条件。</p>
+<p><strong>公理 1：载体必要性（Carrier Necessity）</strong></p>
+<blockquote>
+<p>每个记忆实例必须占据至少一个载体维度位置（Token-level / Parametric / External / Latent），不存在无载体的记忆。</p>
+</blockquote>
+<p>这一公理排除了“纯粹的记忆“这一形而上学概念——记忆必须有物质或信息的承载体。在工程实践中，这意味着每条记忆对象必须明确声明其载体类型。例如，KnowledgeEditor 中编辑的事实存储在 Parametric 载体（模型权重）中，MemoryBank 中的对话历史存储在 External 载体（向量数据库）中。</p>
+<p><strong>公理 2：事件依赖性（Event Dependency）</strong></p>
+<blockquote>
+<p>没有无来源的记忆——每条记忆必须关联至少一个 MemoryEvent（用户输入、系统输出、环境信号等）。</p>
+</blockquote>
+<p>这一公理确保记忆的可追溯性。在工程实现中，每条 Memory 实例应记录其 SourceEvent 字段，以便审计、调试和回溯。</p>
+<p><strong>公理 3：多维共存（Multi-dimensional Coexistence）</strong></p>
+<blockquote>
+<p>一个记忆实例可同时具有多个维度的坐标值（如 External 载体 + Factual 功能 + Retrieval 操作）。</p>
+</blockquote>
+<p>这一公理允许概念在多维空间中的丰富刻画。例如，HippoRAG 的知识图谱可以同时占据 External 载体、Semantic 功能和 Association 动态三个坐标。</p>
+<h3 id="242-操作公理"><a class="header" href="#242-操作公理">2.4.2 操作公理</a></h3>
+<p>操作公理约束记忆操作的执行条件与效果。</p>
+<p><strong>公理 4：索引约束（Index Constraint）</strong></p>
+<blockquote>
+<p>任何 MemoryRetrieval 操作必须有对应的 Index 结构支撑，无索引即无法检索。</p>
+</blockquote>
+<p>索引结构可以是向量索引（FAISS IVF/PQ）、图索引（邻接表）、文本索引（倒排索引）或参数索引（超网络映射）。这一公理强调了索引设计在记忆系统中的核心地位——没有索引的记忆等于没有记忆。</p>
+<p><strong>公理 5：遗忘不可逆（Forgetting Irreversibility）</strong></p>
+<blockquote>
+<p>MemoryForgetting 操作不产生可恢复的记忆副本，遗忘是单向的信息损失过程。</p>
+</blockquote>
+<p>这一公理区分了“遗忘“与“归档“——归档是将记忆移至冷存储（仍可检索），而遗忘是永久删除。在工程实现中，Policy 类可以通过 RetentionPolicy 配置是否允许归档替代遗忘。</p>
+<p><strong>公理 6：反思增量性（Reflection Incrementality）</strong></p>
+<blockquote>
+<p>MemoryReflection 操作必然产生至少一个新增概念实例——反思不只是回顾，而是知识生成。</p>
+</blockquote>
+<p>这一公理将反思与其他操作区分开来。如果一次“反思“没有产生新知识（新的 Factual 事实、新的 Procedural 技能或新的 Experiential 经验），那么它只是检索，不是反思。</p>
+<p><strong>公理 7：操作闭合性（Operational Closure）</strong></p>
+<blockquote>
+<p>所有 MemoryOperation 的输入和输出均在本体论定义的类空间内，不存在域外操作。</p>
+</blockquote>
+<p>这一公理确保模型的封闭性——任何操作都可以用本体论中的类来描述其输入和输出类型。</p>
+<h3 id="243-质量公理"><a class="header" href="#243-质量公理">2.4.3 质量公理</a></h3>
+<p>质量公理定义记忆质量的度量方式和演化规律。</p>
+<p><strong>公理 8：质量三元组（Quality Triplet）</strong></p>
+<blockquote>
+<p>记忆质量是新鲜度（Freshness）、一致性（Consistency）与置信度（Confidence）的函数，三者缺一不可。</p>
+</blockquote>
+<ul>
+<li><strong>新鲜度</strong>：记忆内容与当前状态的时效匹配度。例如，“2024 年奥运会举办地“这一事实在 2024 年后新鲜度下降。</li>
+<li><strong>一致性</strong>：记忆内容与其他记忆及全局知识的一致性程度。例如，用户今天说“我喜欢猫“与昨天说“我对猫毛过敏“可能冲突。</li>
+<li><strong>置信度</strong>：记忆内容来源的可靠性和生成过程的置信水平。例如，用户明确陈述的事实置信度高于系统推断的假设。</li>
+</ul>
+<p><strong>公理 9：属性非独立性（Attribute Non-independence）</strong></p>
+<blockquote>
+<p>质量维度作为 Memory 的属性而非独立类存在——质量内生于记忆实例。</p>
+</blockquote>
+<p><strong>公理 10：时效衰减律（Temporal Decay Law）</strong></p>
+<blockquote>
+<p>记忆的新鲜度随时间单调递减，除非通过检索或巩固操作刷新。</p>
+</blockquote>
+<p>这一定律是 MemoryBank（2305.10250）遗忘曲线 $R = e^{-t/S}$ 的理论基础。它表明即使记忆内容本身不变（如用户出生日期），其新鲜度也会随时间降低——因为系统缺乏对其“仍然有效“的确认信号。</p>
+<h3 id="244-安全公理"><a class="header" href="#244-安全公理">2.4.4 安全公理</a></h3>
+<p>安全公理约束记忆系统的安全边界与防护策略。</p>
+<p><strong>公理 11：风险正比律（Risk Proportionality）</strong></p>
+<blockquote>
+<p>记忆检索深度与隐私泄露风险正相关——检索越深，暴露越多。</p>
+</blockquote>
+<p>深层检索可能触及用户未曾明示但隐含在交互历史中的敏感信息（如健康状态、情绪模式、经济状况）。这一公理要求 MemorySystem 在检索策略中引入深度限制参数。</p>
+<p><strong>公理 12：攻击面差异（Attack Surface Differentiation）</strong></p>
+<blockquote>
+<p>格式化检索（基于关键词/模板）比语义检索更易受提示词操纵攻击。</p>
+</blockquote>
+<p>格式化检索（如精确匹配、正则表达式）的输入-输出映射是确定性的，攻击者可以通过构造特定输入精确触发目标检索。而语义检索的向量相似度匹配具有模糊性和不可预测性，攻击难度更高。</p>
+<p><strong>公理 13：隔离必要性（Isolation Necessity）</strong></p>
+<blockquote>
+<p>敏感记忆操作必须在安全沙箱中执行，防止记忆内容被未授权访问。</p>
+</blockquote>
+<p>敏感操作包括：涉及 PII（个人身份信息）的读写、跨用户记忆共享、参数级记忆的编辑等。沙箱隔离确保即使操作被恶意利用，影响范围也被限制在可控区域内。</p>
+<h3 id="245-演进公理"><a class="header" href="#245-演进公理">2.4.5 演进公理</a></h3>
+<p>演进公理描述记忆系统随时间的演化规律。</p>
+<p><strong>公理 14：使用强化律（Usage Reinforcement）</strong></p>
+<blockquote>
+<p>记忆随使用而强化——accessCount 增加导致 importance 增加，频繁访问的记忆更持久。</p>
+</blockquote>
+<p>这是 MemoryBank 记忆强度增强机制的理论基础：$S_{new} = S_{old} + \Delta S$。在工程中，importance 评分通常与 accessCount 正相关。</p>
+<p><strong>公理 15：时间衰减律（Temporal Attenuation）</strong></p>
+<blockquote>
+<p>记忆随时间而衰减——长期未访问的记忆 importance 递减，直至触发遗忘。</p>
+</blockquote>
+<p>与时效衰减律（公理 10）不同，此公理关注的是记忆的重要性评分（importance），而非新鲜度（freshness）。一条记忆可能内容仍然新鲜（事实仍然成立），但因长期未被访问而降权。</p>
+<p><strong>公理 16：最小扰动原则（Minimal Perturbation）</strong></p>
+<blockquote>
+<p>记忆编辑（如 Knowledge Editing）应遵循最小权重变更原则，避免灾难性遗忘。</p>
+</blockquote>
+<p>KnowledgeEditor（2104.08164）的核心贡献之一就是将这一原则形式化为约束优化问题：$\min ||\Delta \theta||$，subject to $f(x; \theta + \Delta \theta) = a$。这意味着编辑一个事实时，参数变化应尽可能小，以保护其他知识不受影响。</p>
+<p><strong>公理 17：一致性优先（Consistency Priority）</strong></p>
+<blockquote>
+<p>当新旧记忆冲突时，系统应优先维护全局一致性而非局部精确性。</p>
+</blockquote>
+<p>例如，用户从“我喜欢猫“变为“我现在对猫毛过敏“，系统不应简单地添加新记忆而保留旧记忆，而应通过冲突消解机制更新或标注旧记忆，确保全局画像一致。</p>
+<hr />
+<h2 id="25-本体论分析实战"><a class="header" href="#25-本体论分析实战">2.5 本体论分析实战</a></h2>
+<p>本节选取 5 篇代表性论文，演示如何使用本本体论框架进行完整的分析。每篇论文的分析遵循以下步骤：（1）从简报中提取记忆类型、结构、操作和载体；（2）映射到三维坐标；（3）标注类层级归属；（4）一句话总结其在本体论中的定位。</p>
+<h3 id="251-论文一210408164--editing-factual-knowledge-in-language-models"><a class="header" href="#251-论文一210408164--editing-factual-knowledge-in-language-models">2.5.1 论文一：2104.08164 — Editing Factual Knowledge in Language Models</a></h3>
+<p><strong>提取分析</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>内容</th></tr></thead><tbody>
+<tr><td>Memory Types</td><td>Parametric Factual Knowledge, Editable Knowledge State</td></tr>
+<tr><td>Memory Structures</td><td>Hyper-network Weight Generator, Perturbation Vector (Delta)</td></tr>
+<tr><td>Memory Operations</td><td>Constraint-based Editing, Local Weight Update, Test-time Editing</td></tr>
+<tr><td>Memory Carriers</td><td>Transformer Model Parameters, Hyper-network Parameters</td></tr>
+</tbody></table>
+</div>
+<p><strong>三维坐标映射</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>坐标</th><th>位置</th><th>理由</th></tr></thead><tbody>
+<tr><td>载体</td><td><strong>Parametric</strong></td><td>知识编码于 Transformer 模型权重中</td></tr>
+<tr><td>功能</td><td><strong>Factual</strong></td><td>编辑目标是事实性知识（实体关系三元组）</td></tr>
+<tr><td>动态</td><td><strong>Evolution</strong></td><td>核心操作是知识更新（增量编辑）</td></tr>
+</tbody></table>
+</div>
+<p><strong>类层级归属</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>类</th><th>角色</th></tr></thead><tbody>
+<tr><td>Memory</td><td>ParametricMemory——模型权重中的事实知识</td></tr>
+<tr><td>MemoryOperation</td><td>MemoryUpdate——通过超网络预测的 Delta 进行参数编辑</td></tr>
+<tr><td>MemoryEvent</td><td>UserInput——待编辑的查询和目标答案</td></tr>
+<tr><td>Policy</td><td>EditingPolicy——局部性约束（不影响无关知识）</td></tr>
+</tbody></table>
+</div>
+<p><strong>本体论定位</strong>：KnowledgeEditor 是 <strong>Parametric 载体 + Factual 功能 + Evolution 动态</strong> 坐标上的典型实例，证明了参数级记忆可以在不重训的情况下进行精准、局部化的知识编辑。</p>
+<h3 id="252-论文二230510250--memorybank"><a class="header" href="#252-论文二230510250--memorybank">2.5.2 论文二：2305.10250 — MemoryBank</a></h3>
+<p><strong>提取分析</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>内容</th></tr></thead><tbody>
+<tr><td>Memory Types</td><td>Raw Dialogue Memory, Summarized Memory (Daily/Global), User Profile Memory</td></tr>
+<tr><td>Memory Structures</td><td>Hierarchical Memory Storage, Vector Index (FAISS), Memory Strength Parameter</td></tr>
+<tr><td>Memory Operations</td><td>Memory Consolidation (Summarization), Memory Decay (Forgetting), Memory Reinforcement (Retrieval)</td></tr>
+<tr><td>Memory Carriers</td><td>Text Embeddings, Dialogue Logs, Profile Tags</td></tr>
+</tbody></table>
+</div>
+<p><strong>三维坐标映射</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>坐标</th><th>位置</th><th>理由</th></tr></thead><tbody>
+<tr><td>载体</td><td><strong>External</strong></td><td>记忆存储于外部向量数据库（FAISS）</td></tr>
+<tr><td>功能</td><td><strong>Episodic</strong> + <strong>Factual</strong></td><td>对话历史（情景）+ 用户画像（事实）</td></tr>
+<tr><td>动态</td><td><strong>Formation</strong> + <strong>Retrieval</strong> + <strong>Evolution</strong> + <strong>Forgetting</strong></td><td>覆盖完整生命周期</td></tr>
+</tbody></table>
+</div>
+<p><strong>类层级归属</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>类</th><th>角色</th></tr></thead><tbody>
+<tr><td>MemorySystem</td><td>三层记忆管理（原始/每日/全局）+ FAISS 检索引擎</td></tr>
+<tr><td>Memory</td><td>ExternalMemory——向量嵌入形式的对话记忆</td></tr>
+<tr><td>MemoryOperation</td><td>MemoryWrite（写入）、MemoryRead（检索）、MemoryForget（衰减淘汰）、MemoryUpdate（强度增强）</td></tr>
+<tr><td>MemoryEvent</td><td>UserInput（对话输入）、TimerSignal（时间衰减触发）</td></tr>
+<tr><td>Policy</td><td>RetentionPolicy——基于遗忘曲线的动态保留策略</td></tr>
+</tbody></table>
+</div>
+<p><strong>本体论定位</strong>：MemoryBank 是 <strong>External 载体 + Episodic/Factual 功能 + 完整生命周期动态</strong> 坐标上的典范，首次将艾宾浩斯遗忘曲线引入 LLM 记忆管理，实现了拟人化的记忆衰减与强化机制。</p>
+<h3 id="253-论文三231008560--memgpt"><a class="header" href="#253-论文三231008560--memgpt">2.5.3 论文三：2310.08560 — MemGPT</a></h3>
+<p><strong>提取分析</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>内容</th></tr></thead><tbody>
+<tr><td>Memory Types</td><td>Virtual Context Memory, Main Context, Archival Memory, Recall Memory</td></tr>
+<tr><td>Memory Structures</td><td>Hierarchical Memory System, Queue Manager, FIFO Message Buffer</td></tr>
+<tr><td>Memory Operations</td><td>Virtual Context Paging, Memory Eviction/Loading, Autonomous Function Calling</td></tr>
+<tr><td>Memory Carriers</td><td>Context Window Tokens, External Vector/Relational Database</td></tr>
+</tbody></table>
+</div>
+<p><strong>三维坐标映射</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>坐标</th><th>位置</th><th>理由</th></tr></thead><tbody>
+<tr><td>载体</td><td><strong>Token-level</strong> + <strong>External</strong></td><td>主上下文（Token）+ 外部存储（External）的混合载体</td></tr>
+<tr><td>功能</td><td><strong>Working</strong> + <strong>Episodic</strong></td><td>工作上下文（Working）+ 归档历史（Episodic）</td></tr>
+<tr><td>动态</td><td><strong>Formation</strong> + <strong>Retrieval</strong> + <strong>Forgetting</strong></td><td>写入、分页检索、上下文溢出淘汰</td></tr>
+</tbody></table>
+</div>
+<p><strong>类层级归属</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>类</th><th>角色</th></tr></thead><tbody>
+<tr><td>MemorySystem</td><td>分层内存系统（主上下文 + 外部存储）+ 队列管理器</td></tr>
+<tr><td>Memory</td><td>TokenMemory（主上下文）、ExternalMemory（归档/召回存储）</td></tr>
+<tr><td>MemoryOperation</td><td>MemoryWrite（写入上下文）、MemoryRead（从外部检索）、MemoryForget（FIFO 溢出淘汰）</td></tr>
+<tr><td>MemoryEvent</td><td>UserInput、SystemOverflow（上下文容量告警触发分页）</td></tr>
+<tr><td>Agent</td><td>LLM 作为自主记忆管理者——自行决定何时分页、何时检索</td></tr>
+</tbody></table>
+</div>
+<p><strong>本体论定位</strong>：MemGPT 是 <strong>Token-level + External 混合载体 + Working 功能 + 自主分页动态</strong> 坐标上的开创性工作，首次将操作系统虚拟内存架构引入 LLM 上下文管理，赋予模型自主管理记忆的能动性。</p>
+<h3 id="254-论文四240514831--hipporag"><a class="header" href="#254-论文四240514831--hipporag">2.5.4 论文四：2405.14831 — HippoRAG</a></h3>
+<p><strong>提取分析</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>内容</th></tr></thead><tbody>
+<tr><td>Memory Types</td><td>Neurobiologically Inspired Long-Term Memory, Hippocampal Index Memory</td></tr>
+<tr><td>Memory Structures</td><td>Knowledge Graph (Cortex-like Storage), Hippocampal Index, PPR Graph Index</td></tr>
+<tr><td>Memory Operations</td><td>Offline Index Construction, Personalized PageRank Retrieval, Cross-Passage Knowledge Integration</td></tr>
+<tr><td>Memory Carriers</td><td>Text Passages, Graph Nodes &amp; Edges, LLM Context Window</td></tr>
+</tbody></table>
+</div>
+<p><strong>三维坐标映射</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>坐标</th><th>位置</th><th>理由</th></tr></thead><tbody>
+<tr><td>载体</td><td><strong>External</strong></td><td>知识图谱持久化于外部存储</td></tr>
+<tr><td>功能</td><td><strong>Semantic</strong> + <strong>Factual</strong></td><td>图结构语义关联 + 段落事实</td></tr>
+<tr><td>动态</td><td><strong>Association</strong> + <strong>Retrieval</strong></td><td>图谱关联构建 + PPR 检索</td></tr>
+</tbody></table>
+</div>
+<p><strong>类层级归属</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>类</th><th>角色</th></tr></thead><tbody>
+<tr><td>MemorySystem</td><td>两阶段架构：离线图谱构建（新皮层模拟）+ 在线 PPR 检索（海马体模拟）</td></tr>
+<tr><td>Memory</td><td>ExternalMemory——知识图谱形式的长期记忆</td></tr>
+<tr><td>MemoryOperation</td><td>MemoryWrite（图谱节点/边插入）、MemoryRead（PPR 检索）</td></tr>
+<tr><td>MemoryEvent</td><td>UserInput（查询触发检索）</td></tr>
+<tr><td>Entity</td><td>Concept（图谱节点）、Relation（图谱边）</td></tr>
+<tr><td>Context</td><td>TaskContext——多跳问答任务上下文</td></tr>
+</tbody></table>
+</div>
+<p><strong>本体论定位</strong>：HippoRAG 是 <strong>External 载体 + Semantic 功能 + Association 动态</strong> 坐标上的独特实例，通过知识图谱 + Personalized PageRank 实现了单次检索完成多跳推理，将神经生物学的海马体索引理论成功映射到 AI 架构。</p>
+<h3 id="255-论文五250206049--lm2-large-memory-models"><a class="header" href="#255-论文五250206049--lm2-large-memory-models">2.5.5 论文五：2502.06049 — LM2: Large Memory Models</a></h3>
+<p><strong>提取分析</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>内容</th></tr></thead><tbody>
+<tr><td>Memory Types</td><td>Explicit Auxiliary Memory, Context Representation Memory</td></tr>
+<tr><td>Memory Structures</td><td>Independent Memory Bank, Gated Memory Unit, Cross-Attention Connectivity</td></tr>
+<tr><td>Memory Operations</td><td>Cross-Attention Read, Gated Write/Update, Forget Operation</td></tr>
+<tr><td>Memory Carriers</td><td>Memory Vectors, Token Representations</td></tr>
+</tbody></table>
+</div>
+<p><strong>三维坐标映射</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>坐标</th><th>位置</th><th>理由</th></tr></thead><tbody>
+<tr><td>载体</td><td><strong>Latent</strong> + <strong>Parametric</strong></td><td>记忆向量（Latent 隐式表征）+ 门控参数（Parametric）</td></tr>
+<tr><td>功能</td><td><strong>Working</strong> + <strong>Factual</strong></td><td>长上下文推理工作区 + 多跳信息合成</td></tr>
+<tr><td>动态</td><td><strong>Formation</strong> + <strong>Retrieval</strong> + <strong>Forgetting</strong></td><td>门控写入 + 跨注意力读取 + 遗忘门淘汰</td></tr>
+</tbody></table>
+</div>
+<p><strong>类层级归属</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>类</th><th>角色</th></tr></thead><tbody>
+<tr><td>Memory</td><td>LatentMemory——记忆向量形式的显式辅助记忆</td></tr>
+<tr><td>MemorySystem</td><td>Decoder-only Transformer + 独立 Memory Bank + 跨注意力层</td></tr>
+<tr><td>MemoryOperation</td><td>MemoryWrite（I-Gate/O-Gate 门控更新）、MemoryRead（Cross-Attention）、MemoryForget（F-Gate）</td></tr>
+<tr><td>MemoryEvent</td><td>InputTokens（输入触发跨注意力交互）</td></tr>
+<tr><td>Policy</td><td>GatingPolicy——门控信号控制的信息流约束</td></tr>
+</tbody></table>
+</div>
+<p><strong>本体论定位</strong>：LM2 是 <strong>Latent 载体 + Working 功能 + 门控生命周期动态</strong> 坐标上的前沿探索，通过独立记忆库 + 三门类控机制证明了显式记忆可以在不损害通用能力的前提下大幅提升 Transformer 的长上下文推理能力。</p>
+<h3 id="256-五篇论文的本体论坐标总览"><a class="header" href="#256-五篇论文的本体论坐标总览">2.5.6 五篇论文的本体论坐标总览</a></h3>
+<p>下表将五篇论文映射到统一的本体论坐标空间，直观展示它们在三维分类体系中的分布：</p>
+<div class="table-wrapper"><table><thead><tr><th>论文</th><th>载体维度</th><th>功能维度</th><th>动态维度</th><th>MemorySystem 子类</th><th>一句话定位</th></tr></thead><tbody>
+<tr><td>2104.08164 KnowledgeEditor</td><td>Parametric</td><td>Factual</td><td>Evolution</td><td>N/A（模型级操作）</td><td>参数级事实的精准编辑器</td></tr>
+<tr><td>2305.10250 MemoryBank</td><td>External</td><td>Episodic + Factual</td><td>Formation + Retrieval + Evolution + Forgetting</td><td>分层检索系统</td><td>拟人化的长期记忆管理框架</td></tr>
+<tr><td>2310.08560 MemGPT</td><td>Token-level + External</td><td>Working + Episodic</td><td>Formation + Retrieval + Forgetting</td><td>虚拟上下文管理器</td><td>LLM 的操作系统架构</td></tr>
+<tr><td>2405.14831 HippoRAG</td><td>External</td><td>Semantic + Factual</td><td>Association + Retrieval</td><td>图索引检索系统</td><td>海马体启发的多跳推理引擎</td></tr>
+<tr><td>2502.06049 LM2</td><td>Latent + Parametric</td><td>Working + Factual</td><td>Formation + Retrieval + Forgetting</td><td>门控记忆增强 Transformer</td><td>显式辅助记忆的长程推理模型</td></tr>
+</tbody></table>
+</div>
+<p>这一映射揭示了一个关键洞察：<strong>五篇论文分别占据了本体论坐标空间中的不同区域，彼此互补而非重叠</strong>。KnowledgeEditor 独占 Parametric+Evolution 区域，MemoryBank 和 HippoRAG 共享 External 载体但功能定位不同（Episodic vs. Semantic），MemGPT 独占 Token-level+External 混合区域，LM2 独占 Latent+Parametric 区域。这意味着 Agent Memory 领域在三维坐标空间中仍有大量未探索区域——如 Parametric+Procedural+Formation（程序性知识的参数化编码）、External+Reflection+Reflection（外部反思记忆的生成）等坐标组合。</p>
+<hr />
+<h2 id="26-本章小结"><a class="header" href="#26-本章小结">2.6 本章小结</a></h2>
+<ul>
+<li>
+<p><strong>统一语言是领域成熟的前提。</strong> 170 篇论文中的术语碎片化和概念重叠揭示了 Agent Memory 领域迫切需要统一的分析框架。本体论提供了这种统一语言。</p>
+</li>
+<li>
+<p><strong>三维正交分类是本体的核心分析工具。</strong> 载体（Carrier）、功能（Function）、动态（Dynamic）三个维度相互正交，每个记忆概念由三个坐标唯一确定。载体定义“记忆存在哪里“，功能定义“记忆做什么“，动态定义“记忆如何变化“。</p>
+</li>
+<li>
+<p><strong>类层级提供语义归属。</strong> 8 个顶层类（Agent、Memory、MemorySystem、MemoryEvent、MemoryOperation、Context、Entity、Policy）构成领域概念的语义归属树，与三维分类正交互补。</p>
+</li>
+<li>
+<p><strong>18 条公理约束模型的逻辑一致性。</strong> 存在公理（3 条）定义记忆存在的基本条件，操作公理（4 条）约束操作的执行规则，质量公理（3 条）定义质量的度量方式，安全公理（3 条）划定安全边界，演进公理（4 条）描述记忆随时间的演化规律。</p>
+</li>
+<li>
+<p><strong>本体论框架已验证于 5 篇代表性论文。</strong> 分析结果表明，现有工作在三维坐标空间中分布稀疏且互补，大量坐标区域尚未被探索，预示着领域仍有广阔的设计空间。</p>
+</li>
+<li>
+<p><strong>本体论是地图而非领土。</strong> 框架的价值在于提供统一的分析语言和导航工具，而非取代原始论文的贡献。它将持续演进——新论文的发现将填充空白区域、挑战既有分类或触发维度扩展。</p>
+</li>
+<li>
+<p><strong>本章框架为后续章节奠定分析基础。</strong> 第3章至第15章将依次展开各载体维度、功能范式和生命周期阶段的技术细节，每一章都将使用本章建立的本体论框架进行概念定位和关系分析。</p>
+</li>
+</ul>
+<hr />
+<h2 id="27-延伸阅读"><a class="header" href="#27-延伸阅读">2.7 延伸阅读</a></h2>
+<h3 id="本体论与分类学基础"><a class="header" href="#本体论与分类学基础">本体论与分类学基础</a></h3>
+<ul>
+<li>Guarino, N. (1998). <em>Formal Ontology in Information Systems</em>. IOS Press. — 信息系统中形式本体论的经典教材。</li>
+<li>Smith, B. (2003). <em>Ontology</em>. In Blackwell Guide to the Philosophy of Computing and Information. — 本体论的哲学基础概述。</li>
+<li>Mizoguchi, R. &amp; Sunagawa, E. (2022). <em>Introduction to Ontology Engineering</em>. — 本体工程学的入门指南。</li>
+</ul>
+<h3 id="agent-memory-领域综述"><a class="header" href="#agent-memory-领域综述">Agent Memory 领域综述</a></h3>
+<ul>
+<li>Zhong, W. et al. (2023). <em>MemoryBank: Enhancing Large Language Models with Long-Term Memory</em>. arXiv:2305.10250. — 本章分析的 5 篇论文之一。</li>
+<li>Packer, C. et al. (2023). <em>MemGPT: Towards LLMs as Operating Systems</em>. arXiv:2310.08560. — 本章分析的 5 篇论文之一。</li>
+<li>Gutierrez, B. J. et al. (2024). <em>HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models</em>. NeurIPS 2024. — 本章分析的 5 篇论文之一。</li>
+</ul>
+<h3 id="认知心理学记忆理论"><a class="header" href="#认知心理学记忆理论">认知心理学记忆理论</a></h3>
+<ul>
+<li>Baddeley, A. (2000). <em>The episodic buffer: a new component of working memory?</em> Trends in Cognitive Sciences. — 工作记忆的多组件模型。</li>
+<li>Tulving, E. (1972). <em>Episodic and semantic memory</em>. — 情景记忆与语义记忆的经典区分。</li>
+<li>Ebbinghaus, H. (1885). <em>Memory: A Contribution to Experimental Psychology</em>. — 遗忘曲线的原始文献。</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch01-overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch03-cognitive.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch01-overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch03-cognitive.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script src="katex-render.js"></script>
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

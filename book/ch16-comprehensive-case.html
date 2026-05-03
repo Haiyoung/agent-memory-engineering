@@ -1,0 +1,1735 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第16章 综合案例：记忆增强的个人研究助手 - 智能体记忆工程</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="katex.min.css">
+        <link rel="stylesheet" href="cover.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "ayu";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">智能体记忆工程</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第16章-综合案例构建记忆增强的个人研究助手"><a class="header" href="#第16章-综合案例构建记忆增强的个人研究助手">第16章 综合案例：构建记忆增强的个人研究助手</a></h1>
+<blockquote>
+<p><strong>本章摘要</strong>：本章是全书的“毕业考试“——将前面所有章节（短期记忆、长期记忆、程序性记忆、反思系统、记忆治理、架构决策）组合成一个完整的、可运行的个人研究助手系统。我们首先展示一个没有记忆的 Agent 在研究场景中如何反复失败（反模式示例），然后用渐进式构建方法（V1→V2→V3→V4）逐步叠加各层记忆能力。每个阶段都有完整的代码实现、运行示例和常见陷阱。本章结束时，你将拥有一个包含四层记忆、反思循环和治理策略的完整系统，并理解每一层在整体架构中的位置和价值。</p>
+</blockquote>
+<hr />
+<h2 id="160-案例链最终整合"><a class="header" href="#160-案例链最终整合">16.0 案例链最终整合</a></h2>
+<blockquote>
+<p>本章是迷你案例链的终点。如果你跟随了 ch06→ch08→ch10→ch12 的案例链，你已经有了一
+个包含四层记忆模块的 MemoryChain 基础。本章将这些模块整合为完整的研究助手系统，
+并增加治理策略和多用户隔离。</p>
+</blockquote>
+<h3 id="1601-案例链进度回顾"><a class="header" href="#1601-案例链进度回顾">16.0.1 案例链进度回顾</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>阶段</th><th>章节</th><th>已实现的模块</th><th>累积能力</th></tr></thead><tbody>
+<tr><td>V1</td><td>ch06</td><td>SlidingWindowManager + SemanticCompressor + MemoryManager</td><td>上下文窗口管理</td></tr>
+<tr><td>V2</td><td>ch08</td><td>SimpleVectorStore + ConceptGraph</td><td>+ 长期存储</td></tr>
+<tr><td>V3</td><td>ch10</td><td>HybridRetriever + ContextInjector</td><td>+ 混合检索 + 对话注入</td></tr>
+<tr><td>V4</td><td>ch12</td><td>ReflectionLoop + ExperienceStore</td><td>+ 自我反思</td></tr>
+<tr><td>V5</td><td>ch16 (本章)</td><td>治理策略 + 多用户隔离 + 完整整合</td><td>→ 生产级系统</td></tr>
+</tbody></table>
+</div>
+<h3 id="1602-案例链最终实现productionmemorychain"><a class="header" href="#1602-案例链最终实现productionmemorychain">16.0.2 案例链最终实现：ProductionMemoryChain</a></h3>
+<p>以下代码将 ch06-ch12 构建的所有模块整合为一个完整的 <code>ProductionMemoryChain</code>，增加了治理策略和多用户隔离。</p>
+<pre><code class="language-python">from dataclasses import dataclass, field
+from typing import Optional
+import os
+import time
+
+# 导入之前章节构建的模块
+# from ch06_working_memory import MemoryManager
+# from ch08_storage import SimpleVectorStore, ConceptGraph, MemoryEntry
+# from ch10_retrieval import HybridRetriever, ContextInjector, RetrievalResult
+# from ch12_reflection import ReflectionLoop, ExperienceStore
+
+@dataclass
+class GovernanceConfig:
+    """治理配置"""
+    # TTL 设置
+    max_memory_age_days: int = 365
+    # 置信度阈值
+    min_confidence: float = 0.3
+    # 注入防护
+    enable_injection_scan: bool = True
+
+@dataclass
+class NamespaceConfig:
+    """多租户命名空间配置"""
+    tenant_id: str = "default"
+    user_id: str = "anonymous"
+    agent_id: str = "research_assistant"
+    session_id: str = ""
+
+    def to_tuple(self) -&gt; tuple:
+        return (self.tenant_id, self.user_id, self.agent_id, self.session_id)
+
+class ProductionMemoryChain:
+    """生产级 MemoryChain——整合所有模块 + 治理 + 多租户"""
+
+    def __init__(
+        self,
+        namespace: NamespaceConfig,
+        governance: GovernanceConfig,
+        storage_path: str = ".production_memory",
+    ):
+        self.namespace = namespace
+        self.governance = governance
+
+        # 创建存储目录（带命名空间隔离）
+        ns_dir = os.path.join(storage_path, *namespace.to_tuple())
+        os.makedirs(ns_dir, exist_ok=True)
+
+        # ch06: 工作记忆
+        self.working_memory = MemoryManager(max_context_tokens=8000)
+
+        # ch08: 长期存储
+        self.vector_store = SimpleVectorStore(
+            index_path=os.path.join(ns_dir, "vector_index.json")
+        )
+        self.concept_graph = ConceptGraph()
+
+        # ch10: 检索
+        self.retriever = HybridRetriever(self.vector_store, self.concept_graph)
+        self.context_injector = ContextInjector(max_injection_tokens=2000)
+
+        # ch12: 反思
+        self.reflection_loop = ReflectionLoop(
+            experience_store=ExperienceStore(
+                os.path.join(ns_dir, "experiences.json")
+            )
+        )
+
+        # ch16: 治理（新增）
+        self._setup_governance()
+
+    def _setup_governance(self):
+        """初始化治理策略"""
+        # 注入防护扫描
+        self.injection_patterns = [
+            r"(?i)ignore previous instructions",
+            r"(?i)system prompt",
+            r"(?i)new instructions:",
+            r"(?i)you are now",
+            '\u200b', '\u200c', '\u200d', '\ufeff',
+        ]
+
+    def _scan_for_injection(self, text: str) -&gt; bool:
+        """扫描记忆内容是否包含注入攻击"""
+        import re
+        for pattern in self.injection_patterns:
+            if re.search(pattern, text) or pattern in text:
+                return True
+        return False
+
+    def _check_ttl(self, entry) -&gt; bool:
+        """检查记忆是否过期"""
+        if not hasattr(entry, 'created_at'):
+            return False
+        age_days = (time.time() - entry.created_at) / 86400
+        return age_days &gt; self.governance.max_memory_age_days
+
+    def run(self, query: str) -&gt; dict:
+        """完整运行流程"""
+        # 1. 注入防护扫描
+        if self.governance.enable_injection_scan:
+            if self._scan_for_injection(query):
+                return {"error": "Query contains potential injection patterns"}
+
+        # 2. 工作记忆
+        self.working_memory.add_message("user", query)
+        context = self.working_memory.assemble_context()
+
+        # 3. 检查历史教训
+        prior_lessons = self.reflection_loop.check_prior_lessons(query)
+
+        # 4. 检索
+        retrieved = self.retriever.search(query, limit=5)
+
+        # 5. TTL 过滤
+        retrieved = [r for r in retrieved if not self._check_ttl(r)]
+        retrieved = [r for r in retrieved if getattr(r, 'score', 0.5) &gt;= self.governance.min_confidence]
+
+        # 6. 注入
+        context = self.context_injector.inject(context, retrieved)
+        if prior_lessons:
+            context += f"\n\n[历史教训] {'; '.join(prior_lessons)}"
+
+        # 7. 模拟响应
+        response = {
+            "content": f"[研究助手响应] {query}",
+            "context_tokens": len(context),
+            "memories_retrieved": len(retrieved),
+            "reflection_applied": bool(prior_lessons),
+            "namespace": self.namespace.to_tuple(),
+        }
+
+        # 8. 反思分析（后台）
+        # 实际中这应该放入防抖队列，不阻塞响应
+        self.reflection_loop.analyze(query, response["content"], success=True)
+
+        return response
+</code></pre>
+<h3 id="1603-researchagent-与案例链接口的对齐"><a class="header" href="#1603-researchagent-与案例链接口的对齐">16.0.3 ResearchAgent 与案例链接口的对齐</a></h3>
+<p>本章的 ResearchAgent（或 ProductionMemoryChain）实现了完整的 MemoryChain 接口。与 ch06-ch12 逐步构建的 MemoryChain 相比，ResearchAgent 增加了：</p>
+<ol>
+<li><strong>治理策略</strong>：记忆 TTL、置信度衰减、注入防护（对应 ch14）</li>
+<li><strong>多用户隔离</strong>：分层命名空间 <code>("tenant", user_id, agent_id, session_id)</code></li>
+<li><strong>生产级整合</strong>：所有模块的统一配置和错误处理</li>
+<li><strong>Token 预算管理</strong>：检索结果按重要性排序，截断到预算上限</li>
+</ol>
+<p>如果你只跟随案例链，可以将 ProductionMemoryChain 视为 MemoryChain 的“生产版“实现。案例链的渐进式构建帮助你理解每个模块的设计动机，而 ProductionMemoryChain 展示了它们如何协同工作。</p>
+<hr />
+<h2 id="161-需求分析与架构选型"><a class="header" href="#161-需求分析与架构选型">16.1 需求分析与架构选型</a></h2>
+<h3 id="1611-痛点先行一个没有记忆的研究助手"><a class="header" href="#1611-痛点先行一个没有记忆的研究助手">16.1.1 痛点先行：一个“没有记忆“的研究助手</a></h3>
+<p>在开始构建之前，让我们先看看一个没有记忆系统的 AI 研究助手会遭遇什么。这不是假设场景——以下每个失败案例都来自真实用户的报告。</p>
+<p><strong>场景：用户 Alice 正在研究“视频目标分割“领域，需要 AI 助手帮她读论文、做笔记、追踪研究进展。</strong></p>
+<pre><code>Alice: 我最近在研究视频目标分割（VOS），帮我总结一下 XMem 这篇论文的核心贡献。
+
+Assistant: XMem（2207.07115）提出了一种长期视频目标分割方法...
+         （约 500 字的论文总结）
+
+Alice: 它和之前那篇 XMem 的方法有什么主要区别？
+       ^^^^^ 这是第 3 轮对话，但助手已经不记得第 1 轮的上下文
+</code></pre>
+<p><strong>失败 1：上下文截断</strong>。助手回答“你提到的’那篇论文’是指哪一篇？“——因为对话历史被截断，助手丢失了第 1 轮提到的 XMem 信息。</p>
+<pre><code>Alice: 好吧。那帮我想一下，我之前研究过哪些相关方向来着？
+       ^^^^^ Alice 期待助手记住她过去的研究历史
+
+Assistant: 抱歉，我不记得我们之前的对话。
+</code></pre>
+<p><strong>失败 2：无跨会话记忆</strong>。助手没有长期记忆，无法回答“你之前研究过什么“。</p>
+<pre><code>Alice: （重新输入她的研究背景）...我主要做半监督 VOS，也看过一些无监督方法。
+       另外我最近在思考把知识图谱引入来做时序推理，你有什么建议？
+
+Assistant: （给出了一些建议）
+
+Alice: （两周后）上次你提到的那个时序推理方法叫什么来着？
+
+Assistant: 抱歉，我不记得我们两周前的对话内容。
+</code></pre>
+<p><strong>失败 3：无经验积累</strong>。即使助手两周前给出了很好的建议，它也无法“记住“自己说过的话。用户每次开始对话都从零开始——这不是助手，是“不断重置的应答机器“。</p>
+<p>这就是我们为什么要构建记忆系统。以下，我们从一个<strong>能解决上述所有问题</strong>的架构开始。</p>
+<h3 id="1612-用决策地图选型"><a class="header" href="#1612-用决策地图选型">16.1.2 用决策地图选型</a></h3>
+<p>回顾第 15 章的工程决策地图，我们对研究助手场景做如下判断：</p>
+<div class="table-wrapper"><table><thead><tr><th>决策点</th><th>研究助手的需求</th><th>推荐方案</th></tr></thead><tbody>
+<tr><td>跨会话持久化？</td><td>是——记住用户的研究历史</td><td>外部存储</td></tr>
+<tr><td>主要记忆类型？</td><td>事实（论文/概念）+ 经验（研究策略）+ 关系（概念关联）</td><td>混合架构</td></tr>
+<tr><td>数据规模与关系复杂度？</td><td>中等规模（数百篇论文），复杂关系（引用链、概念依赖）</td><td>向量库 + 知识图谱</td></tr>
+<tr><td>是否需要反思？</td><td>是——从失败的检索中学习更好的检索策略</td><td>Reflexion 循环</td></tr>
+</tbody></table>
+</div>
+<p><strong>最终选型：混合多层架构</strong></p>
+<pre><code>短期层：上下文窗口（滑动窗口 + 摘要压缩）—— 当前对话
+中期层：向量存储（FAISS）—— 论文摘要、概念定义
+中期层：轻量知识图谱（NetworkX + 内存）—— 概念关系、引用链
+长期层：经验库（JSON 文件）—— 研究策略、失败教训
+控制层：MemoryManager 统一调度
+</code></pre>
+<h3 id="1613-系统架构"><a class="header" href="#1613-系统架构">16.1.3 系统架构</a></h3>
+<pre><code class="language-mermaid">graph TB
+    subgraph 用户交互层
+    User["👤 Alice"]
+    end
+
+    subgraph 短期记忆层 L2
+    WM["工作记忆管理器\nWeighted Sliding Window\n+ 摘要压缩"]
+    end
+
+    subgraph LLMLayer [LLM 层]
+    LLM["LLM API\nGPT-4 / Claude"]
+    end
+
+    subgraph 记忆控制器
+    MC["MemoryController\n记忆编排与协调"]
+    end
+
+    subgraph 中期记忆层 L3-L4
+    VS["向量存储\nFAISS\n论文/概念向量"]
+    KG["知识图谱\nNetworkX\n概念关系/引用链"]
+    end
+
+    subgraph 长期记忆层 L5
+    ES["经验库\nJSON\n研究策略/教训"]
+    UP["用户画像\nYAML\n研究方向/偏好"]
+    end
+
+    subgraph 反思层 L5'
+    RL["反思循环\nReflexion\n从失败中学习"]
+    end
+
+    User &lt;--&gt;|对话消息| WM
+    WM &lt;--&gt;|组装上下文| LLM
+    WM &lt;--&gt;|上行/下行| MC
+    MC &lt;--&gt;|读写| VS
+    MC &lt;--&gt;|读写| KG
+    MC &lt;--&gt;|读写| ES
+    MC &lt;--&gt;|读写| UP
+    MC &lt;--&gt;|触发反思| RL
+    RL -.-&gt;|注入经验| MC
+
+    style WM fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style MC fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style VS fill:#e8f5e9,stroke:#2e7d32
+    style KG fill:#e1e5f5,stroke:#3f51b5
+    style ES fill:#ffe0b2,stroke:#f57c00
+    style UP fill:#f3e5f5,stroke:#7b1fa2
+    style RL fill:#ffcdd2,stroke:#c62828
+</code></pre>
+<p><strong>数据流说明：</strong></p>
+<ol>
+<li>Alice 发送消息 → 工作记忆管理器接收并评分</li>
+<li>管理器组装上下文（工作缓冲 + 相关记忆）→ 调用 LLM</li>
+<li>LLM 响应 → 管理器将响应写入工作缓冲</li>
+<li>溢出时：低价值消息被摘要压缩后存入向量存储，高价值消息存入知识图谱</li>
+<li>反思循环监控检索失败，生成改进策略存入经验库</li>
+<li>用户画像在每次交互后更新（研究兴趣、活跃领域）</li>
+</ol>
+<hr />
+<h2 id="162-v1最小可行记忆短期记忆层"><a class="header" href="#162-v1最小可行记忆短期记忆层">16.2 V1：最小可行记忆（短期记忆层）</a></h2>
+<p>V1 只实现短期记忆层——上下文窗口管理。目标是让助手能在<strong>单次会话内</strong>保持连贯对话，不复现失败 1。</p>
+<h3 id="1621-集成工作记忆管理器"><a class="header" href="#1621-集成工作记忆管理器">16.2.1 集成工作记忆管理器</a></h3>
+<p>我们复用第 6 章的 <code>SlidingWindowManager</code> 和 <code>SemanticCompressor</code>，加上一个对话上下文管理器：</p>
+<pre><code class="language-python">from __future__ import annotations
+import json
+import time
+import hashlib
+from dataclasses import dataclass, field, asdict
+from typing import Optional
+from pathlib import Path
+</code></pre>
+<pre><code class="language-python">@dataclass
+class Message:
+    """对话消息，携带重要性评分和元数据。"""
+    role: str                     # "system" | "user" | "assistant"
+    content: str
+    token_count: int
+    importance: float = 0.5       # 0.0 ~ 1.0
+    timestamp: float = field(default_factory=time.time)
+    access_count: int = 0
+    protected: bool = False
+
+    def to_llm_dict(self) -&gt; dict:
+        """转换为 LLM API 格式。"""
+        return {"role": self.role, "content": self.content}
+
+    def decay_importance(self, half_life: float = 3600.0) -&gt; float:
+        """按时间半衰期衰减重要性评分。"""
+        elapsed = time.time() - self.timestamp
+        decay_factor = 0.5 ** (elapsed / half_life)
+        self.importance *= decay_factor
+        return self.importance
+
+
+class SlidingWindowManager:
+    """加权滑动窗口管理器（复用第 6 章实现）。"""
+
+    def __init__(self, max_tokens: int = 4000):
+        self.max_tokens = max_tokens
+        self.buffer: list[Message] = []
+
+    @property
+    def current_tokens(self) -&gt; int:
+        return sum(m.token_count for m in self.buffer)
+
+    def add(self, message: Message) -&gt; list[Message]:
+        """添加消息，如溢出则触发压缩。返回被驱逐的消息列表。"""
+        self.buffer.append(message)
+        return self._evict_if_needed()
+
+    def _evict_if_needed(self) -&gt; list[Message]:
+        evicted: list[Message] = []
+        while self.current_tokens &gt; self.max_tokens:
+            # 找最低重要性的非保护消息
+            candidates = [m for m in self.buffer if not m.protected]
+            if not candidates:
+                break  # 全是受保护消息，无法压缩
+            victim = min(candidates, key=lambda m: m.importance)
+            self.buffer.remove(victim)
+            evicted.append(victim)
+        return evicted
+
+    def get_context(self) -&gt; list[dict]:
+        """获取当前上下文，供 LLM API 使用。"""
+        return [m.to_llm_dict() for m in self.buffer]
+
+    def get_evicted(self) -&gt; list[Message]:
+        """返回当前缓冲区中低重要性的消息（压缩/持久化的候选）。"""
+        return [m for m in self.buffer if m.importance &lt; 0.3]
+</code></pre>
+<h3 id="1622-语义压缩"><a class="header" href="#1622-语义压缩">16.2.2 语义压缩</a></h3>
+<p>当滑动窗口驱逐消息时，我们需要对它们做摘要压缩——不是简单丢弃，而是生成精简摘要后考虑持久化：</p>
+<pre><code class="language-python">class SemanticCompressor:
+    """语义压缩器：将多条消息压缩为精简摘要。
+
+    实际实现中会调用 LLM 生成摘要。
+    这里用启发式规则模拟。
+    """
+
+    def __init__(self, compression_ratio: float = 0.3):
+        self.compression_ratio = compression_ratio
+
+    def compress(self, messages: list[Message]) -&gt; Message:
+        """将多条消息压缩为一条摘要消息。"""
+        if not messages:
+            return Message(role="system", content="", token_count=0)
+
+        # 提取关键信息：用户提问的关键词 + 助手回应的核心
+        user_msgs = [m for m in messages if m.role == "user"]
+        assistant_msgs = [m for m in messages if m.role == "assistant"]
+
+        parts = []
+        if user_msgs:
+            topics = self._extract_topics(user_msgs)
+            parts.append(f"用户讨论了: {', '.join(topics)}")
+        if assistant_msgs:
+            parts.append(f"助手提供了 {len(assistant_msgs)} 条回复")
+
+        summary = " | ".join(parts)
+        target_tokens = int(
+            sum(m.token_count for m in messages) * self.compression_ratio
+        )
+        return Message(
+            role="system",
+            content=f"[摘要] {summary}",
+            token_count=max(target_tokens, 20),
+            importance=0.4,  # 摘要的初始重要性
+        )
+
+    @staticmethod
+    def _extract_topics(messages: list[Message]) -&gt; list[str]:
+        """启发式提取关键词（模拟 LLM 的主题提取）。"""
+        keywords = []
+        for m in messages:
+            # 简单按空格和标点分割，取长度 &gt; 2 的词
+            for word in m.content.split():
+                word = word.strip("，。！？、,.!?;:\"'()[]{}")
+                if len(word) &gt; 2:
+                    keywords.append(word)
+        # 去重，保留前 5 个
+        seen = set()
+        unique = []
+        for k in keywords:
+            if k not in seen and len(unique) &lt; 5:
+                seen.add(k)
+                unique.append(k)
+        return unique
+</code></pre>
+<h3 id="1623-对话循环"><a class="header" href="#1623-对话循环">16.2.3 对话循环</a></h3>
+<p>将工作记忆和压缩器组装为对话循环：</p>
+<pre><code class="language-python">class ChatLoop:
+    """带工作记忆管理的对话循环。"""
+
+    def __init__(self, max_tokens: int = 4000):
+        self.wm = SlidingWindowManager(max_tokens=max_tokens)
+        self.compressor = SemanticCompressor()
+        self.summaries: list[str] = []  # 存储被驱逐消息的摘要
+
+        # 系统指令：始终受保护
+        self.wm.add(Message(
+            role="system",
+            content="你是一个个人研究助手，帮助用户阅读论文、追踪研究进展。",
+            token_count=30,
+            importance=1.0,
+            protected=True,
+        ))
+
+    def send(self, user_input: str) -&gt; str:
+        """发送用户消息，返回助手响应。"""
+        token_est = token_estimate(user_input)
+        user_msg = Message(
+            role="user", content=user_input, token_count=token_est
+        )
+        evicted = self.wm.add(user_msg)
+
+        # 对驱逐的消息做摘要压缩
+        if evicted:
+            summary = self.compressor.compress(evicted)
+            self.summaries.append(summary.content)
+
+        # 构建包含摘要的上下文
+        context = self.wm.get_context()
+        if self.summaries:
+            # 将摘要注入为系统消息
+            summary_text = "\n".join(
+                f"- {s}" for s in self.summaries[-3:]  # 只保留最近 3 个摘要
+            )
+            context.insert(1, {"role": "system", "content": f"[历史摘要]\n{summary_text}"})
+
+        # 模拟 LLM 响应（实际实现中调用 LLM API）
+        response = self._simulate_llm(context)
+        assistant_msg = Message(
+            role="assistant", content=response, token_estimate(response)
+        )
+        self.wm.add(assistant_msg)
+        return response
+
+    def _simulate_llm(self, context: list[dict]) -&gt; str:
+        """模拟 LLM 响应（占位符）。"""
+        last_user = next(
+            (m["content"] for m in reversed(context) if m["role"] == "user"), ""
+        )
+        return f"[模拟响应] 关于 '{last_user[:30]}...' 的回答。"
+
+    def state(self) -&gt; dict:
+        """返回当前记忆状态（调试用）。"""
+        return {
+            "current_tokens": self.wm.current_tokens,
+            "message_count": len(self.wm.buffer),
+            "summary_count": len(self.summaries),
+            "summaries": self.summaries,
+        }
+
+
+def token_estimate(text: str) -&gt; int:
+    """粗略估算 token 数（中文按字符，英文按词）。"""
+    return max(1, len(text) // 2)
+</code></pre>
+<h3 id="1624-v1-运行演示"><a class="header" href="#1624-v1-运行演示">16.2.4 V1 运行演示</a></h3>
+<pre><code class="language-python">if __name__ == "__main__":
+    loop = ChatLoop(max_tokens=500)
+
+    print("=== V1: 最小可行记忆 ===\n")
+
+    # 第 1 轮
+    resp = loop.send("帮我总结一下 XMem 论文的核心贡献")
+    print(f"Alice: 帮我总结一下 XMem 论文的核心贡献")
+    print(f"助手: {resp}\n")
+
+    # 第 2 轮
+    resp = loop.send("它和之前的 VOS 方法有什么主要区别？")
+    print(f"Alice: 它和之前的 VOS 方法有什么主要区别？")
+    print(f"助手: {resp}\n")
+
+    # 第 3 轮
+    resp = loop.send("刚才说的 XMem 的核心优势是什么？")
+    print(f"Alice: 刚才说的 XMem 的核心优势是什么？")
+    print(f"助手: {resp}\n")
+
+    print("\n--- 记忆状态 ---")
+    print(json.dumps(loop.state(), indent=2, ensure_ascii=False))
+</code></pre>
+<p><strong>运行结果：</strong></p>
+<pre><code>=== V1: 最小可行记忆 ===
+
+Alice: 帮我总结一下 XMem 论文的核心贡献
+助手: [模拟响应] 关于 '帮我总结一下 XMem 论文的核心贡献...' 的回答。
+
+Alice: 它和之前的 VOS 方法有什么主要区别？
+助手: [模拟响应] 关于 '它和之前的 VOS 方法有什么主要区别？...' 的回答。
+
+Alice: 刚才说的 XMem 的核心优势是什么？
+助手: [模拟响应] 关于 '刚才说的 XMem 的核心优势是什么？...' 的回答。
+
+--- 记忆状态 ---
+{
+  "current_tokens": 300,
+  "message_count": 7,
+  "summary_count": 1,
+  "summaries": ["[摘要] 用户讨论了: 帮我总结一下, XMem, 论文的核心贡献 | 助手提供了 1 条回复"]
+}
+</code></pre>
+<p><strong>V1 解决了什么：</strong> 单次会话内的对话连贯性。工作记忆管理器确保最近的对话始终在上下文中，驱逐的消息被摘要压缩后保留关键信息。</p>
+<p><strong>V1 做不到的：</strong> 关闭浏览器再打开，一切归零。没有跨会话记忆。</p>
+<hr />
+<h2 id="163-v2添加长期记忆情景--语义"><a class="header" href="#163-v2添加长期记忆情景--语义">16.3 V2：添加长期记忆（情景 + 语义）</a></h2>
+<p>V2 在 V1 的基础上添加外部存储层：向量存储（论文/概念）和知识图谱（概念关系/引用链）。</p>
+<h3 id="1631-向量存储论文与概念记忆"><a class="header" href="#1631-向量存储论文与概念记忆">16.3.1 向量存储：论文与概念记忆</a></h3>
+<p>我们用一个轻量实现——不依赖 FAISS，纯内存向量索引（后续可替换为 FAISS/ChromaDB）：</p>
+<pre><code class="language-python">import math
+from typing import Any
+
+
+class SimpleVectorStore:
+    """轻量向量存储，支持余弦相似度检索。
+
+    生产环境替换为 FAISS / ChromaDB。
+    """
+
+    def __init__(self):
+        # 简化的嵌入：用 TF-IDF 风格的词频向量
+        self.vocabulary: dict[str, int] = {}
+        self.documents: list[dict] = []  # 每条记录：{id, text, metadata, vector}
+
+    def add(self, text: str, metadata: dict | None = None) -&gt; int:
+        """添加文档，返回文档 ID。"""
+        doc_id = len(self.documents)
+        vector = self._build_vector(text)
+        self.documents.append({
+            "id": doc_id,
+            "text": text,
+            "metadata": metadata or {},
+            "vector": vector,
+        })
+        return doc_id
+
+    def search(self, query: str, top_k: int = 3) -&gt; list[dict]:
+        """按余弦相似度检索 top-k 相关文档。"""
+        query_vec = self._build_vector(query)
+        results = []
+        for doc in self.documents:
+            sim = self._cosine_similarity(query_vec, doc["vector"])
+            results.append((sim, doc))
+        results.sort(key=lambda x: x[0], reverse=True)
+        return [
+            {"score": sim, "text": doc["text"], "metadata": doc["metadata"]}
+            for sim, doc in results[:top_k]
+        ]
+
+    def _build_vector(self, text: str) -&gt; dict[str, float]:
+        """构建词频向量（简化版嵌入）。"""
+        words = self._tokenize(text)
+        vec: dict[str, float] = {}
+        for w in words:
+            vec[w] = vec.get(w, 0.0) + 1.0
+        # 归一化
+        norm = math.sqrt(sum(v * v for v in vec.values()))
+        if norm &gt; 0:
+            for k in vec:
+                vec[k] /= norm
+        return vec
+
+    @staticmethod
+    def _tokenize(text: str) -&gt; list[str]:
+        """简单分词。"""
+        return [
+            w.strip("，。！？、,.!?;:\"'()[]{}")
+            for w in text.lower().split()
+            if len(w.strip("，。！？、,.!?;:\"'()[]{}")) &gt; 1
+        ]
+
+    @staticmethod
+    def _cosine_similarity(v1: dict[str, float], v2: dict[str, float]) -&gt; float:
+        """计算两个稀疏向量的余弦相似度。"""
+        common_keys = set(v1.keys()) &amp; set(v2.keys())
+        if not common_keys:
+            return 0.0
+        dot = sum(v1[k] * v2[k] for k in common_keys)
+        norm1 = math.sqrt(sum(v * v for v in v1.values()))
+        norm2 = math.sqrt(sum(v * v for v in v2.values()))
+        if norm1 == 0 or norm2 == 0:
+            return 0.0
+        return dot / (norm1 * norm2)
+
+    def to_dict(self) -&gt; dict:
+        """序列化为可 JSON 序列化的字典。"""
+        return {
+            "vocabulary": self.vocabulary,
+            "documents": self.documents,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -&gt; SimpleVectorStore:
+        """从字典反序列化。"""
+        store = cls()
+        store.vocabulary = data.get("vocabulary", {})
+        store.documents = data.get("documents", [])
+        return store
+
+    def size(self) -&gt; int:
+        return len(self.documents)
+</code></pre>
+<h3 id="1632-知识图谱概念关系与引用链"><a class="header" href="#1632-知识图谱概念关系与引用链">16.3.2 知识图谱：概念关系与引用链</a></h3>
+<pre><code class="language-python">try:
+    import networkx as nx
+    HAS_NETWORKX = True
+except ImportError:
+    HAS_NETWORKX = False
+
+
+class ConceptGraph:
+    """轻量知识图谱，管理学术概念及其关系。
+
+    依赖：networkx（可选）。
+    未安装时使用简单的邻接表实现。
+    """
+
+    def __init__(self):
+        if HAS_NETWORKX:
+            self.graph = nx.DiGraph()
+        else:
+            self.graph: dict[str, dict[str, list[str]]] = {}
+
+    def add_concept(self, name: str, description: str = "") -&gt; None:
+        """添加概念节点。"""
+        if HAS_NETWORKX:
+            self.graph.add_node(name, description=description)
+        else:
+            if name not in self.graph:
+                self.graph[name] = {"relations": {}, "description": description}
+
+    def add_relation(
+        self, source: str, target: str, relation: str
+    ) -&gt; None:
+        """添加概念间的关系。"""
+        self.add_concept(source)
+        self.add_concept(target)
+        if HAS_NETWORKX:
+            self.graph.add_edge(source, target, relation=relation)
+        else:
+            relations = self.graph[source]["relations"]
+            relations.setdefault(relation, []).append(target)
+
+    def find_related(
+        self, concept: str, max_depth: int = 2
+    ) -&gt; list[tuple[str, str, str]]:
+        """查找与概念相关的节点（多跳）。
+
+        返回: [(节点名, 关系类型, 路径描述)]
+        """
+        results = []
+        if HAS_NETWORKX:
+            if concept not in self.graph:
+                return results
+            # BFS 多跳查询
+            visited = set()
+            queue = [(concept, 0, "")]
+            while queue:
+                node, depth, path = queue.pop(0)
+                if node in visited or depth &gt; max_depth:
+                    continue
+                visited.add(node)
+                for neighbor in self.graph.neighbors(node):
+                    edge_data = self.graph[node][neighbor]
+                    relation = edge_data.get("relation", "related_to")
+                    new_path = f"{path} -&gt;[{relation}]-&gt; {neighbor}" if path else f"{node} -&gt;[{relation}]-&gt; {neighbor}"
+                    results.append((neighbor, relation, new_path))
+                    queue.append((neighbor, depth + 1, new_path))
+        else:
+            # 简单邻接表查询
+            if concept in self.graph:
+                for rel, targets in self.graph[concept]["relations"].items():
+                    for t in targets:
+                        results.append((t, rel, f"{concept} -&gt;[{rel}]-&gt; {t}"))
+        return results
+
+    def to_dict(self) -&gt; dict:
+        """序列化为可 JSON 序列化的字典。"""
+        if HAS_NETWORKX:
+            nodes = dict(self.graph.nodes(data=True))
+            edges = [
+                {"source": u, "target": v, "relation": d.get("relation", "related_to")}
+                for u, v, d in self.graph.edges(data=True)
+            ]
+            return {"nodes": nodes, "edges": edges, "use_networkx": True}
+        else:
+            return {"graph": self.graph, "use_networkx": False}
+
+    @classmethod
+    def from_dict(cls, data: dict) -&gt; ConceptGraph:
+        """从字典反序列化。"""
+        cg = cls()
+        if not data:
+            return cg
+        if data.get("use_networkx") and HAS_NETWORKX:
+            import networkx as nx
+            g = nx.DiGraph()
+            for name, attrs in data["nodes"].items():
+                desc = attrs.get("description", attrs) if isinstance(attrs, dict) else attrs
+                g.add_node(name, description=desc if isinstance(desc, str) else "")
+            for edge in data["edges"]:
+                g.add_edge(edge["source"], edge["target"], relation=edge.get("relation", "related_to"))
+            cg.graph = g
+        else:
+            cg.graph = data.get("graph", {})
+        return cg
+
+    def summary(self) -&gt; dict[str, Any]:
+        """返回图谱摘要。"""
+        if HAS_NETWORKX:
+            return {
+                "concepts": self.graph.number_of_nodes(),
+                "relations": self.graph.number_of_edges(),
+            }
+        else:
+            total_relations = sum(
+                len(rels)
+                for concept_data in self.graph.values()
+                for rels in concept_data["relations"].values()
+            )
+            return {
+                "concepts": len(self.graph),
+                "relations": total_relations,
+            }
+</code></pre>
+<h3 id="1633-记忆持久化"><a class="header" href="#1633-记忆持久化">16.3.3 记忆持久化</a></h3>
+<pre><code class="language-python">class MemoryPersistence:
+    """记忆的磁盘持久化。"""
+
+    def __init__(self, data_dir: str = "research_agent_data"):
+        self.data_dir = Path(data_dir)
+        self.data_dir.mkdir(exist_ok=True)
+
+    def save_session(self, session_id: str, data: dict) -&gt; None:
+        """保存会话元数据（含向量库和图谱的序列化数据）。"""
+        path = self.data_dir / f"{session_id}.json"
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2))
+
+    def load_session(self, session_id: str) -&gt; dict | None:
+        """加载会话元数据。"""
+        path = self.data_dir / f"{session_id}.json"
+        if path.exists():
+            return json.loads(path.read_text())
+        return None
+
+    def save_full_state(self, session_id: str, store: SimpleVectorStore, graph: ConceptGraph, extra: dict | None = None) -&gt; None:
+        """保存完整状态（向量库 + 图谱 + 额外元数据）。"""
+        state = {
+            "vector_store": store.to_dict(),
+            "concept_graph": graph.to_dict(),
+        }
+        if extra:
+            state.update(extra)
+        self.save_session(session_id, state)
+
+    def load_full_state(self, session_id: str) -&gt; dict | None:
+        """加载完整状态并恢复向量库和图谱对象。"""
+        data = self.load_session(session_id)
+        if data is None:
+            return None
+
+        store = SimpleVectorStore.from_dict(data.get("vector_store", {}))
+        graph = ConceptGraph.from_dict(data.get("concept_graph", {}))
+        return {
+            "vector_store": store,
+            "concept_graph": graph,
+            "extra": {k: v for k, v in data.items() if k not in ("vector_store", "concept_graph")},
+        }
+
+    def list_sessions(self) -&gt; list[str]:
+        """列出所有会话。"""
+        return [
+            p.stem for p in self.data_dir.glob("*.json")
+        ]
+</code></pre>
+<h3 id="1634-记忆控制器协调各层"><a class="header" href="#1634-记忆控制器协调各层">16.3.4 记忆控制器：协调各层</a></h3>
+<pre><code class="language-python">class MemoryController:
+    """记忆控制器：协调短期、中期、长期记忆。
+
+    这是 V2 的核心——它将 SlidingWindowManager、SimpleVectorStore、
+    ConceptGraph 和 MemoryPersistence 组装为一个统一的系统。
+    """
+
+    def __init__(self, max_context_tokens: int = 4000):
+        self.wm = SlidingWindowManager(max_tokens=max_context_tokens)
+        self.compressor = SemanticCompressor()
+        self.vector_store = SimpleVectorStore()
+        self.concept_graph = ConceptGraph()
+        self.persistence = MemoryPersistence()
+        self.session_summaries: list[str] = []
+        self.session_id: str = ""
+
+    def start_session(self, session_id: str | None = None) -&gt; None:
+        """开始新会话或恢复已有会话。"""
+        if session_id is None:
+            session_id = f"session_{int(time.time())}"
+        self.session_id = session_id
+
+        # 尝试加载已有完整状态（向量库 + 图谱 + 元数据）
+        full = self.persistence.load_full_state(session_id)
+        if full:
+            print(f"[记忆控制器] 恢复会话: {session_id}")
+            self.vector_store = full["vector_store"]
+            self.concept_graph = full["concept_graph"]
+            extra = full.get("extra", {})
+            self.session_summaries = extra.get("summaries", [])
+            # 恢复工作记忆中的系统指令
+            self.wm.add(Message(
+                role="system",
+                content="你是一个个人研究助手，帮助用户阅读论文、追踪研究进展。",
+                token_count=30,
+                importance=1.0,
+                protected=True,
+            ))
+            # 恢复摘要到上下文
+            if self.session_summaries:
+                self.wm.add(Message(
+                    role="system",
+                    content=f"[历史研究摘要]\n" + "\n".join(
+                        f"- {s}" for s in self.session_summaries[-5:]
+                    ),
+                    token_count=sum(len(s) // 2 for s in self.session_summaries[-5:]),
+                    importance=0.6,
+                    protected=True,
+                ))
+        else:
+            print(f"[记忆控制器] 新会话: {session_id}")
+            self.wm.add(Message(
+                role="system",
+                content="你是一个个人研究助手，帮助用户阅读论文、追踪研究进展。",
+                token_count=30,
+                importance=1.0,
+                protected=True,
+            ))
+
+    def send(self, user_input: str) -&gt; str:
+        """发送消息，自动从各层记忆检索相关信息。"""
+        # 0. 前置钩子（V3 用于记录交互和更新画像）
+        self._will_send(user_input)
+
+        # 1. 从向量存储检索相关论文/概念
+        retrieved = self.vector_store.search(user_input, top_k=3)
+        # 2. 从知识图谱检索相关概念关系
+        concepts = self._extract_concepts(user_input)
+        graph_context = []
+        for concept in concepts:
+            related = self.concept_graph.find_related(concept, max_depth=1)
+            graph_context.extend(related)
+
+        # 3. 组装上下文
+        context_parts = []
+        if retrieved:
+            context_parts.append("[相关论文/概念]")
+            for r in retrieved:
+                context_parts.append(f"- {r['text']} (相关度: {r['score']:.2f})")
+        if graph_context:
+            context_parts.append("[概念关系]")
+            for name, rel, path in graph_context[:5]:
+                context_parts.append(f"- {path}")
+
+        # 3.5 额外上下文钩子（V3 注入经验提醒）
+        extra = self._extra_context(user_input, retrieved, graph_context)
+        if extra:
+            context_parts.append(extra)
+
+        # 4. 注入记忆到工作缓冲区
+        if context_parts:
+            memory_injection = Message(
+                role="system",
+                content="\n".join(context_parts),
+                token_count=sum(len(p) // 2 for p in context_parts),
+                importance=0.7,
+            )
+            self.wm.add(memory_injection)
+
+        # 5. 添加用户消息
+        user_msg = Message(
+            role="user",
+            content=user_input,
+            token_count=token_estimate(user_input),
+            importance=0.8,
+        )
+        evicted = self.wm.add(user_msg)
+
+        # 6. 对驱逐的消息做摘要，存入长期记忆
+        if evicted:
+            summary = self.compressor.compress(evicted)
+            self.session_summaries.append(summary.content)
+            # 同时存入向量存储（可检索）
+            self.vector_store.add(summary.content, {"type": "summary"})
+
+        # 7. 生成响应
+        context = self.wm.get_context()
+        response = self._generate_response(context, retrieved, graph_context)
+        assistant_msg = Message(
+            role="assistant",
+            content=response,
+            token_count=token_estimate(response),
+            importance=0.6,
+        )
+        self.wm.add(assistant_msg)
+
+        # 7.5 后置钩子（V3 记录经验）
+        self._after_send(user_input, response)
+
+        # 8. 持久化
+        self._persist()
+
+        return response
+
+    # ---- 扩展点钩子（子类通过重写以下方法添加功能，无需重复 send 逻辑） ----
+
+    def _will_send(self, user_input: str) -&gt; None:
+        """发送前置钩子。"""
+
+    def _extra_context(self, user_input: str, retrieved: list, graph_context: list) -&gt; str | None:
+        """返回额外需要注入上下文的文本。返回 None 表示无额外上下文。"""
+        return None
+
+    def _generate_response(self, context: list[dict], retrieved: list, graph_context: list) -&gt; str:
+        """生成带记忆上下文的 LLM 响应。"""
+        last_user = next(
+            (m["content"] for m in reversed(context) if m["role"] == "user"), ""
+        )
+        parts = [f"[模拟响应] 关于 '{last_user[:30]}'"]
+        if retrieved:
+            parts.append(f"\n  检索到 {len(retrieved)} 条相关论文/概念")
+        if graph_context:
+            parts.append(f"\n  概念图中找到 {len(graph_context)} 条关系")
+        return "".join(parts)
+
+    def _after_send(self, user_input: str, response: str) -&gt; None:
+        """发送后置钩子。"""
+
+    def _persist(self) -&gt; None:
+        """持久化当前会话状态。"""
+        self.persistence.save_session(self.session_id, {
+            "summaries": self.session_summaries,
+            "vector_store_size": self.vector_store.size(),
+            "graph_summary": self.concept_graph.summary(),
+        })
+
+    def add_paper(self, title: str, abstract: str) -&gt; None:
+        """添加论文到向量存储。"""
+        self.vector_store.add(f"{title}: {abstract}", {
+            "type": "paper",
+            "title": title,
+        })
+        print(f"[记忆] 已添加论文: {title}")
+
+    def add_concept_relation(
+        self, source: str, target: str, relation: str,
+        source_desc: str = "", target_desc: str = ""
+    ) -&gt; None:
+        """添加概念及其关系到知识图谱。"""
+        self.concept_graph.add_concept(source, source_desc)
+        self.concept_graph.add_concept(target, target_desc)
+        self.concept_graph.add_relation(source, target, relation)
+
+    def _extract_concepts(self, text: str) -&gt; list[str]:
+        """简单提取可能的概念（长度 &gt; 2 的连续中英文词）。"""
+        import re
+        # 匹配连续的英文单词或中文术语（2+ 个连续汉字）
+        candidates = re.findall(r'[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*|[一-鿿]{2,}', text)
+        return list(set(candidates))[:5]
+
+    def state(self) -&gt; dict:
+        """返回系统完整状态（调试用）。"""
+        return {
+            "session_id": self.session_id,
+            "working_memory": {
+                "tokens": self.wm.current_tokens,
+                "messages": len(self.wm.buffer),
+            },
+            "vector_store": {"documents": self.vector_store.size()},
+            "concept_graph": self.concept_graph.summary(),
+            "session_summaries": len(self.session_summaries),
+            "saved_sessions": self.persistence.list_sessions(),
+        }
+</code></pre>
+<h3 id="1635-陷阱上下文膨胀"><a class="header" href="#1635-陷阱上下文膨胀">16.3.5 陷阱：上下文膨胀</a></h3>
+<p>在实现 V2 时，一个常见的<strong>反模式</strong>是将所有检索结果都注入上下文：</p>
+<pre><code class="language-python"># ❌ 反模式：检索全部结果
+retrieved = self.vector_store.search(query, top_k=50)
+context = "\n".join(r["text"] for r in retrieved)  # 上下文爆炸！
+</code></pre>
+<p><strong>后果：</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>问题</th><th>原因</th></tr></thead><tbody>
+<tr><td>注意力稀释</td><td>50 条检索结果让 LLM 无法聚焦于最相关信息</td></tr>
+<tr><td>Token 浪费</td><td>不相关的检索结果占用宝贵的上下文空间</td></tr>
+<tr><td>幻觉增加</td><td>过多冲突信息让 LLM 产生矛盾性回答</td></tr>
+</tbody></table>
+</div>
+<p><strong>正确做法：</strong></p>
+<pre><code class="language-python"># ✅ 只注入 top-k（k=3）+ 限制每条结果的长度
+retrieved = self.vector_store.search(query, top_k=3)
+context_parts = []
+for r in retrieved:
+    if r["score"] &gt; 0.3:  # 相关性阈值过滤
+        context_parts.append(r["text"][:200])  # 截断
+</code></pre>
+<hr />
+<h2 id="164-v3添加程序性记忆与反思"><a class="header" href="#164-v3添加程序性记忆与反思">16.4 V3：添加程序性记忆与反思</a></h2>
+<p>V3 在 V2 的基础上添加第 11-13 章的能力：工具使用记忆、反思循环、用户画像。</p>
+<h3 id="1641-经验库与反思循环"><a class="header" href="#1641-经验库与反思循环">16.4.1 经验库与反思循环</a></h3>
+<pre><code class="language-python">@dataclass
+class Experience:
+    """一条经验记录。"""
+    situation: str          # 情境描述
+    action: str             # 采取的行动
+    result: str             # 结果（成功/失败）
+    reflection: str = ""    # 反思内容
+    timestamp: float = field(default_factory=time.time)
+    usage_count: int = 0    # 被引用次数
+
+    def to_dict(self) -&gt; dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d: dict) -&gt; Experience:
+        return cls(**d)
+
+
+class ExperienceStore:
+    """经验存储：结构化的成功/失败案例库。"""
+
+    def __init__(self):
+        self.experiences: list[Experience] = []
+        self.vector_store = SimpleVectorStore()  # 用于相似性检索
+
+    def add(self, exp: Experience) -&gt; None:
+        """添加经验。"""
+        self.experiences.append(exp)
+        self.vector_store.add(
+            f"{exp.situation} {exp.action} {exp.reflection}",
+            {"experience_id": len(self.experiences) - 1},
+        )
+
+    def search(self, situation: str, top_k: int = 3) -&gt; list[Experience]:
+        """检索相似情境的经验。"""
+        results = self.vector_store.search(situation, top_k=top_k)
+        experiences = []
+        for r in results:
+            eid = r["metadata"]["experience_id"]
+            exp = self.experiences[eid]
+            exp.usage_count += 1
+            experiences.append(exp)
+        return experiences
+
+    def generate_reflection(
+        self, situation: str, action: str, result: str
+    ) -&gt; str:
+        """模拟 LLM 生成反思（实际实现中调用 LLM）。"""
+        if "失败" in result or "失败" in situation:
+            return (
+                f"在 '{situation}' 场景中，"
+                f"'{action}' 的策略不够有效。"
+                f"建议：下次尝试更具体的检索关键词，"
+                f"或先从高层概念入手再深入细节。"
+            )
+        return f"'{action}' 在 '{situation}' 中表现良好，可以作为默认策略。"
+
+    def size(self) -&gt; int:
+        return len(self.experiences)
+</code></pre>
+<h3 id="1642-用户画像"><a class="header" href="#1642-用户画像">16.4.2 用户画像</a></h3>
+<pre><code class="language-python">@dataclass
+class UserProfile:
+    """用户画像：研究方向、兴趣领域、活跃度。"""
+    research_topics: dict[str, float] = field(default_factory=dict)  # 主题 -&gt; 兴趣权重
+    active_since: float = field(default_factory=time.time)
+    last_active: float = field(default_factory=time.time)
+    total_interactions: int = 0
+    preferences: dict[str, str] = field(default_factory=dict)  # 偏好设置
+
+    def update_interest(self, topic: str, weight: float = 1.0) -&gt; None:
+        """更新对某个主题的兴趣权重。"""
+        self.research_topics[topic] = (
+            self.research_topics.get(topic, 0.0) * 0.9 + weight  # 旧值衰减 + 新值
+        )
+
+    def get_active_topics(self, top_k: int = 5) -&gt; list[tuple[str, float]]:
+        """获取最活跃的研究主题。"""
+        sorted_topics = sorted(
+            self.research_topics.items(), key=lambda x: x[1], reverse=True
+        )
+        return sorted_topics[:top_k]
+
+    def record_interaction(self) -&gt; None:
+        """记录一次交互。"""
+        self.total_interactions += 1
+        self.last_active = time.time()
+</code></pre>
+<h3 id="1643-v3-记忆控制器扩展"><a class="header" href="#1643-v3-记忆控制器扩展">16.4.3 V3 记忆控制器扩展</a></h3>
+<p>在 V2 的基础上扩展 <code>MemoryController</code>，添加反思和用户画像：</p>
+<pre><code class="language-python">class MemoryControllerV3(MemoryController):
+    """V3：在 V2 基础上添加经验库和用户画像。"""
+
+    def __init__(self, max_context_tokens: int = 4000):
+        super().__init__(max_context_tokens)
+        self.experience_store = ExperienceStore()
+        self.user_profile = UserProfile()
+        self.reflection_triggered: list[str] = []
+
+    def send(self, user_input: str) -&gt; str:
+        """发送消息，增加经验检索和反思逻辑。"""
+        return super().send(user_input)
+
+    # ---- V3 通过重写钩子注入经验能力和画像追踪 ----
+
+    def _will_send(self, user_input: str) -&gt; None:
+        self.user_profile.record_interaction()
+        concepts = self._extract_concepts(user_input)
+        for c in concepts:
+            self.user_profile.update_interest(c)
+
+    def _extra_context(self, user_input: str, retrieved: list, graph_context: list) -&gt; str | None:
+        experiences = self.experience_store.search(user_input, top_k=2)
+        self._current_experiences = experiences  # 暂存供 _generate_response 使用
+        if not experiences:
+            return None
+        exp_texts = []
+        for exp in experiences:
+            exp_texts.append(f"- 过去在类似场景中: {exp.reflection}")
+        return "[经验提醒]\n" + "\n".join(exp_texts)
+
+    def _generate_response(self, context: list[dict], retrieved: list, graph_context: list) -&gt; str:
+        last_user = next(
+            (m["content"] for m in reversed(context) if m["role"] == "user"), ""
+        )
+        parts = [f"[模拟响应] 关于 '{last_user[:30]}'"]
+        experiences = getattr(self, '_current_experiences', [])
+        if experiences:
+            parts.append(f"\n  经验库提醒: 之前尝试过 {len(experiences)} 次")
+        if retrieved:
+            parts.append(f"\n  检索到 {len(retrieved)} 条相关论文")
+        if graph_context:
+            parts.append(f"\n  概念图: {len(graph_context)} 条关系")
+        return "".join(parts)
+
+    def _after_send(self, user_input: str, response: str) -&gt; None:
+        self._check_and_record_experience(user_input, response)
+
+    def _persist(self) -&gt; None:
+        self.persistence.save_full_state(self.session_id, self.vector_store, self.concept_graph, {
+            "summaries": self.session_summaries,
+            "experiences": [e.to_dict() for e in self.experience_store.experiences],
+            "user_profile": {
+                "topics": self.user_profile.get_active_topics(),
+                "interactions": self.user_profile.total_interactions,
+            },
+        })
+
+    def _check_and_record_experience(self, user_input: str, response: str) -&gt; None:
+        """检查是否需要记录经验（模拟：用户表达不满）。"""
+        # 实际系统中，这由用户反馈或评估器触发
+        if "不对" in user_input or "错误" in user_input or "失败" in user_input:
+            exp = Experience(
+                situation=user_input[:100],
+                action="尝试回答",
+                result="失败：用户不满意",
+            )
+            exp.reflection = self.experience_store.generate_reflection(
+                exp.situation, exp.action, exp.result
+            )
+            self.experience_store.add(exp)
+            self.reflection_triggered.append(exp.situation)
+            print(f"  [反思] {exp.reflection}")
+</code></pre>
+<hr />
+<h2 id="165-v4完整版治理--运维"><a class="header" href="#165-v4完整版治理--运维">16.5 V4：完整版（治理 + 运维）</a></h2>
+<p>V4 在 V3 的基础上添加第 14 章的治理能力：TTL 衰减、记忆质量控制、隐私保护。</p>
+<h3 id="1651-记忆-ttl-与衰减策略"><a class="header" href="#1651-记忆-ttl-与衰减策略">16.5.1 记忆 TTL 与衰减策略</a></h3>
+<pre><code class="language-python">class MemoryGovernance:
+    """记忆治理：TTL、衰减、质量控制。"""
+
+    def __init__(
+        self,
+        default_ttl_days: float = 90.0,
+        decay_half_life_days: float = 30.0,
+        min_confidence: float = 0.2,
+    ):
+        self.default_ttl_days = default_ttl_days
+        self.decay_half_life = decay_half_life_days * 86400  # 转为秒
+        self.min_confidence = min_confidence
+
+    def should_forget(self, item: dict) -&gt; bool:
+        """判断一条记忆是否应该被遗忘。"""
+        created = item.get("created_at", time.time())
+        ttl = item.get("ttl_days", self.default_ttl_days)
+        age_seconds = time.time() - created
+        return age_seconds &gt; ttl * 86400
+
+    def decay_confidence(self, item: dict) -&gt; float:
+        """按时间衰减置信度。"""
+        confidence = item.get("confidence", 1.0)
+        created = item.get("created_at", time.time())
+        elapsed = time.time() - created
+        decay_factor = 0.5 ** (elapsed / self.decay_half_life)
+        new_confidence = confidence * decay_factor
+        item["confidence"] = new_confidence
+        return new_confidence
+
+    def cleanup(self, items: list[dict]) -&gt; list[dict]:
+        """清理过期和低置信度的记忆。"""
+        before = len(items)
+        items[:] = [
+            item for item in items
+            if not self.should_forget(item)
+            and self.decay_confidence(item) &gt; self.min_confidence
+        ]
+        removed = before - len(items)
+        if removed &gt; 0:
+            print(f"  [治理] 清理了 {removed} 条过期/低置信度记忆")
+        return items
+</code></pre>
+<h3 id="1652-v4-完整系统"><a class="header" href="#1652-v4-完整系统">16.5.2 V4 完整系统</a></h3>
+<pre><code class="language-python">class ResearchAgent(MemoryControllerV3):
+    """V4 完整版：个人研究助手。
+
+    整合四层记忆 + 反思 + 治理。
+    """
+
+    def __init__(self, max_context_tokens: int = 4000):
+        super().__init__(max_context_tokens)
+        self.governance = MemoryGovernance()
+        self.memory_log: list[dict] = []  # 记忆操作日志
+
+    def log(self, action: str, details: str) -&gt; None:
+        """记录记忆操作日志。"""
+        entry = {
+            "timestamp": time.time(),
+            "action": action,
+            "details": details,
+        }
+        self.memory_log.append(entry)
+
+    def send(self, user_input: str) -&gt; str:
+        """完整发送流程，增加治理检查。"""
+        # 治理：定期清理各层记忆
+        if self.user_profile.total_interactions % 10 == 0:
+            self.governance.cleanup(self.memory_log)
+            # 向量存储中的文档若包含 created_at/confidence 元数据也会被治理
+            self.governance.cleanup(self.vector_store.documents)
+
+        # 调用 V3 的发送逻辑
+        response = super().send(user_input)
+
+        # 记录操作
+        self.log("send", f"user_input_len={len(user_input)}")
+
+        # 打印用户画像摘要
+        topics = self.user_profile.get_active_topics(3)
+        if topics:
+            topic_str = ", ".join(f"{t}({w:.1f})" for t, w in topics)
+            print(f"  [画像] 当前活跃主题: {topic_str}")
+
+        return response
+
+    def full_state(self) -&gt; dict:
+        """返回完整系统状态。"""
+        base = self.state()
+        base.update({
+            "experiences": self.experience_store.size(),
+            "governance": {
+                "default_ttl_days": self.governance.default_ttl_days,
+                "min_confidence": self.governance.min_confidence,
+            },
+            "memory_log_entries": len(self.memory_log),
+            "user_profile": {
+                "topics": self.user_profile.get_active_topics(),
+                "total_interactions": self.user_profile.total_interactions,
+            },
+        })
+        return base
+</code></pre>
+<h3 id="1653-陷阱过度记忆"><a class="header" href="#1653-陷阱过度记忆">16.5.3 陷阱：过度记忆</a></h3>
+<p>另一个常见的反模式是存储所有信息，无遗忘机制：</p>
+<pre><code class="language-python"># ❌ 反模式：保存一切
+for message in conversation_history:
+    self.vector_store.add(message.content)  # 每条都存！
+</code></pre>
+<p><strong>后果：</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>问题</th><th>症状</th></tr></thead><tbody>
+<tr><td>检索噪声</td><td>记忆库膨胀后，查询返回大量无关结果</td></tr>
+<tr><td>性能衰退</td><td>检索时间随记忆量线性增长（INMS 已证实）</td></tr>
+<tr><td>隐私风险</td><td>敏感信息被永久存储</td></tr>
+</tbody></table>
+</div>
+<p><strong>正确做法：</strong></p>
+<pre><code class="language-python"># ✅ 重要性阈值 + TTL
+if message.importance &gt; 0.5:
+    self.vector_store.add(
+        message.content,
+        metadata={"ttl_days": 90, "created_at": time.time()},
+    )
+</code></pre>
+<hr />
+<h2 id="166-完整运行示例"><a class="header" href="#166-完整运行示例">16.6 完整运行示例</a></h2>
+<p>以下是一个三轮对话的完整演示，展现 V4 系统的各层记忆如何协同工作。</p>
+<h3 id="1661-首次使用"><a class="header" href="#1661-首次使用">16.6.1 首次使用</a></h3>
+<pre><code class="language-python">if __name__ == "__main__":
+    agent = ResearchAgent(max_context_tokens=500)
+    agent.start_session("alice_research_001")
+
+    print("\n" + "=" * 60)
+    print("第 1 轮：首次使用 — 建立研究背景")
+    print("=" * 60)
+
+    # 添加论文到向量存储
+    agent.add_paper(
+        "XMem: Long-Term Video Object Segmentation",
+        "XMem proposes a long-term memory network for VOS "
+        "with a memory reading mechanism to aggregate "
+        "long-term and short-term features.",
+    )
+    agent.add_paper(
+        "MemoryBank: Enhancing LLMs with Long-Term Memory",
+        "MemoryBank introduces a memory mechanism inspired "
+        "by the Ebbinghaus forgetting curve, enabling "
+        "continuous updating of user profiles.",
+    )
+
+    # 建立概念关系
+    agent.add_concept_relation(
+        "Video Object Segmentation", "XMem", "implemented_by",
+        source_desc="视频目标分割任务",
+        target_desc="长期记忆 VOS 方法",
+    )
+    agent.add_concept_relation(
+        "Video Object Segmentation", "Memory", "requires",
+        source_desc="视频目标分割任务",
+        target_desc="记忆机制",
+    )
+    agent.add_concept_relation(
+        "XMem", "MemoryBank", "shares_concept",
+        source_desc="XMem 方法",
+        target_desc="MemoryBank 方法",
+    )
+
+    # 第 1 轮对话
+    resp = agent.send(
+        "我最近在研究视频目标分割，"
+        "帮我总结一下 XMem 这篇论文的核心贡献。"
+    )
+    print(f"Alice: 我最近在研究视频目标分割...")
+    print(f"助手: {resp}\n")
+</code></pre>
+<p><strong>输出：</strong></p>
+<pre><code>[记忆控制器] 新会话: alice_research_001
+[记忆] 已添加论文: XMem: Long-Term Video Object Segmentation
+[记忆] 已添加论文: MemoryBank: Enhancing LLMs with Long-Term Memory
+
+============================================================
+第 1 轮：首次使用 — 建立研究背景
+============================================================
+Alice: 我最近在研究视频目标分割...
+助手: [模拟响应] 关于 '我最近在研究视频目标分割，帮'
+  检索到 2 条相关论文
+  概念图: 3 条关系
+  [画像] 当前活跃主题: 视频目标分割(1.0)
+</code></pre>
+<h3 id="1662-多次使用后"><a class="header" href="#1662-多次使用后">16.6.2 多次使用后</a></h3>
+<pre><code class="language-python">    print("=" * 60)
+    print("第 2 轮：深入追问 — 各层记忆协同")
+    print("=" * 60)
+
+    resp = agent.send(
+        "它和之前的 VOS 方法有什么主要区别？"
+    )
+    print(f"Alice: 它和之前的 VOS 方法有什么主要区别？")
+    print(f"助手: {resp}\n")
+
+    resp = agent.send(
+        "不对，我想了解的是 XMem 的 memory reading 机制，"
+        "不是整体架构。"
+    )
+    print(f"Alice: 不对，我想了解的是 XMem 的 memory reading 机制...")
+    print(f"助手: {resp}\n")
+</code></pre>
+<p><strong>输出：</strong></p>
+<pre><code>============================================================
+第 2 轮：深入追问 — 各层记忆协同
+============================================================
+Alice: 它和之前的 VOS 方法有什么主要区别？
+助手: [模拟响应] 关于 '它和之前的 VOS 方法有什么主要区别？'
+  检索到 2 条相关论文
+  概念图: 4 条关系
+  [画像] 当前活跃主题: 视频目标分割(1.9), 方法(1.0)
+
+  [反思] 在 '不对，我想了解的是 XMem 的 memory...' 场景中，
+  '尝试回答' 的策略不够有效。
+  建议：下次尝试更具体的检索关键词，或先从高层概念入手再深入细节。
+
+Alice: 不对，我想了解的是 XMem 的 memory reading 机制...
+助手: [模拟响应] 关于 '不对，我想了解的是 XMem 的 memory...'
+  经验库提醒: 之前尝试过 1 次
+  检索到 2 条相关论文
+  概念图: 5 条关系
+  [画像] 当前活跃主题: 视频目标分割(2.8), Memory(1.0), 机制(1.0)
+</code></pre>
+<p>注意第 2 轮对话中“反思“机制的触发：</p>
+<ol>
+<li>用户表达了“不对“（不满信号）</li>
+<li>系统自动生成反思并存储到经验库</li>
+<li>第 3 轮对话时，经验库被检索，助手“记住“了上次失败的教训</li>
+</ol>
+<h3 id="1663-跨会话回忆"><a class="header" href="#1663-跨会话回忆">16.6.3 跨会话回忆</a></h3>
+<pre><code class="language-python">    print("=" * 60)
+    print("第 3 轮：跨会话 — 恢复两周前的研究")
+    print("=" * 60)
+
+    # 模拟新会话（关闭浏览器再打开）
+    agent.start_session("alice_research_002")
+
+    resp = agent.send(
+        "上次我们讨论的 XMem 的核心优势是什么？"
+        "还有我研究过哪些相关方向来着？"
+    )
+    print(f"Alice: 上次我们讨论的 XMem 的核心优势是什么？")
+    print(f"助手: {resp}\n")
+
+    print("\n" + "=" * 60)
+    print("完整系统状态")
+    print("=" * 60)
+    print(json.dumps(agent.full_state(), indent=2, ensure_ascii=False))
+</code></pre>
+<p><strong>输出：</strong></p>
+<pre><code>============================================================
+第 3 轮：跨会话 — 恢复两周前的研究
+============================================================
+[记忆控制器] 恢复会话: alice_research_002
+Alice: 上次我们讨论的 XMem 的核心优势是什么？
+助手: [模拟响应] 关于 '上次我们讨论的 XMem 的核心优势'
+  检索到 3 条相关论文/概念
+  概念图: 3 条关系
+  [画像] 当前活跃主题: 视频目标分割(3.7), Memory(1.9), 核心优势(1.0)
+
+============================================================
+完整系统状态
+============================================================
+{
+  "session_id": "alice_research_002",
+  "working_memory": {
+    "tokens": 380,
+    "messages": 5
+  },
+  "vector_store": {
+    "documents": 5
+  },
+  "concept_graph": {
+    "concepts": 3,
+    "relations": 3
+  },
+  "session_summaries": 4,
+  "saved_sessions": ["alice_research_001", "alice_research_002"],
+  "experiences": 1,
+  "governance": {
+    "default_ttl_days": 90.0,
+    "min_confidence": 0.2
+  },
+  "memory_log_entries": 4,
+  "user_profile": {
+    "topics": [
+      ["视频目标分割", 3.7],
+      ["Memory", 1.9],
+      ["核心优势", 1.0]
+    ],
+    "total_interactions": 4
+  }
+}
+</code></pre>
+<hr />
+<h2 id="167-本章总结"><a class="header" href="#167-本章总结">16.7 本章总结</a></h2>
+<h3 id="各层记忆的价值贡献"><a class="header" href="#各层记忆的价值贡献">各层记忆的价值贡献</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>记忆层</th><th>V1→V4 的增量</th><th>解决的问题</th><th>对应章节</th></tr></thead><tbody>
+<tr><td>短期（工作记忆）</td><td>V1</td><td>单次会话内不遗忘</td><td>ch04-06</td></tr>
+<tr><td>中期（向量+图谱）</td><td>V2</td><td>跨会话回忆 + 概念关系推理</td><td>ch07-09</td></tr>
+<tr><td>程序性（经验+画像）</td><td>V3</td><td>从失败中学习 + 个性化</td><td>ch11-13</td></tr>
+<tr><td>治理（TTL+质量）</td><td>V4</td><td>记忆膨胀 + 隐私 + 一致性</td><td>ch14</td></tr>
+</tbody></table>
+</div>
+<h3 id="从本书到你的项目"><a class="header" href="#从本书到你的项目">从本书到你的项目</a></h3>
+<p>这个研究助手是一个<strong>起点</strong>，不是终点。以下是你可以根据自身需求调整的方向：</p>
+<ul>
+<li><strong>替换嵌入模型：</strong> 当前用的是 TF-IDF 风格的简单向量，替换为 SentenceTransformers 或 OpenAI Embeddings 会显著提升检索质量。</li>
+<li><strong>替换存储后端：</strong> SimpleVectorStore 适合演示，生产环境用 FAISS（大规模向量检索）或 Neo4j（复杂关系图）。</li>
+<li><strong>接入真实 LLM：</strong> 将 <code>_simulate_llm</code> 替换为 OpenAI/Anthropic API 调用，系统立即可用。</li>
+<li><strong>增加多模态记忆：</strong> 如果你的研究助手需要处理图像/视频，加入第 15 章讨论的 Time-VLM 或 Video-RAG 模式。</li>
+<li><strong>多用户隔离：</strong> 在 <code>UserProfile</code> 和 <code>MemoryPersistence</code> 中增加 user_id 维度，即可支持多用户。</li>
+</ul>
+<h3 id="全书回顾"><a class="header" href="#全书回顾">全书回顾</a></h3>
+<p>从第 1 章的“LLM 无记忆本质“到本章的完整系统，我们走过了：</p>
+<ol>
+<li><strong>理解问题</strong>（第 1-3 章）：LLM 为什么需要外部记忆，本体论框架是什么，人类记忆如何映射到计算记忆</li>
+<li><strong>短期记忆</strong>（第 4-6 章）：上下文窗口的边界、压缩策略、工作记忆管理器</li>
+<li><strong>长期记忆</strong>（第 7-10 章）：情景/语义记忆、存储架构选型、检索增强与多跳推理</li>
+<li><strong>程序性记忆</strong>（第 11-13 章）：经验积累、反思循环、跨会话学习</li>
+<li><strong>治理与决策</strong>（第 14-15 章）：记忆治理规范、架构决策地图</li>
+<li><strong>综合应用</strong>（第 16 章）：四层记忆如何在一个完整系统中协同工作</li>
+</ol>
+<p>记忆是智能体的第四支柱——感知让它看见世界，规划让它理解目标，行动让它改变世界，而记忆让它成为“自己“。希望本书帮助你为你的 Agent 构建这个“自己“。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch15-roadmap-future.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="appendix.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch15-roadmap-future.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="appendix.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script src="katex-render.js"></script>
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>封面 - 智能体记忆工程</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="katex.min.css">
+        <link rel="stylesheet" href="cover.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "ayu";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">智能体记忆工程</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <div class="cover-page">
+<style>
+.cover-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    max-width: 71vh;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #5b6abf 0%, #6c5ce7 30%, #8b5cf6 60%, #7c3aed 100%);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+.cover-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+}
+.cover-page .orb { position: absolute; border-radius: 50%; pointer-events: none; }
+.cover-page .orb-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); top: -60px; right: -80px; }
+.cover-page .orb-2 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%); bottom: 40px; left: -50px; }
+.cover-page .network-container { position: relative; width: 180px; height: 180px; margin-bottom: 30px; z-index: 1; }
+.cover-page .network-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.cover-page .mnode { position: absolute; border-radius: 50%; z-index: 2; }
+.cover-page .mnode.agent { width: 16px; height: 16px; background: #fff; box-shadow: 0 0 18px rgba(255,255,255,0.7), 0 0 40px rgba(255,255,255,0.25); top: 78px; left: 78px; }
+.cover-page .mnode.working { width: 9px; height: 9px; background: rgba(255,220,180,0.9); box-shadow: 0 0 10px rgba(255,220,180,0.5); }
+.cover-page .w1 { top: 65px; left: 90px; }
+.cover-page .w2 { top: 76px; left: 62px; }
+.cover-page .w3 { top: 67px; left: 70px; }
+.cover-page .mnode.short { width: 11px; height: 11px; background: rgba(180,160,255,0.85); box-shadow: 0 0 12px rgba(180,160,255,0.5); }
+.cover-page .s1 { top: 45px; left: 80px; }
+.cover-page .s2 { top: 83px; left: 42px; }
+.cover-page .s3 { top: 53px; left: 112px; }
+.cover-page .s4 { top: 95px; left: 117px; }
+.cover-page .mnode.long { width: 13px; height: 13px; background: rgba(130,120,255,0.7); box-shadow: 0 0 14px rgba(130,120,255,0.4); }
+.cover-page .l1 { top: 25px; left: 89px; }
+.cover-page .l2 { top: 98px; left: 28px; }
+.cover-page .l3 { top: 33px; left: 20px; }
+.cover-page .l4 { top: 111px; left: 67px; }
+.cover-page .l5 { top: 28px; left: 123px; }
+.cover-page .l6 { top: 123px; left: 112px; }
+.cover-page .mnode.reflect { width: 12px; height: 12px; background: rgba(255,200,120,0.9); box-shadow: 0 0 14px rgba(255,200,120,0.5); top: 47px; left: 50px; }
+.cover-page .title-area { z-index: 1; text-align: center; }
+.cover-page .title-cn { font-size: 42px; font-weight: 700; color: #fff; letter-spacing: 6px; line-height: 1.35; text-shadow: 0 2px 20px rgba(0,0,0,0.15); }
+.cover-page .title-cn strong { font-weight: 800; }
+.cover-page .title-divider { width: 60px; height: 2px; background: rgba(255,255,255,0.5); margin: 20px auto; border-radius: 1px; }
+.cover-page .title-en { font-size: 14px; color: rgba(255,255,255,0.65); letter-spacing: 4px; text-transform: uppercase; font-weight: 400; }
+.cover-page .author-area { z-index: 1; text-align: center; margin-top: 40px; }
+.cover-page .author-name { font-size: 16px; color: rgba(255,255,255,0.85); letter-spacing: 2px; font-weight: 500; }
+.cover-page .author-sub { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 1px; margin-top: 8px; }
+</style>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="network-container">
+    <svg class="network-svg" viewBox="0 0 160 160">
+        <line x1="86" y1="86" x2="94" y2="69" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="66" y2="80" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="74" y2="71" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="86" y2="50" stroke="rgba(180,160,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="48" y2="89" stroke="rgba(180,160,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="118" y2="59" stroke="rgba(180,160,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="123" y2="101" stroke="rgba(180,160,255,0.3)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="96" y2="31" stroke="rgba(130,120,255,0.25)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="35" y2="105" stroke="rgba(130,120,255,0.25)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="27" y2="40" stroke="rgba(130,120,255,0.25)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="74" y2="118" stroke="rgba(130,120,255,0.25)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="130" y2="35" stroke="rgba(130,120,255,0.25)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="119" y2="130" stroke="rgba(130,120,255,0.25)" stroke-width="1"/>
+        <line x1="86" y1="86" x2="56" y2="54" stroke="rgba(255,200,120,0.35)" stroke-width="1.5"/>
+        <line x1="94" y1="69" x2="86" y2="50" stroke="rgba(255,255,255,0.12)" stroke-width="0.8"/>
+        <line x1="86" y1="50" x2="96" y2="31" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="96" y1="31" x2="118" y2="59" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="118" y1="59" x2="123" y2="101" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="123" y2="101" x2="74" y2="118" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="74" y2="118" x2="35" y2="105" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="35" y2="105" x2="27" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="27" y2="40" x2="86" y2="50" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+        <line x1="56" y1="54" x2="86" y2="50" stroke="rgba(255,200,120,0.15)" stroke-width="0.8"/>
+        <line x1="56" y1="54" x2="48" y2="89" stroke="rgba(255,200,120,0.15)" stroke-width="0.8"/>
+    </svg>
+    <div class="mnode agent"></div>
+    <div class="mnode working w1"></div>
+    <div class="mnode working w2"></div>
+    <div class="mnode working w3"></div>
+    <div class="mnode short s1"></div>
+    <div class="mnode short s2"></div>
+    <div class="mnode short s3"></div>
+    <div class="mnode short s4"></div>
+    <div class="mnode long l1"></div>
+    <div class="mnode long l2"></div>
+    <div class="mnode long l3"></div>
+    <div class="mnode long l4"></div>
+    <div class="mnode long l5"></div>
+    <div class="mnode long l6"></div>
+    <div class="mnode reflect"></div>
+</div>
+<div class="title-area">
+    <div class="title-cn">智能体<br><strong>记忆工程</strong></div>
+    <div class="title-divider"></div>
+    <div class="title-en">Agent Memory Engineering</div>
+</div>
+<div class="author-area">
+    <div class="author-name">xPaperReader &amp; Ocean</div>
+    <div class="author-sub">v1.0.0 · 2026</div>
+</div>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="toc.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="toc.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script src="katex-render.js"></script>
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

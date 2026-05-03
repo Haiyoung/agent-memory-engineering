@@ -1,0 +1,11 @@
+[book]
+title = "智能体记忆工程"
+authors = ["Agent Memory Research Group"]
+language = "zh-CN"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "ayu"
+smart-punctuation = true
+additional-css = ["katex.min.css", "cover.css"]
+additional-js = ["katex.min.js", "auto-render.min.js", "katex-render.js", "mermaid.min.js", "mermaid-init.js"]

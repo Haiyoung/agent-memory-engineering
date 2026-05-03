@@ -1,0 +1,606 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第9章 检索增强与多跳推理 - 智能体记忆工程</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="katex.min.css">
+        <link rel="stylesheet" href="cover.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "ayu";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">智能体记忆工程</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第9章-检索增强与多跳推理"><a class="header" href="#第9章-检索增强与多跳推理">第9章 检索增强与多跳推理</a></h1>
+<blockquote>
+<p><strong>本章摘要</strong>：本章深入探讨 Agent Memory 系统中最核心的操作——检索（Retrieval）。我们首先系统性地分析检索策略全景，从单一的相似度检索到时序检索、图遍历检索，再到混合策略，建立检索策略的选择框架。随后讨论检索与生成之间的协同机制，包括 RAG 范式的局限性、重排序与过滤、上下文组装策略和检索失败的降级行为。最后，我们深入多跳推理的机制，分析如何通过记忆链和图结构实现复杂问答，并结合 COLT（2405.16089）和 Context-Time Memory（2406.00057）两篇论文，展示检索完整性与时间敏感记忆的最新进展。本章为第10章构建完整的记忆增强对话系统奠定检索基础。</p>
+</blockquote>
+<hr />
+<h2 id="91-检索策略全景"><a class="header" href="#91-检索策略全景">9.1 检索策略全景</a></h2>
+<p>检索（Retrieval）是 Agent Memory 动态维度中最密集的研究领域——本体论 v1.1 中 445 个动态操作概念里，Retrieval 子类独占 79 个概念（18%）。这种密集度并非偶然：检索质量直接决定了 Agent 能否在正确的时间、从正确的存储中、召回正确的信息。本节建立完整的检索策略分类体系，帮助工程师在不同场景下做出最优选择。</p>
+<h3 id="911-相似度检索dense-retrieval"><a class="header" href="#911-相似度检索dense-retrieval">9.1.1 相似度检索（Dense Retrieval）</a></h3>
+<p><strong>原理</strong>：将查询和记忆条目分别编码为稠密向量（Dense Vector），在向量空间中通过余弦相似度或内积进行最近邻搜索。这是当前最主流的检索策略，背后的直觉是“语义相似的查询和记忆在向量空间中应该靠近“。</p>
+<p>典型技术栈包括：嵌入模型（如 OpenAI text-embedding-3-small、bge-large-zh）将文本映射为 768-1536 维向量，向量索引（如 FAISS 的 IVF/PQ 索引、HNSW 图索引）支持高效的近似最近邻（ANN）搜索，返回 Top-K 最相似的记忆条目。</p>
+<pre><code class="language-mermaid">graph LR
+    Q[查询文本] --&gt; E1[嵌入编码器]
+    E1 --&gt; V1[查询向量 q]
+    
+    M1[记忆条目1] --&gt; E2[嵌入编码器]
+    M2[记忆条目2] --&gt; E2
+    M3[记忆条目N] --&gt; E2
+    E2 --&gt; VDB[(向量数据库)]
+    
+    V1 --&gt; ANN[ANN 搜索]
+    VDB --&gt; ANN
+    ANN --&gt; TopK[Top-K 结果]
+</code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>语义泛化能力强</strong>：即使查询和记忆使用不同的词汇表述，只要语义相近即可匹配。例如查询“用户不喜欢什么食物“能匹配到记忆“小明对海鲜过敏“。</li>
+<li><strong>工程成熟度高</strong>：向量数据库生态完善（FAISS、ChromaDB、Milvus、Pinecone），开箱即用。</li>
+<li><strong>可扩展性好</strong>：ANN 算法支持百万甚至十亿级向量的毫秒级检索。</li>
+</ul>
+<p><strong>局限</strong>：</p>
+<ul>
+<li><strong>元数据盲区</strong>：向量相似度无法处理结构化查询。“上周三的对话”、“第二次会话中提到的内容“这类涉及时间、会话编号的元数据查询，在纯向量空间中无法被精确回答。</li>
+<li><strong>细粒度区分力弱</strong>：对于高度相似的记忆条目（如同一用户多次表达“我喜欢咖啡“），向量检索难以区分哪条最新、哪条最相关。</li>
+<li><strong>嵌入模型瓶颈</strong>：检索上限受嵌入模型质量制约。小模型（&lt;500M 参数）在复杂语义匹配上的表现显著弱于大模型，但大模型的推理成本又不可接受。</li>
+<li><strong>“中间迷失“放大效应</strong>：检索返回的多条记忆中，LLM 对中间位置信息的注意力权重衰减，可能导致关键信息被忽略。</li>
+</ul>
+<h3 id="912-时序检索temporal-retrieval"><a class="header" href="#912-时序检索temporal-retrieval">9.1.2 时序检索（Temporal Retrieval）</a></h3>
+<p><strong>原理</strong>：利用时间元数据进行检索，核心策略包括时间衰减（最近优先）和滑动窗口（固定时间范围）。</p>
+<p><strong>时间衰减模型</strong>：为每条记忆分配一个随时间递减的权重 $w(t) = w_0 \cdot e^{-\lambda t}$，其中 $\lambda$ 是衰减速率。这种模型源自艾宾浩斯遗忘曲线，也是 MemoryBank（2305.10250）的核心机制。被频繁检索的记忆可以通过强度增强机制重置衰减值，模拟人类的“复习“效应。</p>
+<p><strong>滑动窗口策略</strong>：仅检索最近 $N$ 条或最近 $T$ 时间范围内的记忆。这是最简单、最直接的时序检索——在客服场景中，用户当前的投诉通常与最近 24 小时的交互最相关；在编程助手场景中，当前会话的上下文通常比一周前的代码讨论更有价值。</p>
+<pre><code class="language-mermaid">graph LR
+    subgraph "时间衰减曲线"
+    A[t=0: w=1.0] --&gt; B[t=1天: w=0.7]
+    B --&gt; C[t=3天: w=0.4]
+    C --&gt; D[t=7天: w=0.2]
+    D --&gt; E[t=30天: w=0.05]
+    end
+    
+    subgraph "滑动窗口"
+    F[当前时间] --&gt; G[← 最近7天 →]
+    G --&gt; H[窗口内记忆]
+    end
+</code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>实现简单</strong>：只需在记忆条目中增加时间戳字段，检索时增加时间过滤条件。</li>
+<li><strong>符合直觉</strong>：大多数场景下，最近的记忆确实更重要。</li>
+<li><strong>计算开销低</strong>：时间过滤是确定性操作，远比向量检索便宜。</li>
+</ul>
+<p><strong>局限</strong>：</p>
+<ul>
+<li><strong>重要旧记忆被淘汰</strong>：用户的长期偏好（如“我对花生过敏“）可能数月不变，但随时间衰减而被降权甚至遗忘。</li>
+<li><strong>会话割裂问题</strong>：如何定义“一次会话“？两次交互间隔 20 分钟算同一次会话还是两次？硬编码阈值无法适配所有场景。</li>
+<li><strong>纯时序无法处理复杂查询</strong>：“用户上次提到预算时说的金额“需要结合时序和语义双重条件。</li>
+</ul>
+<p>2406.00057（Context and Time）论文专门针对这一问题进行了系统研究。该论文发现，纯向量检索在处理“昨天早上“、“第几次会话“等元数据查询时召回率极低，而引入结构化时间过滤后，性能显著提升。论文提出了 TemporalMemoryDataset 基准，包含约 2 万道问题变体，覆盖了时间敏感性查询和模糊查询两大类别。</p>
+<h3 id="913-图遍历检索graph-traversal-retrieval"><a class="header" href="#913-图遍历检索graph-traversal-retrieval">9.1.3 图遍历检索（Graph Traversal Retrieval）</a></h3>
+<p><strong>原理</strong>：将记忆建模为图结构——节点表示实体或概念，边表示关系。检索不再是简单的相似度匹配，而是沿着图边进行路径搜索，实现多跳推理。</p>
+<p>HippoRAG（2405.14831）是图遍历检索的代表性工作。其核心流程为：</p>
+<ol>
+<li><strong>图谱构建</strong>：LLM 从文档中提取实体和关系，构建知识图谱。</li>
+<li><strong>索引构建</strong>：使用 Personalized PageRank（PPR）算法预计算图谱上的节点相关性。</li>
+<li><strong>检索执行</strong>：将查询映射为图谱上的起始节点，通过 PPR 随机游走计算所有节点的相关性得分。</li>
+</ol>
+<p>这种方法的革命性在于：<strong>单次检索即可完成多跳推理</strong>，无需传统的迭代式“检索-生成-再检索“循环。据原文报告，PPR 检索比迭代检索方法快 6-13 倍。</p>
+<pre><code class="language-mermaid">graph TD
+    Q["查询：谁开发了Transformer?"] --&gt; N1[节点: Transformer]
+    N1 -- "开发关系" --&gt; N2[节点: Google]
+    N2 -- "雇佣关系" --&gt; N3[节点: Vaswani]
+    N2 -- "雇佣关系" --&gt; N4[节点: Shazeer]
+    N3 -- "作者关系" --&gt; D1["论文: Attention Is All You Need"]
+    N4 -- "作者关系" --&gt; D1
+    
+    style Q fill:#fff3cd
+    style D1 fill:#d4edda
+</code></pre>
+<p><strong>优势</strong>：</p>
+<ul>
+<li><strong>显式关系推理</strong>：支持“如果 A 是 B 的朋友，B 是 C 的同事，则 A 和 C 可能相识“这类链式推理。</li>
+<li><strong>可解释性强</strong>：检索路径本身就是推理过程的可视化。</li>
+<li><strong>多跳效率高</strong>：单次 PPR 检索替代多次迭代检索。</li>
+</ul>
+<p><strong>局限</strong>：</p>
+<ul>
+<li><strong>图谱构建成本高</strong>：需要 LLM 进行实体识别和关系抽取，预处理开销大。</li>
+<li><strong>图谱维护复杂</strong>：新增记忆需要动态更新图结构，涉及节点合并、边权重调整等操作。</li>
+<li><strong>稀疏图效果受限</strong>：在记忆量较少或关系稀疏的场景中，图遍历的覆盖范围有限。</li>
+</ul>
+<h3 id="914-混合检索策略"><a class="header" href="#914-混合检索策略">9.1.4 混合检索策略</a></h3>
+<p><strong>原理</strong>：没有任何单一检索策略能在所有场景下表现最优。混合检索将多种策略组合，通过路由或融合机制实现优势互补。</p>
+<p>2406.00057 论文提出的混合检索架构是这一方向的典型案例：</p>
+<pre><code class="language-mermaid">flowchart TD
+    UserQuery[用户查询] --&gt; Classifier{查询分类器}
+    Classifier --&gt;|需要元数据 | MetaRouter[元数据检索]
+    Classifier --&gt;|需要语义 | SemRouter[语义检索]
+    Classifier --&gt;|两者都需要 | HybridRouter[混合检索]
+    
+    MetaRouter --&gt; TableFilter[链式表过滤]
+    TableFilter --&gt; Subset[候选子集]
+    
+    SemRouter --&gt; VectorSearch[向量检索]
+    
+    HybridRouter --&gt; TableFilter
+    Subset --&gt; VectorSearch
+    
+    VectorSearch --&gt; RetrievedDocs[检索文档]
+    RetrievedDocs --&gt; LLMGen[LLM 生成回答]
+    
+    subgraph DataStorage [数据存储]
+    DataTable[结构化对话表]
+    VectorDB[向量索引]
+    end
+    
+    DataTable -.-&gt; TableFilter
+    VectorDB -.-&gt; VectorSearch
+</code></pre>
+<p>混合检索的常见模式包括：</p>
+<div class="table-wrapper"><table><thead><tr><th>模式</th><th>组合方式</th><th>适用场景</th></tr></thead><tbody>
+<tr><td><strong>路由型混合</strong></td><td>分类器决定使用哪种策略</td><td>查询类型明确的场景</td></tr>
+<tr><td><strong>级联型混合</strong></td><td>先粗筛（元数据过滤）再精筛（语义检索）</td><td>大规模记忆库，需缩小搜索空间</td></tr>
+<tr><td><strong>融合型混合</strong></td><td>多种策略独立检索后合并结果</td><td>查询类型不确定或复合查询</td></tr>
+<tr><td><strong>递归型混合</strong></td><td>检索结果作为下一轮检索的输入</td><td>多跳推理、渐进式信息搜集</td></tr>
+</tbody></table>
+</div>
+<h3 id="916-最新进展查询自适应检索"><a class="header" href="#916-最新进展查询自适应检索">9.1.6 最新进展：查询自适应检索</a></h3>
+<blockquote>
+<p><strong>注</strong>：本节基于 2026 年最新研究成果（ACM WWW ’26, CCF-A 类会议）。</p>
+</blockquote>
+<h4 id="hingemem--事件分割理论驱动的边界引导记忆"><a class="header" href="#hingemem--事件分割理论驱动的边界引导记忆">HingeMem — 事件分割理论驱动的边界引导记忆</a></h4>
+<p><strong>背景</strong>：长对话系统中记忆冗余、检索不相关或信息不足，导致上下文理解偏差。传统固定 Top-k 检索缺乏对查询类别的适应性，计算开销大。</p>
+<p><strong>方案</strong>：HingeMem（2604.06845）基于事件分割理论（Event Segmentation Theory），提出两个核心机制：</p>
+<ol>
+<li><strong>边界引导记忆构建</strong>：监测对话中<strong>人物、时间、地点、话题</strong>四要素的变化，任一要素变化时触发记忆边界绘制并写入片段。超边索引以“人/时/地/题“为维度，提供可解释的接口。</li>
+<li><strong>查询自适应检索</strong>：联合决策“检索什么内容“和“检索多少内容“，动态决定检索深度，避免过度检索导致上下文溢出。</li>
+</ol>
+<pre><code class="language-mermaid">flowchart TD
+    UserQuery[用户查询] --&gt; RetrievalPlan[检索计划模块]
+    RetrievalPlan --&gt; What[决定检索内容]
+    RetrievalPlan --&gt; HowMuch[决定检索深度]
+    RetrievalPlan --&gt; IndexingInterface[索引接口 人/时/地/题]
+    
+    Dialogue[对话流] --&gt; BoundaryExtraction[边界提取模块]
+    BoundaryExtraction --&gt; MemoryConstruction[记忆构建模块]
+    MemoryConstruction --&gt; IndexingInterface
+    
+    What --&gt; IndexingInterface
+    HowMuch --&gt; IndexingInterface
+    IndexingInterface --&gt; SelectedMemories[关键记忆片段]
+    SelectedMemories --&gt; Response[生成响应]
+</code></pre>
+<p><strong>关键结果</strong>：</p>
+<ul>
+<li>LOCOMO 数据集上相比强基线实现约 20% 的相对性能提升</li>
+<li>问答 Token 成本相比 HippoRAG2 降低 68%</li>
+<li>跨模型规模有效（Qwen3-0.6B 至生产级模型均适用）</li>
+<li>无需指定查询类别即可适应多样信息需求</li>
+</ul>
+<p><strong>工程启示</strong>：68% 的 Token 成本降低在生产环境极具吸引力。边界检测的敏感度需要调优——过于敏感导致片段碎片化，过于迟钝则丢失语义边界。在噪声对话中的鲁棒性需进一步验证。迁移至角色扮演或心理咨询场景时，可探索情感作为第五边界触发要素。</p>
+<h3 id="915-检索策略的选择指南"><a class="header" href="#915-检索策略的选择指南">9.1.5 检索策略的选择指南</a></h3>
+<p>选择检索策略时，应从以下维度评估：</p>
+<div class="table-wrapper"><table><thead><tr><th>决策维度</th><th>关键问题</th><th>推荐策略</th></tr></thead><tbody>
+<tr><td><strong>查询类型</strong></td><td>是否需要时间/会话等元数据？</td><td>需要：混合检索；不需要：相似度检索</td></tr>
+<tr><td><strong>记忆规模</strong></td><td>记忆条目数量级？</td><td>千级：相似度检索；万级以上：混合或图检索</td></tr>
+<tr><td><strong>推理复杂度</strong></td><td>是否需要跨记忆关联推理？</td><td>需要：图遍历；不需要：相似度或时序</td></tr>
+<tr><td><strong>延迟要求</strong></td><td>可接受的检索延迟？</td><td>低延迟：时序/相似度；可容忍：图/混合</td></tr>
+<tr><td><strong>可解释性</strong></td><td>是否需要追溯检索路径？</td><td>需要：图遍历；不需要：向量检索</td></tr>
+<tr><td><strong>维护成本</strong></td><td>团队能否维护复杂结构？</td><td>有限：相似度；充裕：图/混合</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="92-检索与生成的协同"><a class="header" href="#92-检索与生成的协同">9.2 检索与生成的协同</a></h2>
+<p>检索到的信息需要有效地注入 LLM 的生成上下文，这个过程并非简单的“拼接“——检索结果的质量、数量和呈现方式直接影响最终生成质量。</p>
+<h3 id="921-rag-范式在记忆场景中的局限"><a class="header" href="#921-rag-范式在记忆场景中的局限">9.2.1 RAG 范式在记忆场景中的局限</a></h3>
+<p>传统 RAG（Retrieval-Augmented Generation）范式在知识问答场景表现优异，但将其直接迁移到 Agent 记忆场景时，暴露出以下结构性局限：</p>
+<p><strong>1. 片段丢失与上下文断裂。</strong> 传统 RAG 检索的是独立文档片段，而 Agent 记忆中的信息往往是跨片段关联的。例如用户在不同时间提到“我开始健身“和“我不吃碳水化合物“，两条记忆单独看都不完整，结合起来才能推断“用户可能在控制饮食减脂“。</p>
+<p><strong>2. 时序信息丢失。</strong> RAG 的 Top-K 检索按相似度排序，时间线索在排序过程中被丢弃。“用户说喜欢咖啡“和“用户说不喜欢咖啡“可能同时出现在 Top-K 中，但系统无法判断哪条更新、哪条已被修正。</p>
+<p><strong>3. 记忆更新不同步。</strong> RAG 假设文档库是相对静态的，而 Agent 记忆是持续演化的。用户的偏好会变化、事实会更新、矛盾需要消解——传统的 RAG 索引更新机制（通常是批量的、离线的）无法支持这种实时性。</p>
+<p><strong>4. 冗余信息干扰。</strong> 检索返回的多条记忆可能存在高度重叠，挤占有限的上下文窗口。研究表明，LLM 对上下文中重复信息的处理效率降低，且可能因注意力分散而忽略关键差异。</p>
+<h3 id="922-检索结果的重排序与过滤"><a class="header" href="#922-检索结果的重排序与过滤">9.2.2 检索结果的重排序与过滤</a></h3>
+<p>检索返回的原始结果需要经过重排序（Reranking）和过滤（Filtering）才能进入生成阶段。</p>
+<p><strong>重排序策略</strong>：</p>
+<ul>
+<li><strong>交叉编码器重排序</strong>：使用交叉编码器（Cross-Encoder）对查询-记忆对进行精细化相关性打分。虽然比双编码器（Bi-Encoder）计算成本高，但精度显著提升。</li>
+<li><strong>时间加权重排序</strong>：在相似度得分基础上叠加时间衰减因子 $S = \alpha \cdot sim(q, m) + (1-\alpha) \cdot decay(t)$，平衡语义相关性和时效性。</li>
+<li><strong>多样性重排序</strong>：使用最大边际相关性（MMR）算法，在相关性和多样性之间取得平衡，避免 Top-K 结果高度同质化。</li>
+</ul>
+<p><strong>过滤策略</strong>：</p>
+<ul>
+<li><strong>阈值过滤</strong>：剔除相似度低于阈值的记忆条目，防止噪声注入上下文。</li>
+<li><strong>冲突检测与消解</strong>：当检索到矛盾记忆时（如“喜欢猫“ vs.“对猫毛过敏”），使用时间戳、置信度和一致性优先级（公理17：一致性优先）进行仲裁。</li>
+<li><strong>冗余去重</strong>：对语义高度重叠的记忆进行聚类，保留最具代表性的条目。</li>
+</ul>
+<h3 id="923-上下文组装策略"><a class="header" href="#923-上下文组装策略">9.2.3 上下文组装策略</a></h3>
+<p>将过滤后的记忆注入 LLM 上下文时，组装策略直接影响生成质量：</p>
+<div class="table-wrapper"><table><thead><tr><th>策略</th><th>方法</th><th>适用场景</th></tr></thead><tbody>
+<tr><td><strong>直接拼接</strong></td><td>将记忆条目按相关性排序后直接拼接到 Prompt</td><td>记忆量少、条目短的场景</td></tr>
+<tr><td><strong>摘要压缩</strong></td><td>先对检索结果进行摘要，再注入上下文</td><td>记忆量大、需压缩 Token 数的场景</td></tr>
+<tr><td><strong>结构化注入</strong></td><td>按类别（事实/情景/偏好）分组注入，添加类别标记</td><td>多类型记忆混合的场景</td></tr>
+<tr><td><strong>动态注入</strong></td><td>根据生成过程中的需要，按需加载额外记忆</td><td>MemGPT 式的自主分页管理</td></tr>
+</tbody></table>
+</div>
+<p><strong>上下文组装的关键原则</strong>：</p>
+<ul>
+<li><strong>信息密度优先</strong>：优先注入信息密度高的记忆（如结构化摘要），而非原始长文本。</li>
+<li><strong>位置效应利用</strong>：将最关键的记忆放在上下文的开头和结尾（利用 LLM 的“首尾效应“，避免“中间迷失“）。</li>
+<li><strong>显式标记</strong>：为每条记忆添加来源标记（如“[记忆-2024-03-15]“），便于 LLM 区分和引用。</li>
+</ul>
+<h3 id="924-检索失败时的降级行为"><a class="header" href="#924-检索失败时的降级行为">9.2.4 检索失败时的降级行为</a></h3>
+<p>检索系统不可能永远返回高质量结果。设计合理的降级（Fallback）机制至关重要：</p>
+<div class="table-wrapper"><table><thead><tr><th>降级场景</th><th>降级策略</th><th>实现方式</th></tr></thead><tbody>
+<tr><td><strong>零结果</strong></td><td>扩大检索范围或降低阈值</td><td>增加 Top-K、放宽相似度阈值、回退到全文搜索</td></tr>
+<tr><td><strong>低置信度</strong></td><td>显式告知用户不确定性</td><td>在回复中添加“根据有限的信息…“前缀</td></tr>
+<tr><td><strong>矛盾结果</strong></td><td>返回最新或最高置信度的记忆，并标注冲突</td><td>使用时间戳排序 + 冲突提示</td></tr>
+<tr><td><strong>超时</strong></td><td>使用缓存结果或最近的记忆子集</td><td>设置检索超时阈值，超时后使用最近 N 条记忆</td></tr>
+<tr><td><strong>索引损坏</strong></td><td>回退到无检索模式</td><td>完全依赖模型参数化知识和当前对话上下文</td></tr>
+</tbody></table>
+</div>
+<p>降级行为的设计原则是<strong>优雅降级（Graceful Degradation）</strong>：即使在最差情况下，系统仍能提供可用的回复，而非完全失效或产生误导性回答。</p>
+<hr />
+<h2 id="93-多跳推理"><a class="header" href="#93-多跳推理">9.3 多跳推理</a></h2>
+<p>多跳推理（Multi-hop Reasoning）是 Agent Memory 系统最强大的能力之一——通过串联多条记忆，回答任何单条记忆都无法独立回答的复杂问题。</p>
+<h3 id="931-记忆链与复杂问答"><a class="header" href="#931-记忆链与复杂问答">9.3.1 记忆链与复杂问答</a></h3>
+<p>记忆链（Memory Chain）是指通过逻辑关联串联的多条记忆构成的推理路径。考虑以下场景：</p>
+<pre><code>用户查询：我之前说想去的那个城市，天气怎么样？
+
+记忆链：
+Hop 1: "用户提到想去日本旅游"（情景记忆，2024-01-15）
+Hop 2: "用户说想在樱花季去"（情景记忆，2024-01-15）
+Hop 3: "樱花季通常在3月底到4月中旬"（语义记忆，外部知识）
+→ 推理：用户想去日本，时间约3-4月，查询日本春季天气
+</code></pre>
+<p>单条记忆无法回答“那个城市“指的是哪里，也无法确定“那时“是什么季节。只有通过记忆链将分散的信息串联，才能完成完整的推理。</p>
+<p>记忆链的构建方式有两种：</p>
+<p><strong>显式链</strong>：通过知识图谱中的路径直接链接。HippoRAG 的 PPR 检索本质上就是自动发现记忆链——从查询节点出发，沿着图边遍历，找到与查询相关的多跳路径。</p>
+<p><strong>隐式链</strong>：通过 LLM 的推理能力在检索结果中发现隐含关联。系统将多条检索到的记忆同时注入上下文，由 LLM 自行识别和串联。这种方式不需要预构建图结构，但依赖 LLM 的推理能力和充足的上下文窗口。</p>
+<h3 id="932-图结构上的多跳推理路径"><a class="header" href="#932-图结构上的多跳推理路径">9.3.2 图结构上的多跳推理路径</a></h3>
+<p>在图结构记忆中，多跳推理路径具有以下特征：</p>
+<p><strong>路径发现</strong>：使用图算法（如 BFS、DFS、PPR）发现从查询节点到目标节点的路径。PPR 特别适合记忆检索场景——它通过带偏好（bias）的随机游走，使检索结果偏向与查询语义相关的节点，同时保留图结构带来的多跳能力。</p>
+<p><strong>路径评分</strong>：每条路径的相关性由路径上边的权重和节点的相关性共同决定。例如：</p>
+<ul>
+<li>直接路径（1 跳）权重最高，但信息量可能不足。</li>
+<li>间接路径（2-3 跳）权重递减，但可能包含关键推理信息。</li>
+<li>过长路径（&gt;4 跳）通常噪声过大，应设置最大跳数阈值。</li>
+</ul>
+<p><strong>路径解释</strong>：图遍历检索的优势在于可解释性。检索结果不仅返回答案，还返回推理路径：“根据您在 3 月 15 日提到想去日本（记忆#42），以及 3 月 20 日说想看樱花（记忆#57），我推断您指的是日本东京。”</p>
+<h3 id="933-检索质量评估"><a class="header" href="#933-检索质量评估">9.3.3 检索质量评估</a></h3>
+<p>评估多跳检索系统的质量，需要多维指标：</p>
+<div class="table-wrapper"><table><thead><tr><th>指标</th><th>定义</th><th>计算方法</th><th>目标值</th></tr></thead><tbody>
+<tr><td><strong>召回率（Recall）</strong></td><td>相关记忆中被检索到的比例</td><td>TP / (TP + FN)</td><td>越高越好</td></tr>
+<tr><td><strong>精确度（Precision）</strong></td><td>检索结果中相关的比例</td><td>TP / (TP + FP)</td><td>越高越好</td></tr>
+<tr><td><strong>F2 分数</strong></td><td>偏向召回的调和平均</td><td>5·P·R / (4·P + R)</td><td>记忆场景建议 &gt;0.7</td></tr>
+<tr><td><strong>冗余度</strong></td><td>检索结果中重复信息的比例</td><td>1 - (唯一信息量 / 总信息量)</td><td>越低越好</td></tr>
+<tr><td><strong>跳数效率</strong></td><td>完成推理所需的最小跳数与实际跳数之比</td><td>最小跳数 / 实际跳数</td><td>越接近 1 越好</td></tr>
+<tr><td><strong>延迟</strong></td><td>从查询到检索完成的时间</td><td>端到端测量</td><td>取决于场景</td></tr>
+</tbody></table>
+</div>
+<p><strong>F2 分数</strong>在记忆场景中特别重要——它偏向召回而非精确度，因为遗漏关键记忆（FN）的代价远大于引入少量噪声（FP）。2406.00057 论文选用 F2 作为核心评估指标，正是基于这一考量。</p>
+<h3 id="934-论文案例分析"><a class="header" href="#934-论文案例分析">9.3.4 论文案例分析</a></h3>
+<h4 id="案例一colt--完整性导向的工具检索240516089"><a class="header" href="#案例一colt--完整性导向的工具检索240516089">案例一：COLT —— 完整性导向的工具检索（2405.16089）</a></h4>
+<p><strong>论文</strong>：Qu, C. et al. “Towards Completeness-Oriented Tool Retrieval for Large Language Models.” CIKM ’24.</p>
+<p><strong>核心问题</strong>：现有工具检索方法主要关注查询与工具描述之间的语义匹配，导致检索出冗余、相似的工具，无法提供解决问题所需的完整工具集。</p>
+<p><strong>解决方案</strong>：COLT（COllaborative Learning-based Tool Retrieval）框架引入工具间的<strong>协同信息</strong>，不仅考虑“这个工具与查询是否相关“，还考虑“这些工具组合在一起是否能完整解决问题“。</p>
+<p><strong>双视图图协同学习架构</strong>：</p>
+<pre><code class="language-mermaid">graph TD
+    Q[用户查询] --&gt; SG[语义学习阶段]
+    T[工具库] --&gt; SG
+    SG --&gt; GC[构建二分图]
+    
+    GC --&gt; QT[查询-工具图]
+    GC --&gt; QS[查询-场景图]
+    GC --&gt; ST[场景-工具图]
+    
+    QT --&gt; DV[双视图图协同学习]
+    QS --&gt; DV
+    ST --&gt; DV
+    
+    DV --&gt; Output[完整工具集合]
+</code></pre>
+<p><strong>关键创新</strong>：</p>
+<ol>
+<li><strong>完整性而非相关性</strong>：检索目标从“找到最相关的工具“转向“找到能完整解决问题的工具集合“。这减少了功能重叠的工具冗余，确保检索集合覆盖问题的各个方面。</li>
+<li><strong>双视图图协同学习</strong>：构建查询-工具、查询-场景、场景-工具三个二分图，通过图神经网络捕捉节点间的协同关系。</li>
+<li><strong>小模型超越大模型</strong>：实验表明，11M 参数的 BERT-mini 配合 COLT 框架，性能超越 340M 参数的 BERT-large，参数量减少约 30 倍。这证明了<strong>检索质量的关键不在于模型规模，而在于是否捕捉到了正确的结构信息</strong>。</li>
+</ol>
+<p><strong>工程启示</strong>：在 Agent 工具检索场景中，单纯的语义匹配远远不够。工具之间存在互补关系（如“搜索“和“总结“配合使用）和替代关系（如两种不同的翻译 API），检索系统需要建模这些关系，才能返回完整且不冗余的工具集合。</p>
+<h4 id="案例二context-and-time--上下文与时间敏感的长期记忆240600057"><a class="header" href="#案例二context-and-time--上下文与时间敏感的长期记忆240600057">案例二：Context and Time —— 上下文与时间敏感的长期记忆（2406.00057）</a></h4>
+<p><strong>论文</strong>：Alonso, N. et al. “Toward Conversational Agents with Context and Time Sensitive Long-term Memory.” arXiv:2406.00057.</p>
+<p><strong>核心问题</strong>：对话式 RAG 系统缺乏对时间流逝和会话结构的敏感度，难以处理“昨天早上说了什么“、“他指的是谁“这类涉及时间和上下文的查询。</p>
+<p><strong>解决方案</strong>：混合检索架构，融合链式表（Chain-of-Tables）元数据过滤和向量语义检索。</p>
+<p><strong>关键技术</strong>：</p>
+<ol>
+<li><strong>链式表检索</strong>：将对话日志存储为结构化表格（包含时间戳、会话 ID、嵌入向量等列），使用 <code>f_value</code>（精确值过滤）和 <code>f_between</code>（范围过滤）函数进行链式过滤，先缩小候选空间再进行语义检索。</li>
+<li><strong>查询重写</strong>：利用 LLM 消除指代歧义。当用户说“他的建议是什么“时，系统将查询重写为“张三在第二次会话中的建议是什么“，再进行检索。</li>
+<li><strong>上下文注入</strong>：在检索 Prompt 中注入前 2-4 句对话上下文，帮助系统理解代词和指示词的指代对象。</li>
+</ol>
+<p><strong>实验发现</strong>：</p>
+<ul>
+<li>纯向量检索在元数据查询上表现极差，混合检索在 F2 分数上显著优于基线。</li>
+<li>上下文注入对模糊查询至关重要——不注入上下文时，代词消解几乎完全失效。</li>
+<li>会话割裂阈值（原文使用 20 分钟）需要根据具体业务场景调整，不应硬编码。</li>
+</ul>
+<p><strong>工程启示</strong>：在实际的对话记忆系统中，结构化元数据（时间、会话、参与者）和语义嵌入同等重要。单纯的向量检索只覆盖了检索空间的一半——另一半由结构化数据填补。将两者结合，才能真正实现“有时间和上下文意识“的长期记忆。</p>
+<hr />
+<h2 id="94-本章小结"><a class="header" href="#94-本章小结">9.4 本章小结</a></h2>
+<ul>
+<li><strong>检索策略是一个谱系而非单选</strong>。相似度检索擅长语义泛化但无法处理元数据，时序检索简单高效但会丢失重要旧记忆，图遍历检索支持多跳推理但维护成本高，混合检索取长补短但增加了系统复杂度。没有最优策略，只有最适合场景的策略。</li>
+<li><strong>RAG 范式在记忆场景中存在结构性局限</strong>。片段丢失、时序信息丢失、更新不同步和冗余干扰是四大核心问题，需要通过重排序、冲突消解和智能组装来弥补。</li>
+<li><strong>上下文组装策略直接影响生成质量</strong>。信息密度、位置效应和显式标记是三个关键原则。最关键的记忆应放在上下文的开头和结尾，避免“中间迷失“。</li>
+<li><strong>检索失败时的优雅降级是系统可靠性的保障</strong>。从零结果扩展、低置信度提示到无检索模式回退，降级策略确保系统在任何情况下都能提供可用回复。</li>
+<li><strong>多跳推理是 Agent Memory 的核心竞争力</strong>。通过记忆链和图遍历，Agent 能够回答任何单条记忆都无法独立回答的复杂问题。PPR 等单次多跳检索算法比迭代检索效率高出 6-13 倍。</li>
+<li><strong>检索完整性比相关性更重要</strong>。COLT（2405.16089）证明了工具间的协同信息对检索质量的决定性影响——小模型配合正确的结构信息，可以超越大模型的纯语义匹配。</li>
+<li><strong>时间与上下文意识是长期记忆的必备能力</strong>。2406.00057 论文表明，混合元数据过滤和语义检索的架构，在处理时间敏感查询和模糊查询上显著优于单一策略。</li>
+</ul>
+<hr />
+<h2 id="95-延伸阅读"><a class="header" href="#95-延伸阅读">9.5 延伸阅读</a></h2>
+<h3 id="检索增强与多跳推理核心论文"><a class="header" href="#检索增强与多跳推理核心论文">检索增强与多跳推理核心论文</a></h3>
+<ol>
+<li><strong>Qu, C. et al.</strong> (2024). “Towards Completeness-Oriented Tool Retrieval for Large Language Models.” CIKM ’24. (2405.16089) —— 提出 COLT 框架，通过双视图图协同学习实现完整性导向的工具检索。</li>
+<li><strong>Alonso, N. et al.</strong> (2024). “Toward Conversational Agents with Context and Time Sensitive Long-term Memory.” arXiv:2406.00057. —— 提出混合检索架构，结合链式表元数据过滤与向量语义检索。</li>
+<li><strong>Gutierrez, B. J. et al.</strong> (2024). “HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models.” NeurIPS 2024. (2405.14831) —— 知识图谱 + Personalized PageRank 实现单次多跳检索。</li>
+</ol>
+<h3 id="rag-与检索优化"><a class="header" href="#rag-与检索优化">RAG 与检索优化</a></h3>
+<ol start="4">
+<li><strong>Lewis, P. et al.</strong> (2020). “Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.” NeurIPS 2020. —— RAG 范式的奠基论文。</li>
+<li><strong>Gao, Y. et al.</strong> (2023). “Retrieval-Augmented Generation for Large Language Models: A Survey.” —— RAG 技术的系统性综述，涵盖检索、生成和增强策略。</li>
+<li><strong>Yan, S. et al.</strong> (2024). “Contextual Retrieval: Improving RAG with Context-Aware Chunk Embedding.” —— 上下文感知的检索分块策略。</li>
+</ol>
+<h3 id="检索评估与基准"><a class="header" href="#检索评估与基准">检索评估与基准</a></h3>
+<ol start="7">
+<li><strong>TemporalMemoryDataset</strong>：https://github.com/Zyphra/TemporalMemoryDataset —— 时间与上下文敏感查询的基准数据集。</li>
+<li><strong>ToolLens</strong>：COLT 论文（2405.16089）引入的工具检索基准数据集。</li>
+</ol>
+<h3 id="2026-最新进展"><a class="header" href="#2026-最新进展">2026 最新进展</a></h3>
+<ol start="9">
+<li><strong>(2026).</strong> “HingeMem: Boundary Guided Long-Term Memory with Query Adaptive Retrieval.” ACM WWW ’26. arXiv:2604.06845. —— 事件分割理论驱动的边界引导记忆，Token 成本降低 68%。</li>
+<li><strong>(2026).</strong> “Joint Optimization of Reasoning and Dual-Memory.” arXiv:2604.07269. —— 推理与双记忆联合优化。</li>
+<li><strong>(2026).</strong> “Task-Adaptive Retrieval over Multi-Modal.” arXiv:2604.07863. —— 多模态任务自适应检索。</li>
+<li><strong>(2026).</strong> “Memory Intelligence Agent.” arXiv:2604.04503. —— 多模态检索智能体。</li>
+</ol>
+<p><em>检索是 Agent Memory 系统中最密集的研究领域，也是工程实践中最常遇到的瓶颈。下一章将把本章的检索理论付诸实践，构建一个完整的记忆增强对话系统。</em></p>
+<hr />
+<h2 id="96-框架深度剖析检索策略设计"><a class="header" href="#96-框架深度剖析检索策略设计">9.6 框架深度剖析：检索策略设计</a></h2>
+<h3 id="961-forgetful--四阶段混合搜索管道"><a class="header" href="#961-forgetful--四阶段混合搜索管道">9.6.1 Forgetful — 四阶段混合搜索管道</a></h3>
+<p><strong>问题</strong>：单一检索策略无法兼顾召回率和精确率。</p>
+<p><strong>方案</strong>：四阶段管道——(1) Dense Search（向量余弦距离）；(2) Sparse Search（关键词匹配）；(3) RRF 融合 <code>score = 1/(k+rank_dense) + 1/(k+rank_sparse)</code>，k=60；(4) Cross-Encoder 重排序（FastEmbed TextCrossEncoder）。</p>
+<p><strong>代码路径</strong>：</p>
+<ul>
+<li><code>app/repositories/sqlite/memory_repository.py</code> — 搜索+自动链接+图遍历 (L1-1569)</li>
+<li><code>app/services/memory_service.py</code> — 业务逻辑+Token 预算 (L1-707)</li>
+</ul>
+<p><strong>Token 预算管理</strong>：按重要性排序，截断到配置上限（默认 8K tokens）。确保注入上下文的记忆量不超过 LLM 窗口容量。</p>
+<h3 id="962-memoria--spreading-activation-检索"><a class="header" href="#962-memoria--spreading-activation-检索">9.6.2 Memoria — Spreading Activation 检索</a></h3>
+<p><strong>问题</strong>：当记忆超过 500 条时，向量搜索返回的结果可能缺少关联上下文。</p>
+<p><strong>方案</strong>：锚点选择（Top-N by vector similarity）→ Spreading Activation（3-5 轮传播）→ 按激活分数排序 → 与向量搜索结果融合。权重：语义 0.35 + 激活 0.35 + 置信度 0.20 + 重要性 0.10。</p>
+<p><strong>代码路径</strong>：</p>
+<ul>
+<li><code>memoria/crates/memoria-storage/src/graph/retriever.rs</code> — 激活检索器 (L72-200+)</li>
+<li><code>memoria/crates/memoria-service/src/service.rs</code> — 检索管道 (L1283-1546)</li>
+</ul>
+<h3 id="963-openmemory--waypoint-关联图--bfs-扩展"><a class="header" href="#963-openmemory--waypoint-关联图--bfs-扩展">9.6.3 OpenMemory — Waypoint 关联图 + BFS 扩展</a></h3>
+<p><strong>问题</strong>：当初始搜索最高置信度 &lt; 0.6 时，如何扩展搜索范围？</p>
+<p><strong>方案</strong>：Waypoint 关联图基于语义相似度链接记忆，低置信度时触发 BFS 扩展（深度 2-3 跳，每跳最多保留 5 个邻居）。扩展结果按 <code>edge_weight * neighbor_salience</code> 排序。</p>
+<h2 id="97-工程决策卡片"><a class="header" href="#97-工程决策卡片">9.7 工程决策卡片</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>规模</th><th>推荐策略</th><th>延迟 (P50)</th><th>精确率</th><th>代表项目</th></tr></thead><tbody>
+<tr><td>&lt; 100 条</td><td>纯向量搜索</td><td>&lt; 50ms</td><td>中</td><td>Agent Memory OS</td></tr>
+<tr><td>100-1K 条</td><td>Dense + Sparse + RRF</td><td>&lt; 200ms</td><td>高</td><td>Forgetful</td></tr>
+<tr><td>1K-10K 条</td><td>混合搜索 + 图谱激活</td><td>&lt; 500ms</td><td>高</td><td>Memoria</td></tr>
+<tr><td>&gt; 10K 条</td><td>专用向量数据库 + 服务端聚合</td><td>&lt; 1s</td><td>高</td><td>Redis AMS</td></tr>
+</tbody></table>
+</div>
+<p><strong>RRF 参数</strong>：k=60（经验值，平衡 dense 和 sparse 的权重）
+<strong>图谱激活参数</strong>：语义权重 0.35，激活权重 0.35，置信度权重 0.20，重要性权重 0.10
+<strong>BFS 扩展阈值</strong>：初始最高置信度 &lt; 0.6 触发，深度 2-3 跳，每跳最多 5 个邻居</p>
+<h2 id="98-反模式与陷阱"><a class="header" href="#98-反模式与陷阱">9.8 反模式与陷阱</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>反模式</th><th>问题</th><th>正确做法</th><th>来源</th></tr></thead><tbody>
+<tr><td>纯向量搜索 &gt; 100 条记忆</td><td>精度下降，相似但不相关的结果增多</td><td>引入 Sparse + RRF 混合</td><td>Forgetful 经验</td></tr>
+<tr><td>无 Token 预算</td><td>检索结果超过上下文容量，截断丢失关键信息</td><td>按重要性排序截断到预算上限</td><td>Forgetful Token 预算</td></tr>
+<tr><td>低置信度不扩展</td><td>初始搜索无结果即放弃，忽略关联记忆</td><td>BFS 扩展 2-3 跳</td><td>OpenMemory Waypoint</td></tr>
+<tr><td>检索结果不重排序</td><td>RRF 融合后直接使用，未考虑查询特定需求</td><td>Cross-Encoder 重排序 Top-K</td><td>Forgetful 四阶段管道</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch08-storage-architecture.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ch10-memory-dialogue.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch08-storage-architecture.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ch10-memory-dialogue.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script src="katex-render.js"></script>
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>

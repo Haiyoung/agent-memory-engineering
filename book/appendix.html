@@ -1,0 +1,837 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>附录 - 智能体记忆工程</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="katex.min.css">
+        <link rel="stylesheet" href="cover.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "ayu";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">智能体记忆工程</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="附录"><a class="header" href="#附录">附录</a></h1>
+<blockquote>
+<p>本附录包含五部分：论文索引表（A）收录全书引用的 150+ 篇论文，按年份组织并标注引用章节与本体论坐标；术语对照表（B）从本体论框架中提取 56 个核心术语的中英对照与一句话定义；推荐工具与框架清单（C）收录全书提及的所有工具、框架、库和基准，按类别组织；框架选型速查表（D）提供一页纸决策图与存储后端对比；开源框架代码索引（E）收录 16 个开源项目的核心代码路径分析。</p>
+</blockquote>
+<hr />
+<h2 id="a-论文索引表"><a class="header" href="#a-论文索引表">A. 论文索引表</a></h2>
+<h3 id="2021-年1-篇"><a class="header" href="#2021-年1-篇">2021 年（1 篇）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>arxiv ID</th><th>标题</th><th>引用章节</th><th>本体论坐标</th></tr></thead><tbody>
+<tr><td>2104.08164</td><td>Editing Factual Knowledge in Language Models (KnowledgeEditor)</td><td>2.5.1, 14.1</td><td>Parametric / Factual / Evolution</td></tr>
+</tbody></table>
+</div>
+<h3 id="2022-年1-篇"><a class="header" href="#2022-年1-篇">2022 年（1 篇）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>arxiv ID</th><th>标题</th><th>引用章节</th><th>本体论坐标</th></tr></thead><tbody>
+<tr><td>2207.07115</td><td>XMem: Long-Term Video Object Segmentation with an Atkinson-Shiffrin Memory Model</td><td>第3章</td><td>Latent / Episodic / Formation</td></tr>
+</tbody></table>
+</div>
+<h3 id="2023-年18-篇"><a class="header" href="#2023-年18-篇">2023 年（18 篇）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>arxiv ID</th><th>标题</th><th>引用章节</th><th>本体论坐标</th></tr></thead><tbody>
+<tr><td>2302.04761</td><td>Toolformer: Language Models Can Teach Themselves to Use Tools</td><td>第11章</td><td>Parametric / Procedural / Formation</td></tr>
+<tr><td>2303.11366</td><td>Reflexion: Language Agents with Verbal Reinforcement Learning</td><td>1.2, 第12章</td><td>External / Experiential / Reflection</td></tr>
+<tr><td>2304.03442</td><td>Generative Agents: Interactive Simulacra of Human Behavior</td><td>1.5, 第7章, 第10章</td><td>External / Episodic / Reflection</td></tr>
+<tr><td>2304.06975</td><td>HuaTuo: Tuning LLaMA Model with Chinese Medical Knowledge</td><td>第10章</td><td>Parametric / Factual / Evolution</td></tr>
+<tr><td>2304.13343</td><td>SCM: A Self-Controlled Memory Framework for Enhancing LLMs</td><td>第4章</td><td>External / Working / Formation</td></tr>
+<tr><td>2305.10250</td><td>MemoryBank: Enhancing Large Language Models with Long-Term Memory</td><td>1.5, 2.5.2, 第7章, 第10章</td><td>External / Episodic+Factual / Full Lifecycle</td></tr>
+<tr><td>2305.13304</td><td>RecurrentGPT: Interactive Generation of (Arbitrarily) Long Text</td><td>第4章</td><td>Token-level / Working / Formation</td></tr>
+<tr><td>2305.14322</td><td>RET-LLM: Towards a General Read-Write Memory for Large Language Models</td><td>第8章</td><td>External / Factual / Formation+Retrieval</td></tr>
+<tr><td>2307.06945</td><td>Context Autoencoder for Context Compression in Large Language Models</td><td>第5章</td><td>Token-level / Working / Formation</td></tr>
+<tr><td>2307.16789</td><td>ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs</td><td>第11章</td><td>External / Procedural / Formation</td></tr>
+<tr><td>2308.00352</td><td>MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework</td><td>第10章, 第12章</td><td>Token-level / Procedural / Formation</td></tr>
+<tr><td>2308.02151</td><td>Retroformer: Retrospective Large Language Agent with Policy Gradient Optimization</td><td>第12章</td><td>Parametric / Experiential / Evolution</td></tr>
+<tr><td>2308.08239</td><td>MemoChat: Tuning LLMs to Use Memos for Consistent Long-Range Open-Domain Conversation</td><td>第10章</td><td>External / Episodic / Formation</td></tr>
+<tr><td>2308.09597</td><td>ChatHaruhi: Reviving Anime Character from Reality via Large Language Model</td><td>第10章</td><td>External / Factual / Formation</td></tr>
+<tr><td>2308.15022</td><td>Recursive Summarization for Long-Term Dialogue Memory in LLMs</td><td>第5章</td><td>Token-level / Episodic / Formation</td></tr>
+<tr><td>2310.02172</td><td>Lyfe Agents: Generative Agents for Low-Cost Real-Time Social Interactions</td><td>第10章</td><td>External / Episodic / Reflection</td></tr>
+<tr><td>2310.03052</td><td>Memoria: Tragic Forgetting-free Memory Architecture with Human Heuristics</td><td>第5章</td><td>External / Long-term / Full Lifecycle</td></tr>
+<tr><td>2310.08560</td><td>MemGPT: Towards LLMs as Operating Systems</td><td>1.5, 2.5.3, 第4章</td><td>Token-level+External / Working+Episodic / Formation+Retrieval+Forgetting</td></tr>
+</tbody></table>
+</div>
+<h3 id="2024-年23-篇"><a class="header" href="#2024-年23-篇">2024 年（23 篇）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>arxiv ID</th><th>标题</th><th>引用章节</th><th>本体论坐标</th></tr></thead><tbody>
+<tr><td>2403.17134</td><td>RepairAgent: An Autonomous LLM Agent for Program Repair</td><td>第12章</td><td>External / Procedural / Formation+Reflection</td></tr>
+<tr><td>2404.09982</td><td>INMS: Memory Sharing for Large Language Model based Agents</td><td>第14章</td><td>External / Experiential / Evolution+Retrieval</td></tr>
+<tr><td>2404.16130</td><td>From Local to Global: A Graph RAG Approach to Query-Focused Summarization</td><td>第9章</td><td>External / Semantic / Association+Retrieval</td></tr>
+<tr><td>2405.14831</td><td>HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language Models</td><td>2.5.4, 第8章, 第9章</td><td>External / Semantic+Factual / Association+Retrieval</td></tr>
+<tr><td>2405.16089</td><td>Integrity-Oriented Tool Retrieval for Large Language Models</td><td>第11章</td><td>External / Procedural / Retrieval</td></tr>
+<tr><td>2405.19686</td><td>Knowledge Graph Tuning: Real-Time LLM Personalization via Human Feedback</td><td>第8章</td><td>External / Semantic / Evolution</td></tr>
+<tr><td>2406.00057</td><td>Towards Conversational Agents with Context and Time Sensitive Long-Term Memory</td><td>第7章</td><td>External / Episodic / Full Lifecycle</td></tr>
+<tr><td>2406.06124</td><td>Augmenting RAG with Long-Term Memory using Hierarchical Aggregation Tree</td><td>第8章</td><td>External / Long-term / Formation+Retrieval</td></tr>
+<tr><td>2406.10996</td><td>Towards Lifelong Dialogue Agents via Timeline-based Memory Management</td><td>第7章</td><td>External / Episodic / Full Lifecycle</td></tr>
+<tr><td>2407.01178</td><td>Memory^3: Language Modeling with Explicit Memory</td><td>第3章</td><td>Parametric / Working / Formation+Retrieval</td></tr>
+<tr><td>2407.04363</td><td>AriGraph: Learning Knowledge Graph World Models with Episodic Memory for LLM Agents</td><td>第8章</td><td>External / Episodic+Semantic / Formation+Association</td></tr>
+<tr><td>2407.06567</td><td>FinCon: A Synthetic LLM Multi-Agent System with Conceptual Verbal Reinforcement</td><td>第10章</td><td>External / Procedural / Evolution+Reflection</td></tr>
+<tr><td>2409.19401</td><td>Building Personalized Agents over Editable Memory Graph-based RAG</td><td>第8章</td><td>External / Semantic / Association+Evolution</td></tr>
+<tr><td>2410.02355</td><td>AlphaEdit: Null-Space Constrained Knowledge Editing for Language Models</td><td>第14章</td><td>Parametric / Factual / Evolution</td></tr>
+<tr><td>2410.03439</td><td>ToolGen: Unified Tool Retrieval and Calling via Generation</td><td>第11章</td><td>Parametric / Procedural / Formation</td></tr>
+<tr><td>2410.08164</td><td>Agent S: An Open Agentic Framework that Uses Computers Like a Human</td><td>第11章</td><td>External / Procedural+Experiential / Formation+Reflection</td></tr>
+<tr><td>2410.08197</td><td>From Exploration to Mastery: Enabling LLMs to Master Tools via Self-Driven Interactions</td><td>第11章</td><td>External / Procedural / Evolution</td></tr>
+<tr><td>2410.12859</td><td>Enhancing Long-Context Performance of LLMs via In-Context Query Mechanism</td><td>第4章</td><td>Token-level / Working / Retrieval</td></tr>
+<tr><td>2410.14052</td><td>From Isolated Conversations to Hierarchical Schemas: Dynamic Tree Memory Representations</td><td>第8章</td><td>External / Episodic / Organization</td></tr>
+<tr><td>2411.11581</td><td>OASIS: Open Agent Social Interaction Simulations with One Million Agents</td><td>第10章</td><td>External / Episodic / Formation+Retrieval</td></tr>
+<tr><td>2411.13093</td><td>Video-RAG: Visually-aligned Retrieval-Augmented Long Video Comprehension</td><td>第15章</td><td>External / Episodic / Retrieval</td></tr>
+<tr><td>2412.01857</td><td>Imagine-then-Plan: Episodic Imagination and Episodic Memory in Vision-Language Navigation</td><td>第7章</td><td>External / Episodic / Formation+Reflection</td></tr>
+<tr><td>2412.13103</td><td>AI PERSONA: Towards Life-Long Personalization of LLMs</td><td>第10章</td><td>External / Factual / Evolution</td></tr>
+</tbody></table>
+</div>
+<h3 id="2025-年100-篇"><a class="header" href="#2025-年100-篇">2025 年（100+ 篇）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>arxiv ID</th><th>标题</th><th>引用章节</th><th>本体论坐标</th></tr></thead><tbody>
+<tr><td>2501.00358</td><td>Embodied VideoAgent: Persistent Memory from Egocentric Videos and Embodied Sensors</td><td>第15章</td><td>External+Latent / Episodic / Formation+Evolution</td></tr>
+<tr><td>2501.00663</td><td>Titans: Learning to Memorize at Test Time</td><td>第15章</td><td>Parametric+Latent / Working / Formation+Evolution</td></tr>
+<tr><td>2501.13956</td><td>Zep: A Temporal Knowledge Graph Architecture for Agent Memory</td><td>第8章</td><td>External / Semantic / Formation+Association</td></tr>
+<tr><td>2502.00592</td><td>M+: Extending MemoryLLM with Scalable Long-Term Memory</td><td>第15章</td><td>Parametric+External / Working+Factual / Formation+Retrieval</td></tr>
+<tr><td>2502.04395</td><td>Time-VLM: Exploring Multimodal Vision-Language Models for Augmented Time Series Forecasting</td><td>第15章</td><td>External+Latent / Episodic / Formation+Retrieval</td></tr>
+<tr><td>2502.06049</td><td>LM2: Large Memory Models</td><td>2.5.5, 第15章</td><td>Latent+Parametric / Working+Factual / Formation+Retrieval+Forgetting</td></tr>
+<tr><td>2502.13172</td><td>Unveiling Privacy Risks in LLM Agent Memory</td><td>第14章</td><td>External / Episodic / Retrieval</td></tr>
+<tr><td>2502.14254</td><td>Mem2Ego: Empowering Vision-Language Models with Global-to-Ego Memory</td><td>第7章</td><td>External / Episodic / Formation+Retrieval</td></tr>
+<tr><td>2502.14802</td><td>From RAG to Memory: Non-Parametric Continual Learning for Large Language Models</td><td>第3章</td><td>External / Factual / Formation+Evolution</td></tr>
+<tr><td>2502.15957</td><td>R^3Mem: Bridging Memory Retention and Retrieval via Reversible Compression</td><td>第5章</td><td>Token-level / Working / Formation+Retrieval</td></tr>
+<tr><td>2503.01763</td><td>Retrieval Models Lack Tool Wisdom: Large Language Model Tool Retrieval Benchmark</td><td>第11章</td><td>External / Procedural / Retrieval</td></tr>
+<tr><td>2503.05193</td><td>Memory-Enhanced Query Reconstruction for LLM Knowledge Graph Reasoning</td><td>第9章</td><td>External / Semantic / Retrieval+Association</td></tr>
+<tr><td>2503.09263</td><td>COLA: A Scalable Multi-Agent Framework for Windows UI Task Automation</td><td>第11章</td><td>External / Procedural / Formation+Reflection</td></tr>
+<tr><td>2504.06821</td><td>Programmatic Skill Induction in Agent Tasks</td><td>第11章</td><td>External / Procedural / Formation</td></tr>
+<tr><td>2504.07079</td><td>SkillWeaver: Web Agents Self-Enhance through Skill Discovery and Refinement</td><td>第11章</td><td>External / Procedural+Experiential / Formation+Reflection</td></tr>
+<tr><td>2504.07952</td><td>Dynamic Cheat Sheets: Test-Time Learning with Adaptive Memory</td><td>第15章</td><td>Token-level / Working / Formation+Evolution</td></tr>
+<tr><td>2504.13805</td><td>LearnAct: Few-Shot Mobile GUI Agent with a Unified Demonstration Benchmark</td><td>第11章</td><td>External / Procedural / Formation</td></tr>
+<tr><td>2504.14603</td><td>UFO2: A GUI Agent OS for Desktop</td><td>第11章</td><td>External / Procedural / Formation+Retrieval</td></tr>
+<tr><td>2504.19413</td><td>Mem0: Building Production-Grade AI Agents with Scalable Long-Term Memory</td><td>第7章, 第8章, 第14章</td><td>External / Factual+Episodic / Full Lifecycle</td></tr>
+<tr><td>2505.15962</td><td>Pretraining Language Models with Finite Internal and External Memory</td><td>第3章</td><td>Parametric+External / Working+Factual / Formation+Retrieval</td></tr>
+<tr><td>2505.16348</td><td>Embodied Agents Meet Personalization: Challenges and Solutions through Memory Utilization</td><td>第7章</td><td>External / Episodic / Full Lifecycle</td></tr>
+<tr><td>2505.17670</td><td>Towards General Continual Memory for Vision-Language Models</td><td>第7章</td><td>External+Latent / Episodic+Factual / Full Lifecycle</td></tr>
+<tr><td>2505.20231</td><td>MemGuide: Intent-Driven Memory Selection for Goal-Oriented Multi-Session LLM Agents</td><td>第9章</td><td>External / Semantic / Retrieval</td></tr>
+<tr><td>2505.20286</td><td>Alita: A General-Purpose Agent for Scalable Agent Reasoning via Self-Evolution</td><td>第12章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+<tr><td>2505.22954</td><td>DarwinGodelMachine: Open-Ended Evolution of Self-Improving Agents</td><td>第12章</td><td>Parametric+External / Procedural / Evolution</td></tr>
+<tr><td>2506.03141</td><td>Context as Memory: Scene-Consistent Interactive Long Video Generation via Memory Retrieval</td><td>第7章</td><td>External / Episodic / Formation+Retrieval</td></tr>
+<tr><td>2506.07398</td><td>G-Memory: Tracking Hierarchical Memory in Multi-Agent Systems</td><td>第10章</td><td>External / Episodic+Semantic / Formation+Retrieval</td></tr>
+<tr><td>2506.15841</td><td>MEM1: Learning to Memorize and Reason Synergistically for Efficient Long-Horizon Agents</td><td>第9章</td><td>External / Working+Factual / Formation+Retrieval</td></tr>
+<tr><td>2507.02259</td><td>MemAgent: Reshaping Long-Context LLMs with Multi-Conversational RL Memory Agents</td><td>第9章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+<tr><td>2507.06229</td><td>Agent KB: Agent Problem Solving with Cross-Domain Experience</td><td>第11章</td><td>External / Experiential / Retrieval+Association</td></tr>
+<tr><td>2507.07957</td><td>MIRIX: Multi-Agent Memory Systems for LLM Agents</td><td>第10章</td><td>External / Episodic+Semantic / Formation+Retrieval+Sharing</td></tr>
+<tr><td>2507.21428</td><td>MemTool: Short-Term Memory Management for Optimizing Dynamic Tool Calling</td><td>第11章</td><td>Token-level / Working / Formation+Retrieval</td></tr>
+<tr><td>2507.22925</td><td>Hierarchical Memory for Efficient Long-Term Reasoning of LLM Agents</td><td>第8章</td><td>External / Long-term / Full Lifecycle</td></tr>
+<tr><td>2508.01832</td><td>MLP Memory: Retriever Pre-Training Memory for Large Language Models</td><td>第3章</td><td>Parametric / Factual / Formation+Retrieval</td></tr>
+<tr><td>2508.03341</td><td>Nemori: Self-Organizing Agent Memory Inspired by Cognitive Science</td><td>第8章</td><td>External / Semantic+Factual / Full Lifecycle</td></tr>
+<tr><td>2508.04664</td><td>Sculptor: Empowering LLMs as Cognitive Agents via Active Context Management</td><td>第4章</td><td>Token-level+External / Working / Formation+Retrieval+Forgetting</td></tr>
+<tr><td>2508.04700</td><td>SEAgent: Self-Evolving Computer Use Agent with Autonomous Learning from Experience</td><td>第12章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+<tr><td>2508.04903</td><td>RCR-Router: Efficient Role-Aware Context Routing and Structured Memory for Multi-Agent LLM Systems</td><td>第10章</td><td>External / Working / Formation+Retrieval</td></tr>
+<tr><td>2508.06433</td><td>Memp: Exploring Agent Procedural Memory</td><td>第11章</td><td>External / Procedural / Formation+Retrieval</td></tr>
+<tr><td>2508.08997</td><td>Intrinsic Memory Agents: Heterogeneous Multi-Agent LLM Systems via Structured Context Memory</td><td>第10章</td><td>Token-level+External / Working+Episodic / Formation+Retrieval</td></tr>
+<tr><td>2508.09736</td><td>See, Hear, Memorize, Reason: A Multimodal Agent with Long-Term Memory</td><td>第7章</td><td>External+Latent / Episodic+Factual / Full Lifecycle</td></tr>
+<tr><td>2508.09874</td><td>Memory Decoder: A Pre-Trained Plug-and-Play Memory Module for Large Language Models</td><td>第3章</td><td>Parametric / Factual / Formation+Retrieval</td></tr>
+<tr><td>2508.10419</td><td>ComoRAG: A Cognitive-Inspired Memory Organizing RAG for Stateful Long-Narrative Reasoning</td><td>第9章</td><td>External / Semantic / Organization+Retrieval</td></tr>
+<tr><td>2508.12630</td><td>Semantic Anchoring in Agent Memory: Leveraging Linguistic Structures for Persistent Dialogue Context</td><td>第7章</td><td>External / Semantic / Formation+Association</td></tr>
+<tr><td>2508.15253</td><td>Conflict-Aware Soft Prompting Approach in Retrieval-Augmented Generation</td><td>第9章</td><td>Token-level / Working / Retrieval+Evolution</td></tr>
+<tr><td>2508.15294</td><td>Multi-Memory Snippet System for Generating High-Quality Long-Term Memory Content</td><td>第7章</td><td>External / Episodic+Factual / Formation+Organization</td></tr>
+<tr><td>2508.16153</td><td>Memento: Enabling Agent Adaptive Learning without Fine-Tuning the Underlying Large Model</td><td>第12章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+<tr><td>2508.19005</td><td>Building Self-Evolving Agents via Experience-Driven Life-Long Learning: Framework and Benchmark</td><td>第12章</td><td>External / Experiential+Reflection / Full Lifecycle</td></tr>
+<tr><td>2508.19236</td><td>MemoryVLA: Perceptual-Cognitive Memory in Vision-Language-Action Models for Robotic Manipulation</td><td>第7章</td><td>External+Latent / Episodic+Procedural / Formation+Retrieval</td></tr>
+<tr><td>2508.19828</td><td>Memory-R1: Enhancing LLM Agents’ Ability to Manage and Leverage Memory via Reinforcement Learning</td><td>第9章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+<tr><td>2509.05298</td><td>Livia: An Emotion-Aware AR Companion Driven by Modular AI Agents and Progressive Memory Compression</td><td>第10章</td><td>External / Episodic+Factual / Formation+Compression</td></tr>
+<tr><td>2509.10852</td><td>Pre-Memory Reasoning for Episodic Memory: Shifting the Reasoning Burden to Memory</td><td>第9章</td><td>External / Episodic+Factual / Retrieval+Association</td></tr>
+<tr><td>2509.11860</td><td>MOOM: Memory Maintenance, Organization and Optimization in Ultra-Long Role-Playing Conversations</td><td>第10章</td><td>External / Episodic / Organization+Evolution+Forgetting</td></tr>
+<tr><td>2509.12760</td><td>Similarity-Distance-Magnitude Activation Function</td><td>第9章</td><td>External / Semantic / Retrieval</td></tr>
+<tr><td>2509.12810</td><td>H^2R: Hierarchical Hindsight Reflection for Multi-Task LLM Agents</td><td>第12章</td><td>External / Experiential / Reflection</td></tr>
+<tr><td>2509.13310</td><td>Extending Agents via Continued Pretraining</td><td>第12章</td><td>Parametric / Factual+Procedural / Evolution</td></tr>
+<tr><td>2509.13312</td><td>WebWeaver: Constructing Web-Scale Evidence for Open-Ended Deep Research with Dynamic Outlines</td><td>第11章</td><td>External / Semantic+Episodic / Formation+Retrieval</td></tr>
+<tr><td>2509.17459</td><td>PRINCIPLES: Synthetic Strategic Memory for Proactive Dialogue Agents</td><td>第10章</td><td>External / Experiential / Formation+Reflection</td></tr>
+<tr><td>2509.22315</td><td>PRIME: Planning and Retrieval Integrated Memory for Enhanced Reasoning</td><td>第9章</td><td>External / Working+Factual / Formation+Retrieval</td></tr>
+<tr><td>2509.24704</td><td>MemGen: Weaving Generative Latent Memory for Self-Evolving Agents</td><td>第12章</td><td>Latent / Experiential / Formation+Evolution</td></tr>
+<tr><td>2509.25140</td><td>ReasoningBank: Leveraging Reasoning Memory to Scale Agent Self-Evolution</td><td>第12章</td><td>External / Experiential / Formation+Reflection</td></tr>
+<tr><td>2509.25911</td><td>Mem-alpha: Learning to Construct Memory via Reinforcement Learning</td><td>第9章</td><td>Parametric+External / Working / Formation+Evolution</td></tr>
+<tr><td>2510.00615</td><td>ACON: Optimizing Context Compression for Long-Horizon LLM Agents</td><td>第5章</td><td>Token-level / Working / Formation</td></tr>
+<tr><td>2510.02375</td><td>Pretraining and Hierarchical Memory: Separating Long-Tail Knowledge from Commonsense</td><td>第3章</td><td>Parametric+External / Factual / Formation</td></tr>
+<tr><td>2510.04618</td><td>Agent Context Engineering: Context Evolution for Self-Improving Language Models</td><td>第4章</td><td>Token-level / Working / Formation+Evolution</td></tr>
+<tr><td>2510.04851</td><td>LEGOMem: Modular Process Memory for Multi-Agent LLM Systems in Workflow Automation</td><td>第11章</td><td>External / Procedural / Formation+Retrieval</td></tr>
+<tr><td>2510.05520</td><td>CAM: A Constructivist Approach to LLM Reading Comprehension Agent Memory Framework</td><td>第8章</td><td>External / Semantic+Episodic / Full Lifecycle</td></tr>
+<tr><td>2510.06664</td><td>ToolMem: Enhancing Multimodal Agents with Learnable Tool Competence Memory</td><td>第11章</td><td>External+Parametric / Procedural / Formation+Evolution</td></tr>
+<tr><td>2510.07925</td><td>Long-Term Interaction with LLM-Based Agents via Persistent Memory and User Profiling</td><td>第10章</td><td>External / Factual+Episodic / Full Lifecycle</td></tr>
+<tr><td>2510.08191</td><td>Training-Free Group Relative Policy Optimization</td><td>第9章</td><td>Token-level / Working / Retrieval</td></tr>
+<tr><td>2510.08558</td><td>Agent Learning from Early Experience</td><td>第12章</td><td>External / Experiential / Formation+Reflection</td></tr>
+<tr><td>2510.09038</td><td>Auto-Expanding Continual Memory for GUI Agents</td><td>第11章</td><td>External / Procedural / Formation+Evolution</td></tr>
+<tr><td>2510.10666</td><td>BrowserAgent: Building a Web Agent with Human-Inspired Web Browsing Actions</td><td>第11章</td><td>External / Procedural+Episodic / Formation+Retrieval</td></tr>
+<tr><td>2510.12635</td><td>Memory as Action: Autonomous Context Curation for Long-Horizon Agent Tasks</td><td>第4章</td><td>Token-level+External / Working+Episodic / Formation+Retrieval+Forgetting</td></tr>
+<tr><td>2510.13363</td><td>D-SMART: Enhancing LLM Dialogue Consistency with Dynamic Structured Memory and Reasoning Trees</td><td>第10章</td><td>External / Episodic+Semantic / Formation+Organization</td></tr>
+<tr><td>2510.16392</td><td>RGMem: Renormalization Group Inspired Memory Evolution for Language Agents</td><td>第8章</td><td>External / Semantic / Evolution</td></tr>
+<tr><td>2510.18866</td><td>LightMem: A Lightweight and Efficient Memory-Augmented Generation System</td><td>第8章</td><td>External / Factual / Formation+Retrieval</td></tr>
+<tr><td>2510.21618</td><td>DeepAgent: General Reasoning Agent with Scalable Tool Set</td><td>第11章</td><td>External / Procedural+Experiential / Formation+Retrieval</td></tr>
+<tr><td>2510.23601</td><td>Alita-G: Self-Evolving Generative Agents for Agent Generation</td><td>第12章</td><td>External / Experiential+Reflection / Evolution</td></tr>
+<tr><td>2510.24699</td><td>AgentFold: Long-Horizon Web Agents with Active Context Management</td><td>第4章</td><td>Token-level+External / Working+Episodic / Formation+Retrieval+Forgetting</td></tr>
+<tr><td>2511.02805</td><td>MemSearcher: Training LLMs to Reason, Search, and Manage Memory via End-to-End RL</td><td>第9章</td><td>External / Experiential / Full Lifecycle</td></tr>
+<tr><td>2511.03773</td><td>Expanding Agent Learning through Experience Synthesis</td><td>第12章</td><td>External / Experiential / Formation+Reflection</td></tr>
+<tr><td>2511.06449</td><td>FLEX: Forward Learning from Experience for Continuous Agent Evolution</td><td>第12章</td><td>External / Experiential / Evolution</td></tr>
+<tr><td>2511.07327</td><td>IterResearch: Rethinking Long-Horizon Agents through Interaction Scaling</td><td>第11章</td><td>External / Experiential+Procedural / Evolution</td></tr>
+<tr><td>2511.10395</td><td>AgentEvolver: Towards Efficient Self-Evolving Agent Systems</td><td>第12章</td><td>External / Experiential+Reflection / Evolution</td></tr>
+<tr><td>2511.11007</td><td>VisMem: Latent Visual Memory Unleashes the Potential of Vision-Language Models</td><td>第7章</td><td>Latent / Episodic / Formation+Retrieval</td></tr>
+<tr><td>2511.13593</td><td>O-Mem: Omni-Directional Memory System for Personalized, Long-Period, Self-Evolving Agents</td><td>第8章</td><td>External / Factual+Episodic+Procedural / Full Lifecycle</td></tr>
+<tr><td>2511.17208</td><td>A Simple Yet Strong Baseline for Long-Term Dialogue Memory of LLM Agents</td><td>第10章</td><td>External / Episodic / Formation+Retrieval</td></tr>
+<tr><td>2511.18423</td><td>General Agent Memory for In-Depth Research</td><td>第11章</td><td>External / Semantic+Experiential / Formation+Retrieval</td></tr>
+<tr><td>2512.01710</td><td>Multimodal Memory-Augmented Generation: The MMAG Framework for LLM Applications</td><td>第7章</td><td>External+Latent / Episodic+Factual / Full Lifecycle</td></tr>
+<tr><td>2512.02425</td><td>WorldMM: Dynamic Multimodal Memory Agent for Long Video Reasoning</td><td>第7章</td><td>External+Latent / Episodic / Formation+Evolution</td></tr>
+<tr><td>2512.03627</td><td>MemVerse: Multimodal Memory for Lifelong Learning Agents</td><td>第7章</td><td>External+Latent+Parametric / Episodic+Factual / Full Lifecycle</td></tr>
+<tr><td>2512.04763</td><td>MemLoRA: Expert Adapter Distillation for On-Device Memory Systems</td><td>第3章</td><td>Parametric / Factual+Procedural / Formation</td></tr>
+<tr><td>2512.10696</td><td>Remember Me, Refine Me: Dynamic Process Memory Framework for Experience-Driven Agent Evolution</td><td>第12章</td><td>External / Procedural+Experiential / Formation+Evolution</td></tr>
+<tr><td>2512.12686</td><td>Memoria: A Scalable Agent Memory Framework for Personalized Conversational AI</td><td>第10章</td><td>External / Episodic+Factual / Full Lifecycle</td></tr>
+<tr><td>2512.12818</td><td>Hindsight: Building Agent Memory Systems that Retain, Recall, and Reflect</td><td>第8章</td><td>External / Experiential+Reflection / Full Lifecycle</td></tr>
+<tr><td>2512.13564</td><td>Memory in the Age of AI Agents: A Survey of Forms, Functions, and Dynamics</td><td>第1章, 第15章</td><td>综述 / 全维度覆盖</td></tr>
+<tr><td>2512.14244</td><td>From Context to EDU: Faithful Structured Context Compression Based on Elementary Discourse Unit Decomposition</td><td>第5章</td><td>Token-level / Working / Formation</td></tr>
+<tr><td>2512.18202</td><td>Sophia: A Life-Long Agent Framework for Artificial Life</td><td>第10章</td><td>External / Episodic+Semantic / Full Lifecycle</td></tr>
+<tr><td>2512.18746</td><td>MemEvolve: Meta-Evolution of Agent Memory Systems</td><td>第12章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+</tbody></table>
+</div>
+<h3 id="2026-年5-篇收录进行中"><a class="header" href="#2026-年5-篇收录进行中">2026 年（5+ 篇，收录进行中）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>arxiv ID</th><th>标题</th><th>引用章节</th><th>本体论坐标</th></tr></thead><tbody>
+<tr><td>2601.01885</td><td>Agent Memory: Learning Unified Long-Short Term Memory Management for LLM Agents</td><td>第8章</td><td>External+Token-level / Full Spectrum / Full Lifecycle</td></tr>
+<tr><td>2601.02163</td><td>EverMemOS: Self-Organizing Memory OS for Structured Long-Horizon Reasoning</td><td>第8章</td><td>External / Semantic+Factual / Full Lifecycle</td></tr>
+<tr><td>2601.03192</td><td>MemRL: Self-Evolving Agents via Episodic Memory Runtime Reinforcement Learning</td><td>第12章</td><td>External / Experiential / Evolution+Reflection</td></tr>
+<tr><td>2601.03236</td><td>MAGMA: Multi-Graph Based Agent Memory Architecture</td><td>第8章</td><td>External / Semantic+Episodic / Formation+Association</td></tr>
+<tr><td>2601.04726</td><td>Memory Matters More: Event-Centric Memory as a Logic Map for Agent Search and Reasoning</td><td>第9章</td><td>External / Episodic+Factual / Retrieval+Association</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="b-术语对照表"><a class="header" href="#b-术语对照表">B. 术语对照表</a></h2>
+<p>以下术语从 Agent Memory 领域本体论（ontology_base.md v1.1）中提取，涵盖载体、功能、动态、核心类、治理和架构范式六个类别，共计 56 个核心术语。</p>
+<h3 id="载体维度carrier-dimension"><a class="header" href="#载体维度carrier-dimension">载体维度（Carrier Dimension）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>记忆载体</td><td>Memory Carrier</td><td>记忆的物质承载形式，分为标记级、参数级、外部级和隐式级</td></tr>
+<tr><td>标记级记忆</td><td>Token-level Memory</td><td>以文本令牌为载体的记忆，驻留于模型的输入上下文中</td></tr>
+<tr><td>参数级记忆</td><td>Parametric Memory</td><td>以模型权重为载体的记忆，通过训练或编辑将知识内化于参数中</td></tr>
+<tr><td>外部记忆</td><td>External Memory</td><td>以外部存储为载体的记忆，独立于模型本身持久化于外部数据库中</td></tr>
+<tr><td>隐式记忆</td><td>Latent Memory</td><td>以隐式表示为载体的记忆，存在于模型的隐藏状态或潜在表征中</td></tr>
+<tr><td>上下文窗口</td><td>Context Window</td><td>LLM 在单次推理中能够处理的令牌数量上限，本质是输入缓冲区而非记忆</td></tr>
+<tr><td>向量数据库</td><td>Vector Database</td><td>存储和检索高维嵌入向量的外部存储系统，如 FAISS、ChromaDB</td></tr>
+<tr><td>知识图谱</td><td>Knowledge Graph</td><td>以实体-关系三元组组织的结构化知识表示</td></tr>
+<tr><td>记忆流</td><td>Memory Stream</td><td>以自然语言线性记录所有观察和交互经验的数据结构</td></tr>
+</tbody></table>
+</div>
+<h3 id="功能维度function-dimension"><a class="header" href="#功能维度function-dimension">功能维度（Function Dimension）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>事实记忆</td><td>Factual Memory</td><td>存储离散客观信息的记忆，如用户偏好、世界常识</td></tr>
+<tr><td>语义记忆</td><td>Semantic Memory</td><td>组织概念关联与知识网络的记忆，如知识图谱、概念层级</td></tr>
+<tr><td>情景记忆</td><td>Episodic Memory</td><td>记录交互事件与时间线索的记忆，如对话历史、交互轨迹</td></tr>
+<tr><td>程序记忆</td><td>Procedural Memory</td><td>存储可执行技能与操作流程的记忆，如工具调用序列、SOP</td></tr>
+<tr><td>经验记忆</td><td>Experiential Memory</td><td>记录成功/失败轨迹与迁移知识的记忆，如反馈诊断、启发式策略</td></tr>
+<tr><td>工作记忆</td><td>Working Memory</td><td>即时认知工作区，承载当前任务处理所需的活跃信息</td></tr>
+<tr><td>反思记忆</td><td>Reflection Memory</td><td>实现元认知与自我觉察的记忆，对自身认知过程的监控和重构</td></tr>
+<tr><td>长期记忆</td><td>Long-Term Memory</td><td>跨会话、跨时间的持久存储，经巩固后均可进入</td></tr>
+<tr><td>短期记忆</td><td>Short-Term Memory</td><td>近期操作历史与短期感知保留</td></tr>
+<tr><td>感官记忆</td><td>Sensory Memory</td><td>原始感知输入的瞬时保留</td></tr>
+<tr><td>用户画像</td><td>User Profile</td><td>基于记忆内容动态构建的用户偏好与特征描述</td></tr>
+<tr><td>自我模型</td><td>Self-Model</td><td>Agent 对自身能力、限制和信念的元描述</td></tr>
+</tbody></table>
+</div>
+<h3 id="动态维度dynamic-dimension"><a class="header" href="#动态维度dynamic-dimension">动态维度（Dynamic Dimension）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>记忆形成</td><td>Memory Formation</td><td>记忆的创建与编码过程，将外部信号转化为可存储的记忆表征</td></tr>
+<tr><td>记忆检索</td><td>Memory Retrieval</td><td>从记忆库中召回与当前任务相关的信息</td></tr>
+<tr><td>记忆演化</td><td>Memory Evolution</td><td>知识的更新、整合与结构调整，适应环境变化</td></tr>
+<tr><td>记忆遗忘</td><td>Memory Forgetting</td><td>有计划地淘汰低价值或过时记忆</td></tr>
+<tr><td>记忆反思</td><td>Memory Reflection</td><td>对记忆内容的元层次评估与重构，唯一能产生增量知识的操作</td></tr>
+<tr><td>记忆关联</td><td>Memory Association</td><td>跨记忆关联的建立与维护，将孤立节点连接为网络</td></tr>
+<tr><td>记忆巩固</td><td>Memory Consolidation</td><td>记忆通过整合、更新和强化获得持久性的过程</td></tr>
+<tr><td>记忆组织</td><td>Memory Organization</td><td>将原始记忆内容转化为结构化知识表示的过程</td></tr>
+<tr><td>语义检索</td><td>Semantic Retrieval</td><td>基于向量相似度匹配的检索方式</td></tr>
+<tr><td>图遍历检索</td><td>Graph Traversal Retrieval</td><td>沿知识图谱的边进行多跳查询</td></tr>
+<tr><td>冲突消解</td><td>Conflict Resolution</td><td>当新旧记忆矛盾时，通过时间权重、置信度或人工干预选择保留版本</td></tr>
+<tr><td>知识融合</td><td>Knowledge Fusion</td><td>整合多个来源的冲突信息</td></tr>
+</tbody></table>
+</div>
+<h3 id="核心类core-classes"><a class="header" href="#核心类core-classes">核心类（Core Classes）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>智能体</td><td>Agent</td><td>记忆的主体——记忆的拥有者与使用者，执行记忆操作</td></tr>
+<tr><td>记忆系统</td><td>Memory System</td><td>管理多类记忆的组织、协调与调度的基础设施架构</td></tr>
+<tr><td>记忆操作</td><td>Memory Operation</td><td>对记忆执行的生命周期行为，包括形成、检索、更新、遗忘、反思和关联</td></tr>
+<tr><td>记忆事件</td><td>Memory Event</td><td>引发记忆操作的内部或外部事件，如用户输入、系统输出、定时器信号</td></tr>
+<tr><td>记忆上下文</td><td>Memory Context</td><td>记忆操作发生的环境与约束条件</td></tr>
+<tr><td>记忆策略</td><td>Memory Policy</td><td>控制记忆行为的安全策略与访问规则</td></tr>
+<tr><td>记忆编排器</td><td>Memory Orchestrator</td><td>协调多层记忆系统间形成、检索、巩固与遗忘流程的中央控制器</td></tr>
+<tr><td>质量三元组</td><td>Quality Triplet</td><td>记忆质量的三个维度：新鲜度（Freshness）、一致性（Consistency）与置信度（Confidence）</td></tr>
+</tbody></table>
+</div>
+<h3 id="治理与安全governance--safety"><a class="header" href="#治理与安全governance--safety">治理与安全（Governance &amp; Safety）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>灾难性遗忘</td><td>Catastrophic Forgetting</td><td>新知识的学习导致已有知识急剧丢失的现象</td></tr>
+<tr><td>最小扰动原则</td><td>Minimal Perturbation Principle</td><td>记忆编辑应遵循最小权重变更原则，避免影响无关知识</td></tr>
+<tr><td>遗忘权</td><td>Right to be Forgotten</td><td>用户要求删除其个人数据及相关记忆的法定权利</td></tr>
+<tr><td>记忆隔离</td><td>Memory Isolation</td><td>多用户场景下防止跨用户记忆泄露的安全机制</td></tr>
+<tr><td>记忆投毒</td><td>Memory Poisoning</td><td>恶意向共享记忆池注入错误或有害记忆的攻击</td></tr>
+<tr><td>附带损伤</td><td>Collateral Damage</td><td>编辑操作导致无关知识性能下降的副作用</td></tr>
+<tr><td>局部性</td><td>Locality</td><td>编辑操作不影响无关知识的程度，知识编辑的核心评价指标</td></tr>
+<tr><td>泛化性</td><td>Generalization</td><td>编辑操作对语义等价查询的一致性修正能力</td></tr>
+<tr><td>纵深防御</td><td>Defense in Depth</td><td>在多层级同时部署防护措施的隐私保护策略</td></tr>
+<tr><td>编辑事务</td><td>Edit Transaction</td><td>保证记忆编辑原子性、一致性、隔离性和持久性的操作单元</td></tr>
+<tr><td>TTL（存活时间）</td><td>Time-To-Live</td><td>为记忆设定的最大存活时间，超时后自动淘汰</td></tr>
+<tr><td>LFU 淘汰</td><td>Least Frequently Used Eviction</td><td>淘汰访问频率最低的记忆的策略</td></tr>
+<tr><td>遗忘曲线</td><td>Forgetting Curve</td><td>描述记忆强度随时间衰减的数学模型（如艾宾浩斯 $R = e^{-t/S}$）</td></tr>
+<tr><td>重要性衰减</td><td>Importance Decay</td><td>记忆重要性评分随时间递减的机制，未被访问的记忆逐渐降权</td></tr>
+</tbody></table>
+</div>
+<h3 id="架构范式architecture-paradigms"><a class="header" href="#架构范式architecture-paradigms">架构范式（Architecture Paradigms）</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>外部检索架构</td><td>External Retrieval Architecture</td><td>以向量数据库和图数据库为核心载体，通过语义检索注入上下文的架构</td></tr>
+<tr><td>上下文窗口架构</td><td>Context Window Architecture</td><td>以 LLM 上下文窗口为唯一载体，通过滑动窗口和优先级修剪管理记忆的架构</td></tr>
+<tr><td>参数化架构</td><td>Parametric Architecture</td><td>将记忆编码入模型参数，通过微调或编辑实现知识内化的架构</td></tr>
+<tr><td>图结构架构</td><td>Graph-Based Architecture</td><td>以图/树结构为核心组织形式，将记忆建模为实体-关系网络的架构</td></tr>
+<tr><td>混合多层架构</td><td>Hybrid Multi-Tier Architecture</td><td>组合多种载体维度，构建分层记忆系统并辅以中央记忆控制器协调的架构</td></tr>
+<tr><td>检索增强生成</td><td>Retrieval-Augmented Generation (RAG)</td><td>通过外部检索增强模型生成能力的范式</td></tr>
+<tr><td>虚拟分页</td><td>Virtual Context Paging</td><td>MemGPT 提出的将上下文窗口类比为虚拟内存、自动分页的机制</td></tr>
+<tr><td>测试时记忆</td><td>Test-Time Memory</td><td>在推理阶段动态更新权重的记忆机制</td></tr>
+<tr><td>记忆涌现</td><td>Memory Emergence</td><td>大规模记忆系统产生的不可预测的系统行为</td></tr>
+</tbody></table>
+</div>
+<h3 id="其他关键术语"><a class="header" href="#其他关键术语">其他关键术语</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>中文术语</th><th>English Term</th><th>定义</th></tr></thead><tbody>
+<tr><td>记忆共享</td><td>Memory Sharing</td><td>多个 Agent 共享记忆池以实现知识复用的机制</td></tr>
+<tr><td>言语强化学习</td><td>Verbal Reinforcement Learning</td><td>将环境反馈转化为自然语言反思来优化 Agent 策略的学习范式</td></tr>
+<tr><td>可学习字典</td><td>Learnable Dictionary</td><td>动态更新的用户画像结构，随交互时间步演进</td></tr>
+<tr><td>可编辑记忆图</td><td>Editable Memory Graph (EMG)</td><td>支持插入、删除、替换操作的分层图谱记忆结构</td></tr>
+<tr><td>工具虚拟化</td><td>Tool Virtualization</td><td>将工具映射为模型词汇表中虚拟 token 的技术</td></tr>
+<tr><td>约束解码</td><td>Constrained Decoding</td><td>推理时强制模型仅生成有效 token 集合的解码策略</td></tr>
+<tr><td>元编程</td><td>Meta Programming</td><td>编写管理 Agent 行为的程序，如将 SOP 编码为 Prompt 序列</td></tr>
+<tr><td>标准操作程序</td><td>Standardized Operating Procedure (SOP)</td><td>规范任务流程与输出标准的结构化操作指南</td></tr>
+<tr><td>惊喜度编码</td><td>Surprise-Driven Encoding</td><td>当输入与已有记忆存在显著偏差时触发编码的机制</td></tr>
+<tr><td>门控机制</td><td>Gating Mechanism</td><td>通过门控信号（输入/输出/遗忘）控制信息流的机制</td></tr>
+<tr><td>概念性言语强化</td><td>Conceptual Verbal Reinforcement</td><td>利用概念化信念作为言语强化信号更新 Prompt 的机制</td></tr>
+<tr><td>记忆原子性</td><td>Memory Atomicity</td><td>编辑操作要么完全成功要么完全不执行的特性</td></tr>
+<tr><td>记忆事务性</td><td>Memory Transactionality</td><td>编辑操作序列作为不可分割单元执行的特性</td></tr>
+<tr><td>审计日志</td><td>Audit Log</td><td>记录所有记忆操作的可追溯日志</td></tr>
+<tr><td>记忆膨胀</td><td>Memory Inflation</td><td>记忆库随时间无限增长导致检索效率下降的现象</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="c-推荐工具与框架清单"><a class="header" href="#c-推荐工具与框架清单">C. 推荐工具与框架清单</a></h2>
+<p>以下清单收录全书提及的工具、框架、库和基准，按类别组织。每项包含名称、URL、简要描述和讨论章节。</p>
+<h3 id="向量数据库与检索引擎"><a class="header" href="#向量数据库与检索引擎">向量数据库与检索引擎</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>FAISS</strong></td><td>https://github.com/facebookresearch/faiss</td><td>Meta 开源的高效相似性搜索库，支持十亿级向量 ANN 检索，MemoryBank、Video-RAG 等的检索引擎</td><td>第1章, 第2章, 第5章, 第8章, 第15章</td></tr>
+<tr><td><strong>ChromaDB</strong></td><td>https://www.trychroma.com/</td><td>开源嵌入式数据库，专为 AI 应用设计，API 简洁</td><td>第2章, 第5章, 第8章, 第15章</td></tr>
+<tr><td><strong>Pinecone</strong></td><td>https://www.pinecone.io/</td><td>托管向量数据库服务，支持实时索引更新和元数据过滤</td><td>第2章, 第5章</td></tr>
+<tr><td><strong>Milvus</strong></td><td>https://milvus.io/</td><td>开源向量数据库，支持分布式部署和多种索引类型</td><td>第5章, 第6章</td></tr>
+<tr><td><strong>Weaviate</strong></td><td>https://weaviate.io/</td><td>开源向量搜索引擎，支持混合检索（关键词+语义）</td><td>第5章, 第6章</td></tr>
+<tr><td><strong>Qdrant</strong></td><td>https://qdrant.tech/</td><td>开源向量数据库，内置过滤和 payload 管理</td><td>第5章, 第6章</td></tr>
+<tr><td><strong>Contriever</strong></td><td>https://github.com/facebookresearch/contriever</td><td>Facebook 开源的无监督密集检索器，Video-RAG 使用其进行语义检索</td><td>第15章</td></tr>
+</tbody></table>
+</div>
+<h3 id="知识图谱与图数据库"><a class="header" href="#知识图谱与图数据库">知识图谱与图数据库</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>Neo4j</strong></td><td>https://neo4j.com/</td><td>图数据库标杆，支持 Cypher 查询语言和图算法，适合知识密集型 Agent</td><td>第6章, 第8章, 第13章</td></tr>
+<tr><td><strong>NetworkX</strong></td><td>https://networkx.org/</td><td>Python 图论库，用于图的构建、分析和可视化</td><td>第6章, 第8章, 第13章</td></tr>
+<tr><td><strong>PyTorch Geometric (PyG)</strong></td><td>https://pyg.org/</td><td>基于 PyTorch 的图神经网络库，支持图嵌入和图推理</td><td>第6章</td></tr>
+<tr><td><strong>Zep</strong></td><td>https://www.getzep.com/</td><td>时序知识图谱架构的 Agent 记忆平台（arXiv:2501.13956）</td><td>第6章, 第8章</td></tr>
+<tr><td><strong>TransE</strong></td><td>— (算法)</td><td>知识图谱嵌入算法，将实体和关系映射到低维向量空间</td><td>第8章 (EMG-RAG)</td></tr>
+</tbody></table>
+</div>
+<h3 id="llm-框架与-agent-平台"><a class="header" href="#llm-框架与-agent-平台">LLM 框架与 Agent 平台</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>LangChain</strong></td><td>https://www.langchain.com/</td><td>最流行的 LLM 应用开发框架，包含 Memory 模块支持多种记忆后端</td><td>第1章, 第4章, 第12章</td></tr>
+<tr><td><strong>LlamaIndex</strong></td><td>https://www.llamaindex.ai/</td><td>数据框架，专注于 LLM 的数据索引和检索增强应用</td><td>第5章, 第6章, 第8章</td></tr>
+<tr><td><strong>OpenAI API</strong></td><td>https://platform.openai.com/</td><td>GPT 系列模型的 API 接口，支持 Function Calling</td><td>全书多处</td></tr>
+<tr><td><strong>Hugging Face Transformers</strong></td><td>https://huggingface.co/transformers/</td><td>开源 Transformer 模型库，支持模型编辑和 LoRA</td><td>第2章, 第14章</td></tr>
+<tr><td><strong>vLLM</strong></td><td>https://vllm.readthedocs.io/</td><td>高性能 LLM 推理引擎，支持 PagedAttention</td><td>第4章, 第15章</td></tr>
+</tbody></table>
+</div>
+<h3 id="记忆系统专用框架"><a class="header" href="#记忆系统专用框架">记忆系统专用框架</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>MemGPT</strong></td><td>https://github.com/cpacker/MemGPT</td><td>虚拟上下文管理的开源实现，将 OS 内存管理理论引入 LLM</td><td>第1章, 第2章, 第4章, 第12章</td></tr>
+<tr><td><strong>MemoryBank / SiliconFriend</strong></td><td>https://github.com/zhongwanjun/MemoryBank-SiliconFriend</td><td>基于艾宾浩斯遗忘曲线的长期记忆框架，开源为 SiliconFriend AI 伴侣应用</td><td>第1章, 第2章, 第5章, 第7章, 第10章</td></tr>
+<tr><td><strong>MetaGPT</strong></td><td>https://github.com/geekan/MetaGPT</td><td>多智能体协作框架，通过 SOP 编码实现角色协作</td><td>第10章, 第12章</td></tr>
+<tr><td><strong>Mem0</strong></td><td>https://github.com/mem0ai/mem0</td><td>生产级 AI Agent 记忆平台，支持可扩展的长期记忆（arXiv:2504.19413）</td><td>第7章, 第8章, 第14章</td></tr>
+<tr><td><strong>OASIS</strong></td><td>https://github.com/camel-ai/oasis</td><td>百万代理社交模拟基础设施</td><td>第10章</td></tr>
+<tr><td><strong>AI PERSONA</strong></td><td>— (论文)</td><td>终身个性化框架，可学习字典动态更新用户画像</td><td>第10章, 第13章</td></tr>
+<tr><td><strong>EMG-RAG</strong></td><td>— (论文)</td><td>可编辑记忆图 + RAG 的个性化智能体框架</td><td>第8章, 第13章</td></tr>
+</tbody></table>
+</div>
+<h3 id="知识编辑与模型编辑"><a class="header" href="#知识编辑与模型编辑">知识编辑与模型编辑</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>KnowledgeEditor</strong></td><td>https://github.com/nicola-decao/KnowledgeEditor</td><td>超网络驱动的模型知识编辑，无需重训</td><td>第2章, 第14章</td></tr>
+<tr><td><strong>ROME</strong></td><td>https://github.com/kmeng01/rome</td><td>秩一模型编辑，精准修改 Transformer 中的事实知识</td><td>第14章</td></tr>
+<tr><td><strong>MEMIT</strong></td><td>https://github.com/kmeng01/memit</td><td>大规模记忆编辑，支持同时编辑数千个事实</td><td>第14章</td></tr>
+<tr><td><strong>AlphaEdit</strong></td><td>— (论文, 2410.02355)</td><td>零空间约束的知识编辑，减少附带损伤，局部性提升至 91.5%</td><td>第14章</td></tr>
+</tbody></table>
+</div>
+<h3 id="多模态工具链"><a class="header" href="#多模态工具链">多模态工具链</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>Whisper</strong></td><td>https://github.com/openai/whisper</td><td>OpenAI 开源的语音识别模型，Video-RAG 用于 ASR 转录</td><td>第15章</td></tr>
+<tr><td><strong>EasyOCR</strong></td><td>https://github.com/JaidedAI/EasyOCR</td><td>多语言 OCR 工具，Video-RAG 用于提取视频中的文字</td><td>第15章</td></tr>
+<tr><td><strong>CLIP</strong></td><td>https://github.com/openai/CLIP</td><td>OpenAI 的视觉-语言对齐模型，用于关键帧筛选</td><td>第15章</td></tr>
+<tr><td><strong>ViLT</strong></td><td>https://github.com/dandelin/ViLT</td><td>视觉-语言 Transformer，Time-VLM 使用的冻结预训练 VLM</td><td>第15章</td></tr>
+<tr><td><strong>APE</strong></td><td>—</td><td>高级提示工程工具，Video-RAG 用于物体检测</td><td>第15章</td></tr>
+</tbody></table>
+</div>
+<h3 id="large-memory-models"><a class="header" href="#large-memory-models">Large Memory Models</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>LM2</strong></td><td>https://github.com/convergence-ai/lm2</td><td>Large Memory Models 开源实现，辅助记忆模块 + 门控机制</td><td>第2章, 第15章</td></tr>
+<tr><td><strong>MemoryLLM / M+</strong></td><td>https://github.com/wangyu-ustc/MemoryLLM</td><td>潜在空间记忆模型，M+ 扩展支持 CPU 长期记忆池</td><td>第15章</td></tr>
+</tbody></table>
+</div>
+<h3 id="强化学习与优化"><a class="header" href="#强化学习与优化">强化学习与优化</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL</th><th>描述</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>LoRA</strong></td><td>https://github.com/microsoft/LoRA</td><td>低秩适配器，参数高效微调方法</td><td>第2章, 第11章</td></tr>
+<tr><td><strong>PPO</strong></td><td>— (算法)</td><td>近端策略优化算法，用于策略梯度学习</td><td>第11章 (Retroformer)</td></tr>
+</tbody></table>
+</div>
+<h3 id="评估基准"><a class="header" href="#评估基准">评估基准</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>名称</th><th>URL / 描述</th><th>用途</th><th>讨论章节</th></tr></thead><tbody>
+<tr><td><strong>BABILong</strong></td><td>长上下文推理基准</td><td>评估 LM2 等模型的长程推理能力</td><td>第15章</td></tr>
+<tr><td><strong>MMLU</strong></td><td>https://github.com/hendrycks/test</td><td>大规模多任务语言理解基准</td><td>第2章, 第15章</td></tr>
+<tr><td><strong>CounterFact</strong></td><td>事实编辑基准</td><td>评估 KnowledgeEditor、AlphaEdit 的编辑效果</td><td>第14章</td></tr>
+<tr><td><strong>ZsRE</strong></td><td>零样本关系提取基准</td><td>评估模型编辑的事实修正能力</td><td>第14章</td></tr>
+<tr><td><strong>Video-MME</strong></td><td>多模态视频评估基准</td><td>评估 Video-RAG 的长视频理解能力</td><td>第15章</td></tr>
+<tr><td><strong>LongBook-QA</strong></td><td>长文档问答基准</td><td>评估 M+ 的长上下文记忆能力</td><td>第15章</td></tr>
+<tr><td><strong>LongBench</strong></td><td>长文本理解基准</td><td>评估长上下文建模能力</td><td>第15章</td></tr>
+<tr><td><strong>PersonaBench</strong></td><td>终身个性化评估基准</td><td>评估 AI PERSONA 的个性化能力</td><td>第10章</td></tr>
+<tr><td><strong>OSWorld</strong></td><td>多操作系统任务基准</td><td>评估 Agent S 等桌面代理</td><td>第11章</td></tr>
+<tr><td><strong>Defects4J</strong></td><td>https://github.com/rjust/defects4j</td><td>Java 缺陷数据集，评估程序修复</td><td>第12章</td></tr>
+<tr><td><strong>HotPotQA</strong></td><td>https://hotpotqa.github.io/</td><td>多跳问答基准</td><td>第9章, 第11章</td></tr>
+<tr><td><strong>MIMIC-III</strong></td><td>医疗数据集</td><td>MEXTRA 攻击框架的隐私评估场景</td><td>第14章</td></tr>
+<tr><td><strong>Webshop</strong></td><td>网购仿真环境</td><td>MEXTRA 攻击框架的隐私评估场景</td><td>第14章</td></tr>
+<tr><td><strong>Ego4D-VQ3D</strong></td><td>第一人称视频问答基准</td><td>评估 Embodied VideoAgent</td><td>第15章</td></tr>
+<tr><td><strong>OpenEQA</strong></td><td>开放场景问答基准</td><td>评估具身场景理解</td><td>第15章</td></tr>
+<tr><td><strong>EnvQA</strong></td><td>环境问答基准</td><td>评估复杂空间推理</td><td>第15章</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="d-agent-memory-框架选型速查表"><a class="header" href="#d-agent-memory-框架选型速查表">D. Agent Memory 框架选型速查表</a></h2>
+<h3 id="d1-一页纸决策图"><a class="header" href="#d1-一页纸决策图">D.1 一页纸决策图</a></h3>
+<pre><code>你的场景是什么？
+│
+├─ 多个 Agent 共享记忆 → 中心化记忆服务
+│   ├─ 需要生产级/企业级 → Redis Agent Memory Server
+│   ├─ 需要 LLM 自动管理 → Mem0
+│   ├─ 需要知识图谱 → Zep, Forgetful
+│   └─ 需要用户档案 → Supermemory
+│
+├─ 单个 Agent 内嵌记忆 → SDK 嵌入
+│   ├─ 基于 LangGraph → LangMem
+│   ├─ 框架无关 → Agent Memory OS
+│   └─ 认知科学建模 → OpenMemory
+│
+├─ 需要记忆版本控制 → Memoria
+├─ 需要多模态记忆 → MemOS
+└─ Agent 自主管理记忆 → MemGPT (Letta)
+</code></pre>
+<h3 id="d2-按记忆类型需求选型"><a class="header" href="#d2-按记忆类型需求选型">D.2 按记忆类型需求选型</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>需求</th><th>必需的记忆类型</th><th>推荐方案</th></tr></thead><tbody>
+<tr><td>会话持久化</td><td>工作记忆 + 短期记忆</td><td>LangGraph Checkpoint</td></tr>
+<tr><td>跨会话知识</td><td>语义记忆 + 情景记忆</td><td>Mem0 / Redis AMS</td></tr>
+<tr><td>用户画像</td><td>偏好记忆 + 语义记忆</td><td>Supermemory / Claude Code Auto Memory</td></tr>
+<tr><td>程序技能</td><td>程序记忆</td><td>MemOS / OpenMemory</td></tr>
+<tr><td>时间推理</td><td>时序记忆</td><td>Zep / OpenMemory Temporal KG</td></tr>
+<tr><td>知识关联</td><td>图谱记忆</td><td>Forgetful / Memoria / OpenMemory</td></tr>
+<tr><td>实验/分支</td><td>版本化记忆</td><td>Memoria</td></tr>
+</tbody></table>
+</div>
+<h3 id="d3-按技术栈约束选型"><a class="header" href="#d3-按技术栈约束选型">D.3 按技术栈约束选型</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>约束</th><th>影响</th></tr></thead><tbody>
+<tr><td>已有 Redis 基础设施 → 优先 Redis AMS</td><td></td></tr>
+<tr><td>使用 LangGraph 框架 → 优先 LangMem（原生集成）</td><td></td></tr>
+<tr><td>需要本地优先 → Forgetful / OpenMemory / Hermes Agent</td><td></td></tr>
+<tr><td>需要 MCP 协议 → 7 个项目原生支持</td><td></td></tr>
+<tr><td>生产级多租户 → Memoria (per-user DB) / MemOS (cube access control)</td><td></td></tr>
+</tbody></table>
+</div>
+<h3 id="d4-存储后端速查"><a class="header" href="#d4-存储后端速查">D.4 存储后端速查</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>场景</th><th>推荐后端</th><th>理由</th><th>代表项目</th></tr></thead><tbody>
+<tr><td>原型开发</td><td>SQLite / 内存</td><td>零依赖、易调试</td><td>LangGraph InMemorySaver</td></tr>
+<tr><td>生产-通用</td><td>PostgreSQL + pgvector</td><td>成熟、向量+关系一体</td><td>MemGPT, MemOS</td></tr>
+<tr><td>生产-高速</td><td>Redis + RedisVL</td><td>亚毫秒延迟、内置向量搜索</td><td>Redis AMS</td></tr>
+<tr><td>知识关联</td><td>Neo4j</td><td>原生图遍历、激活传播</td><td>MemOS, OpenMemory</td></tr>
+<tr><td>大规模向量</td><td>Qdrant / Pinecone</td><td>专用向量、亿级规模</td><td>Mem0, MemOS</td></tr>
+<tr><td>版本控制</td><td>MatrixOne (COW)</td><td>零拷贝快照/分支</td><td>Memoria</td></tr>
+<tr><td>轻量文件</td><td>JSON/Markdown</td><td>人类可读、git 友好</td><td>Claude Code, Deer Flow</td></tr>
+</tbody></table>
+</div>
+<h3 id="d5-混合存储推荐组合"><a class="header" href="#d5-混合存储推荐组合">D.5 混合存储推荐组合</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>级别</th><th>组合</th><th>代表项目</th></tr></thead><tbody>
+<tr><td>轻量级</td><td>SQLite + JSON 文件</td><td>Forgetful, Deer Flow</td></tr>
+<tr><td>中量级</td><td>PostgreSQL (pgvector) + JSON 文件</td><td>MemGPT</td></tr>
+<tr><td>重量级</td><td>Redis (工作记忆) + RedisVL (长期记忆)</td><td>Redis AMS</td></tr>
+<tr><td>全功能</td><td>MatrixOne (SQL+向量) + 图谱 + Git 分支</td><td>Memoria</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="e-开源框架代码索引"><a class="header" href="#e-开源框架代码索引">E. 开源框架代码索引</a></h2>
+<p>基于 16 个 Agent Memory 开源项目的深度代码级分析，以下索引涵盖每个框架的关键代码文件及行号。</p>
+<h3 id="e1-langgraph"><a class="header" href="#e1-langgraph">E.1 LangGraph</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>libs/langgraph/langgraph/graph/state.py</code></td><td>L115-1753</td><td>StateGraph 状态图</td></tr>
+<tr><td><code>libs/checkpoint/langgraph/checkpoint/base/__init__.py</code></td><td>L122-480</td><td>BaseCheckpointSaver 检查点</td></tr>
+<tr><td><code>libs/langgraph/langgraph/channels/binop.py</code></td><td>L41-135</td><td>BinaryOperatorAggregate 聚合</td></tr>
+</tbody></table>
+</div>
+<h3 id="e2-langmem"><a class="header" href="#e2-langmem">E.2 LangMem</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>src/langmem/knowledge/extraction.py</code></td><td>L217-693</td><td>MemoryManager 记忆管理</td></tr>
+<tr><td><code>src/langmem/knowledge/tools.py</code></td><td>L25-356</td><td>create_manage_memory_tool</td></tr>
+<tr><td><code>src/langmem/reflection.py</code></td><td>L110-141</td><td>ReflectionExecutor 后台反射</td></tr>
+</tbody></table>
+</div>
+<h3 id="e3-mem0"><a class="header" href="#e3-mem0">E.3 Mem0</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>mem0/memory/main.py</code></td><td>L257-1400</td><td>Memory 主类</td></tr>
+<tr><td><code>mem0/memory/graph_memory.py</code></td><td>L29-745</td><td>Neo4j 图记忆</td></tr>
+<tr><td><code>mem0/configs/prompts.py</code></td><td>L61-173</td><td>提取提示词配置</td></tr>
+</tbody></table>
+</div>
+<h3 id="e4-memgpt-letta"><a class="header" href="#e4-memgpt-letta">E.4 MemGPT (Letta)</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>letta/schemas/memory.py</code></td><td>L68-781</td><td>Memory 类</td></tr>
+<tr><td><code>letta/schemas/block.py</code></td><td>L13-210</td><td>Block 架构</td></tr>
+<tr><td><code>letta/services/summarizer/summarizer.py</code></td><td>L36-200+</td><td>上下文窗口摘要</td></tr>
+</tbody></table>
+</div>
+<h3 id="e5-memoria"><a class="header" href="#e5-memoria">E.5 Memoria</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>memoria/crates/memoria-core/src/types.rs</code></td><td>L64-156</td><td>Memory 结构 + TrustTier</td></tr>
+<tr><td><code>memoria/crates/memoria-git/src/service.rs</code></td><td>L50-306</td><td>Git-for-Data 服务</td></tr>
+<tr><td><code>memoria/crates/memoria-service/src/governance.rs</code></td><td>L540-1470</td><td>治理策略</td></tr>
+<tr><td><code>memoria/crates/memoria-storage/src/graph/retriever.rs</code></td><td>L72-200+</td><td>激活检索器</td></tr>
+</tbody></table>
+</div>
+<h3 id="e6-memos"><a class="header" href="#e6-memos">E.6 MemOS</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>src/memos/mem_os/core.py</code></td><td>L38-1204</td><td>MOSCore 编排器</td></tr>
+<tr><td><code>src/memos/mem_cube/general.py</code></td><td>L21-241</td><td>GeneralMemCube</td></tr>
+</tbody></table>
+</div>
+<h3 id="e7-zep"><a class="header" href="#e7-zep">E.7 Zep</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>legacy/src/lib/graphiti/service_ce.go</code></td><td>L20-89</td><td>Graphiti 时序事实</td></tr>
+</tbody></table>
+</div>
+<h3 id="e8-forgetful"><a class="header" href="#e8-forgetful">E.8 Forgetful</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>app/repositories/sqlite/memory_repository.py</code></td><td>L1-1569</td><td>搜索+自动链接+图遍历</td></tr>
+<tr><td><code>app/services/memory_service.py</code></td><td>L1-707</td><td>业务逻辑+Token 预算</td></tr>
+</tbody></table>
+</div>
+<h3 id="e9-redis-agent-memory-server"><a class="header" href="#e9-redis-agent-memory-server">E.9 Redis Agent Memory Server</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>agent_memory_server/working_memory.py</code></td><td>L266-819</td><td>工作记忆 CRUD</td></tr>
+<tr><td><code>agent_memory_server/long_term_memory.py</code></td><td>L976-2274</td><td>去重+搜索+遗忘</td></tr>
+<tr><td><code>agent_memory_server/memory_strategies.py</code></td><td>L24-561</td><td>4 种提取策略</td></tr>
+</tbody></table>
+</div>
+<h3 id="e10-openmemory"><a class="header" href="#e10-openmemory">E.10 OpenMemory</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>packages/openmemory-py/src/openmemory/memory/hsg.py</code></td><td>L492-631</td><td>HSG 查询</td></tr>
+<tr><td><code>packages/openmemory-py/src/openmemory/memory/decay.py</code></td><td>L111-214</td><td>衰减引擎</td></tr>
+<tr><td><code>packages/openmemory-py/src/openmemory/ops/dynamics.py</code></td><td>L33-53</td><td>交叉共振 + Hebbian</td></tr>
+</tbody></table>
+</div>
+<h3 id="e11-claude-code"><a class="header" href="#e11-claude-code">E.11 Claude Code</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>src/memdir/memoryTypes.ts</code></td><td>L14-272</td><td>记忆分类</td></tr>
+<tr><td><code>src/services/extractMemories/extractMemories.ts</code></td><td>L1-616</td><td>后台提取</td></tr>
+<tr><td><code>src/memdir/memdir.ts</code></td><td>L199-507</td><td>记忆提示构建</td></tr>
+</tbody></table>
+</div>
+<h3 id="e12-claw-code"><a class="header" href="#e12-claw-code">E.12 Claw Code</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>rust/crates/runtime/src/compact.rs</code></td><td>L1-826</td><td>上下文压缩</td></tr>
+<tr><td><code>rust/crates/runtime/src/conversation.rs</code></td><td>L1-1812</td><td>对话运行时</td></tr>
+</tbody></table>
+</div>
+<h3 id="e13-hermes-agent"><a class="header" href="#e13-hermes-agent">E.13 Hermes Agent</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>tools/memory_tool.py</code></td><td>L100-437</td><td>MemoryStore 冻结快照</td></tr>
+<tr><td><code>hermes_state.py</code></td><td>L115-1239</td><td>SQLite + FTS5</td></tr>
+<tr><td><code>agent/context_compressor.py</code></td><td>L60-821</td><td>上下文压缩</td></tr>
+<tr><td><code>agent/memory_manager.py</code></td><td>L72-363</td><td>MemoryManager 编排</td></tr>
+</tbody></table>
+</div>
+<h3 id="e14-deer-flow"><a class="header" href="#e14-deer-flow">E.14 Deer Flow</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>packages/harness/deerflow/agents/memory/updater.py</code></td><td>L255-473</td><td>LLM 提取</td></tr>
+<tr><td><code>packages/harness/deerflow/agents/memory/storage.py</code></td><td>L42-206</td><td>文件存储</td></tr>
+<tr><td><code>packages/harness/deerflow/agents/memory/queue.py</code></td><td>L27-220</td><td>防抖队列</td></tr>
+</tbody></table>
+</div>
+<h3 id="e15-supermemory"><a class="header" href="#e15-supermemory">E.15 Supermemory</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td><code>packages/tools/src/shared/types.ts</code></td><td>L70-106</td><td>Profile 结构</td></tr>
+<tr><td><code>packages/tools/src/vercel/index.ts</code></td><td>L98-214</td><td>Vercel AI SDK 包装</td></tr>
+</tbody></table>
+</div>
+<h3 id="e16-agent-memory-os"><a class="header" href="#e16-agent-memory-os">E.16 Agent Memory OS</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>关键文件</th><th>行号</th><th>功能</th></tr></thead><tbody>
+<tr><td>Agent Memory OS（新兴项目）</td><td>—</td><td>记忆中间件（框架分析进行中）</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h2 id="附录-d工程参数速查"><a class="header" href="#附录-d工程参数速查">附录 D：工程参数速查</a></h2>
+<h3 id="d1-上下文窗口管理"><a class="header" href="#d1-上下文窗口管理">D.1 上下文窗口管理</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>参数</th><th>推荐值</th><th>来源</th></tr></thead><tbody>
+<tr><td>工作记忆最大 Token 数</td><td>8,000</td><td>MemGPT / Redis AMS</td></tr>
+<tr><td>压缩触发 Token 占比</td><td>&gt; 80%</td><td>MemGPT（原 90%，建议调低）</td></tr>
+<tr><td>压缩触发消息数</td><td>&gt; 50 条</td><td>Deer Flow</td></tr>
+<tr><td>压缩触发累计 Token</td><td>&gt; 100K</td><td>Claw Code</td></tr>
+<tr><td>最小摘要间距</td><td>&gt;= 5 次工具调用</td><td>Claude Code</td></tr>
+<tr><td>头部保护</td><td>System prompt + 前 2-3 轮</td><td>通用</td></tr>
+<tr><td>尾部保护</td><td>最近 1-2 轮完整对话</td><td>Claw Code</td></tr>
+</tbody></table>
+</div>
+<h3 id="d2-检索策略"><a class="header" href="#d2-检索策略">D.2 检索策略</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>参数</th><th>推荐值</th><th>来源</th></tr></thead><tbody>
+<tr><td>RRF k 值</td><td>60</td><td>Forgetful</td></tr>
+<tr><td>图谱激活权重</td><td>语义 0.35, 激活 0.35, 置信度 0.20, 重要性 0.10</td><td>Memoria</td></tr>
+<tr><td>实体提升因子</td><td>1.8x</td><td>Memoria</td></tr>
+<tr><td>冲突惩罚</td><td>superseded=0.5, pending=0.7</td><td>Memoria</td></tr>
+<tr><td>BFS 扩展阈值</td><td>初始置信度 &lt; 0.6</td><td>OpenMemory</td></tr>
+<tr><td>BFS 深度</td><td>2-3 跳</td><td>OpenMemory</td></tr>
+<tr><td>BFS 每跳邻居</td><td>最多 5 个</td><td>OpenMemory</td></tr>
+<tr><td>语义去重阈值</td><td>向量相似度 &gt; 0.85</td><td>Redis AMS</td></tr>
+<tr><td>Simhash Hamming 距离</td><td>&lt;= 3</td><td>OpenMemory</td></tr>
+</tbody></table>
+</div>
+<h3 id="d3-置信度衰减--trust-tier-memoria"><a class="header" href="#d3-置信度衰减--trust-tier-memoria">D.3 置信度衰减 — Trust Tier (Memoria)</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Trust Tier</th><th>初始置信度</th><th>半衰期</th></tr></thead><tbody>
+<tr><td>T1 Verified</td><td>0.95</td><td>365 天</td></tr>
+<tr><td>T2 Curated</td><td>0.85</td><td>180 天</td></tr>
+<tr><td>T3 Inferred</td><td>0.65</td><td>60 天</td></tr>
+<tr><td>T4 Unverified</td><td>0.40</td><td>30 天</td></tr>
+</tbody></table>
+</div>
+<h3 id="d4-置信度衰减--认知扇区-openmemory"><a class="header" href="#d4-置信度衰减--认知扇区-openmemory">D.4 置信度衰减 — 认知扇区 (OpenMemory)</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>扇区</th><th>衰减率 λ</th><th>权重</th></tr></thead><tbody>
+<tr><td>Episodic</td><td>0.015</td><td>1.2</td></tr>
+<tr><td>Semantic</td><td>0.005</td><td>1.0</td></tr>
+<tr><td>Procedural</td><td>0.008</td><td>1.1</td></tr>
+<tr><td>Emotional</td><td>0.02</td><td>1.3</td></tr>
+<tr><td>Reflective</td><td>0.001</td><td>0.8</td></tr>
+</tbody></table>
+</div>
+<h3 id="d5-热温冷分层衰减-openmemory"><a class="header" href="#d5-热温冷分层衰减-openmemory">D.5 热/温/冷分层衰减 (OpenMemory)</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>分层</th><th>条件</th><th>衰减率 λ</th></tr></thead><tbody>
+<tr><td>Hot</td><td>最近 &lt; 7 天 或 访问 &gt; 10 次</td><td>0.005</td></tr>
+<tr><td>Warm</td><td>最近 &lt; 30 天 或 访问 &gt; 3 次</td><td>0.02</td></tr>
+<tr><td>Cold</td><td>其他</td><td>0.05</td></tr>
+</tbody></table>
+</div>
+<h3 id="d6-防抖批处理"><a class="header" href="#d6-防抖批处理">D.6 防抖/批处理</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>参数</th><th>推荐值</th><th>来源</th></tr></thead><tbody>
+<tr><td>防抖默认间隔</td><td>30 秒</td><td>LangMem / Deer Flow</td></tr>
+<tr><td>后台处理优先级</td><td>低于主循环</td><td>通用</td></tr>
+<tr><td>每线程去重</td><td>是</td><td>LangMem</td></tr>
+<tr><td>并发安全</td><td>SQLite WAL + 20-150ms 抖动重试</td><td>Hermes Agent</td></tr>
+<tr><td>批量编辑刷新</td><td>64 条 / 2 秒</td><td>Memoria</td></tr>
+</tbody></table>
+</div>
+<h3 id="d7-注入防护模式-hermes-agent"><a class="header" href="#d7-注入防护模式-hermes-agent">D.7 注入防护模式 (Hermes Agent)</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>模式</th><th>说明</th></tr></thead><tbody>
+<tr><td><code>ignore previous instructions</code></td><td>忽略先前指令</td></tr>
+<tr><td><code>system prompt</code></td><td>系统提示注入</td></tr>
+<tr><td><code>new instructions:</code></td><td>新指令注入</td></tr>
+<tr><td><code>you are now</code></td><td>角色替换注入</td></tr>
+<tr><td><code>\u200b</code></td><td>零宽空格</td></tr>
+<tr><td><code>\u200c</code></td><td>零宽非连接符</td></tr>
+<tr><td><code>\u200d</code></td><td>零宽连接符</td></tr>
+<tr><td><code>\ufeff</code></td><td>零宽不空格</td></tr>
+</tbody></table>
+</div>
+<h3 id="d8-提取策略参数"><a class="header" href="#d8-提取策略参数">D.8 提取策略参数</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>参数</th><th>推荐值</th><th>来源</th></tr></thead><tbody>
+<tr><td>记忆原子性</td><td>每条 ~300-400 词</td><td>Mem0 / Redis AMS</td></tr>
+<tr><td>明确陈述置信度</td><td>0.9-1.0</td><td>Deer Flow</td></tr>
+<tr><td>强烈暗示置信度</td><td>0.7-0.8</td><td>Deer Flow</td></tr>
+<tr><td>推断置信度</td><td>0.5-0.6</td><td>Deer Flow</td></tr>
+<tr><td>摘要最大长度</td><td>不超过原始对话 30%</td><td>通用</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch16-comprehensive-case.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch16-comprehensive-case.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="katex.min.js"></script>
+        <script src="auto-render.min.js"></script>
+        <script src="katex-render.js"></script>
+        <script src="mermaid.min.js"></script>
+        <script src="mermaid-init.js"></script>
+
+
+    </div>
+    </body>
+</html>
