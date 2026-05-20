@@ -15,6 +15,10 @@
 | 代码示例 | 7 个实践章节，完整 Python 实现 |
 | 涵盖框架 | Mem0, LangMem, MemGPT, Memoria, Zep, HyperMem 等 16+ 开源框架 |
 
+## 在线阅读
+
+👉 https://haiyoung.github.io/agent-memory-engineering/
+
 ## 章节结构
 
 ### 第一部分：基础与框架（第 1-3 章）
@@ -71,10 +75,6 @@ Agent 区别于普通 LLM 的核心——跨会话、跨时间的持久化知识
 - **架构选型决策** → 直接跳到第 15 章
 - **想看完整系统构建** → 阅读第 16 章的综合案例
 - **每章末尾**都有延伸阅读，指向更深入的论文和技术资料
-
-## 在线阅读
-
-👉 https://haiyoung.github.io/agent-memory-engineering/
 
 ## 本地构建
 
